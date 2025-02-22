@@ -5,9 +5,16 @@ using Example.WebApi.Supports.EndpointMapper;
 using ServiceDefaults;
 using WellKnowns.Presentation.ExampleWebApi;
 
-internal static class WebApiStart
+internal static class WebApiStartup
 {
-    internal static WebApplicationBuilder CreateWebAppBuilder(string[] args)
+    internal static async Task Start(string[] args)
+    {
+        var builder = WebApiStartup.CreateWebHostBuilder(args);
+        var app = await WebApiStartup.BuildWebAppAsync(builder).ConfigureAwait(false);
+        await app.RunAsync().ConfigureAwait(false);
+    }
+
+    internal static WebApplicationBuilder CreateWebHostBuilder(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
@@ -19,8 +26,10 @@ internal static class WebApiStart
         return builder;
     }
 
-    internal static WebApplication CreateWebApp(WebApplicationBuilder builder)
+    internal static async Task<WebApplication> BuildWebAppAsync(WebApplicationBuilder builder)
     {
+        await Task.Delay(0);
+
         var app = builder.Build();
 
         app.MapGroupedEndpoints();

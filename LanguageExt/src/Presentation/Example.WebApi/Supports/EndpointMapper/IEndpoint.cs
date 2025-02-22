@@ -1,6 +1,11 @@
 ﻿namespace Example.WebApi.Supports.EndpointMapper;
 
-internal interface IEndpoint
+[System.Diagnostics.CodeAnalysis.SuppressMessage(
+    "Maintainability",
+    "CA1515:Consider making public types internal",
+    Justification = "<Pending>"
+)]
+public interface IEndpoint
 {
-    void Map(IEndpointRouteBuilder endpointBuilder);
+    public void Map(IEndpointRouteBuilder endpointBuilder);
 }

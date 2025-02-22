@@ -4,7 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Example.WebApi.EndPoints.Accounts.GetAccount;
 
-internal interface IGetAccountEndpoint : IGroupedEndpoint<AccountsGroup>
+[System.Diagnostics.CodeAnalysis.SuppressMessage(
+    "Maintainability",
+    "CA1515:Consider making public types internal",
+    Justification = "<Pending>"
+)]
+public interface IGetAccountEndpoint : IGroupedEndpoint<AccountsGroup>
 {
     Task<Results<Ok<GetAccountResponse>, NoContent>> HandleAsync(
         [FromQuery] ulong id,

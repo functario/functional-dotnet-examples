@@ -2,7 +2,12 @@
 
 namespace Example.WebApi.EndPoints.Accounts;
 
-internal sealed class AccountsGroup : IGroup
+[System.Diagnostics.CodeAnalysis.SuppressMessage(
+    "Maintainability",
+    "CA1515:Consider making public types internal",
+    Justification = "<Pending>"
+)]
+public sealed class AccountsGroup : IGroup
 {
     public AccountsGroup(IEndpointRouteBuilder routeGroupBuilder)
     {

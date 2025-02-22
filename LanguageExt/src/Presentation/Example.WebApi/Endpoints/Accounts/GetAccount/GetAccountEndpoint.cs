@@ -25,4 +25,9 @@ internal class GetAccountEndpoint : IGetAccountEndpoint
     }
 }
 
-internal readonly record struct GetAccountResponse(string Account) { }
+[System.Diagnostics.CodeAnalysis.SuppressMessage(
+    "Maintainability",
+    "CA1515:Consider making public types internal",
+    Justification = "<Pending>"
+)]
+public readonly record struct GetAccountResponse(string Account) { }
