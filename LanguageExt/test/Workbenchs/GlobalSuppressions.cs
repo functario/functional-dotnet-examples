@@ -10,3 +10,10 @@ using System.Diagnostics.CodeAnalysis;
     "CS5001:Identifiers should not contain underscores",
     Justification = "Allow by test naming convention for readability"
 )]
+[assembly: SuppressMessage(
+    "Design",
+    "CA1062:Validate arguments of public methods",
+    Justification = "<Pending>",
+    Scope = "namespaceanddescendants",
+    Target = "~N:Example.WebApi.Workbench.UnitTests"
+)]
