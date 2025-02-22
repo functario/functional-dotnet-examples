@@ -12,18 +12,9 @@ internal static class Startup
                 (_, configuration) =>
                 {
                     configuration.Sources.Clear();
-
-                    //Environment.SetEnvironmentVariable("LH_ENVIRONMENT", "qa");
-
-                    //Environment.SetEnvironmentVariable(
-                    //    "LH_AZURE_SQL_CONNECTION_STRING",
-                    //    "Server=localhost,52425;User ID=sa;Password=Hilo1234!;TrustServerCertificate=true;Database=master"
-                    //);
-
-                    //Environment.SetEnvironmentVariable("LH_SKIP_CACHING", "true");
                 }
             )
-            .ConfigureServices((context, services) => services.AddSociable(context));
+            .ConfigureServices((context, services) => services.AddSociableTests(context));
 
         return hostBuilder;
     }
