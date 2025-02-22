@@ -2,6 +2,8 @@
 
 using Example.WebApi;
 using Example.WebApi.Supports.EndpointMapper;
+using ServiceDefaults;
+using WellKnowns.Presentation.ExampleWebApi;
 
 internal static class WebApiStart
 {
@@ -9,15 +11,16 @@ internal static class WebApiStart
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        builder.AddServiceDefaults();
+
         builder.Host.ConfigureServices((context, services) => services.AddWebApi(context));
 
+        builder.Services.AddOpenApi();
         return builder;
     }
 
     internal static WebApplication CreateWebApp(WebApplicationBuilder builder)
     {
-        builder.Services.AddOpenApi();
-
         var app = builder.Build();
 
         app.MapGroupedEndpoints();
@@ -25,7 +28,11 @@ internal static class WebApiStart
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
+            app.MapDefaultEndpoints();
             app.MapOpenApi();
+            app.UseSwaggerUI(x =>
+                x.SwaggerEndpoint(UrlFragments.OpenApiContract, UrlFragments.OpenApiVersion)
+            );
         }
 
         app.UseHttpsRedirection();

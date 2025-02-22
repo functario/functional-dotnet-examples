@@ -13,6 +13,23 @@ internal static class ServiceCollectionsExtensions
         // csharpier-ignore
         return services
             .AddEndpointsApiExplorer()
-            .AddEndpoints(Assembly.GetExecutingAssembly());
+            .AddEndpoints(Assembly.GetExecutingAssembly())
+            .AddOpenApi(x =>
+            {
+                x.AddDocumentTransformer(
+                    (document, context, cancellationToken) =>
+                    {
+                        // Configure default url to display inside OpenAPI contract
+                        document.Servers.Add(
+                            new Microsoft.OpenApi.Models.OpenApiServer()
+                            {
+                                Url = "https://localhost",
+                            }
+                        );
+
+                        return Task.CompletedTask;
+                    }
+                );
+            });
     }
 }
