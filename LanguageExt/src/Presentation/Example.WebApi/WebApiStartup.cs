@@ -1,5 +1,6 @@
 ﻿//namespace Example.WebApi;
 
+using dotenv.net;
 using Example.WebApi;
 using Example.WebApi.Supports.EndpointMapper;
 using ServiceDefaults;
@@ -17,6 +18,8 @@ internal static class WebApiStartup
     internal static WebApplicationBuilder CreateWebHostBuilder(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+
+        DotEnv.Fluent().WithTrimValues().WithOverwriteExistingVars().Load();
 
         builder.AddServiceDefaults();
 

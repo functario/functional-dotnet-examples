@@ -17,7 +17,7 @@ internal static class Startup
 
                     //Environment.SetEnvironmentVariable(
                     //    "LH_AZURE_SQL_CONNECTION_STRING",
-                    //    "Server=127.0.0.1,52425;User ID=sa;Password=Hilo1234!;TrustServerCertificate=true;Database=master"
+                    //    "Server=localhost,52425;User ID=sa;Password=Hilo1234!;TrustServerCertificate=true;Database=master"
                     //);
 
                     //Environment.SetEnvironmentVariable("LH_SKIP_CACHING", "true");

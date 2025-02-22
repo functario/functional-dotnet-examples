@@ -39,3 +39,6 @@ msbuild.wrn
 # Verify
 *.received.*
 *.received/
+
+# Environment variables
+.env
