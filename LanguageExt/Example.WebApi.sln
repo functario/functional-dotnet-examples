@@ -22,7 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{E3ED0135-D1EE-4116-9372-3361D12A5DF8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exampe.WebApi.Workbench", "test\Workbenchs\Exampe.WebApi.Workbench.csproj", "{43376B13-E170-4F02-AE27-573A817786ED}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example.WebApi.Workbench", "test\Workbenchs\Example.WebApi.Workbench.csproj", "{43376B13-E170-4F02-AE27-573A817786ED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

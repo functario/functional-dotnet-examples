@@ -30,4 +30,8 @@
     <PackageReference Include="xunit.runner.visualstudio" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Presentation\Example.WebApi\Example.WebApi.csproj" />
+  </ItemGroup>
+
 </Project>

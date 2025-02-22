@@ -1,10 +1,9 @@
-﻿using Example.WebApi.Supports.EndpointMapper;
-using Microsoft.AspNetCore.Http.HttpResults;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Example.WebApi.EndPoints.Accounts.GetAccount;
 
-internal sealed class GetAccountEndpoint : IGroupedEndpoint<AccountsGroup>
+internal class GetAccountEndpoint : IGetAccountEndpoint
 {
     public void Map(IEndpointRouteBuilder endpointBuilder)
     {

@@ -23,7 +23,7 @@ internal static class ServiceCollectionExtensions
     )
     {
         return types
-            .Where(t => t.IsAssignableToEndPoint())
+            .Where(t => t.IsAssignableToEndpoint())
             .Select(x => x.GroupEndpoints())
             .GroupBy(x => x.group, x => x.endpointType)
             .ToDictionary(g => g.Key, g => g.ToFrozenSet());
@@ -50,7 +50,7 @@ internal static class ServiceCollectionExtensions
         return services;
     }
 
-    private static bool IsAssignableToEndPoint(this Type type)
+    private static bool IsAssignableToEndpoint(this Type type)
     {
         return type.GetInterfaces().Any(x => x.IsAssignableTo(typeof(IEndpoint)))
             && !type.IsInterface;
