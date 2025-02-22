@@ -12,6 +12,5 @@ internal sealed class AutoDataNSubstitute : AutoDataAttribute
                 new Fixture().Customize(
                     new AutoNSubstituteCustomization() { ConfigureMembers = true }
                 )
-        )
-    { }
+        ) { }
 }
