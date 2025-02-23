@@ -34,6 +34,8 @@ public class AlexandriaDbContextFactory : IDesignTimeDbContextFactory<Alexandria
             nameof(sqlConnectionString)
         );
 
+        // Adding the name in the connection string
+        // replace the default name "master".
         var databaseSegment = $"Database={Constants.SQLDbName}";
         return sqlConnectionString.Contains(databaseSegment, StringComparison.OrdinalIgnoreCase)
             ? sqlConnectionString
