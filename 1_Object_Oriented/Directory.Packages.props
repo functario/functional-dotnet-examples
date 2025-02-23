@@ -1,5 +1,6 @@
 <Project>
   <ItemGroup>
+    <PackageVersion Include="Aspire.Hosting.SqlServer" Version="9.0.0" />
     <PackageVersion Include="AutoFixture.AutoNSubstitute" Version="5.0.0-preview0012" />
     <PackageVersion Include="AutoFixture.Xunit3" Version="5.0.0-preview0012" />
     <PackageVersion Include="AwesomeAssertions" Version="8.0.1" />
