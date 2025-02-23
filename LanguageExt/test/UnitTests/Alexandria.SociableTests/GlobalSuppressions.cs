@@ -15,5 +15,5 @@ using System.Diagnostics.CodeAnalysis;
     "CA1062:Validate arguments of public methods",
     Justification = "<Pending>",
     Scope = "namespaceanddescendants",
-    Target = "~N:Alexandria.WebApi.Workbench.UnitTests"
+    Target = "~N:Alexandria.SociableTests"
 )]

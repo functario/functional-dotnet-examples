@@ -2,7 +2,7 @@
 using AutoFixture.AutoNSubstitute;
 using AutoFixture.Xunit3;
 
-namespace Alexandria.WebApi.Workbench;
+namespace Alexandria.SociableTests;
 
 internal sealed class AutoDataNSubstitute : AutoDataAttribute
 {

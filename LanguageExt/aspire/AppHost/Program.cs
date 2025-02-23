@@ -1,9 +1,9 @@
-﻿using ExampleWebApi = WellKnowns.Presentation.ExampleWebApi.ProjectReferences;
+﻿using AlexandriaWebApi = WellKnowns.Presentation.AlexandriaWebApi.ProjectReferences;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
 builder
-    .AddProject<Projects.Example_WebApi>(ExampleWebApi.ProjectName)
+    .AddProject<Projects.Alexandria_WebApi>(AlexandriaWebApi.ProjectName)
     .WithEndpoint("https", endpoint => endpoint.IsProxied = false)
     .WithEndpoint("http", endpoint => endpoint.IsProxied = false);
 

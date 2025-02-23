@@ -1,8 +1,8 @@
-﻿using Example.WebApi.EndPoints.Accounts.GetAccount;
+﻿using Alexandria.WebApi.Endpoints.Accounts.GetAccount;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 
-namespace Example.WebApi.Workbench.UnitTests;
+namespace Alexandria.WebApi.Workbench.UnitTests;
 
 public class UnitTest1
 {
