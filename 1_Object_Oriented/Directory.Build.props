@@ -1,0 +1,55 @@
+<Project>
+  <PropertyGroup>
+    <SdkTargetFramework>net9.0</SdkTargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <CopyToBinFolder>true</CopyToBinFolder>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <AnalysisMode>All</AnalysisMode>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
+
+  <!--Warnings ignores for the solution-->
+  <PropertyGroup>
+    <NoWarn>1591, IDE0055, CS1591, IDE2006, IDE0058, IDE0290, IDE2000, xUnit1050, IDE0008</NoWarn>
+  </PropertyGroup>
+
+
+	<!--Restore dotnet tools from ./.config/dotnet-tools.json-->
+	<Target Name="ToolRestore" BeforeTargets="Build">
+		<Message Importance="high" Text="Restoring .NET tools..." />
+		<Exec Command="dotnet tool restore" />
+	</Target>
+
+	<!--Apply format code with csharpier-->
+	<Target Name="RunDotNetCSharpierOnce" BeforeTargets="Build">
+		<Message Importance="high" Text="Running dotnet-csharpier..." />
+		<Exec Command="dotnet tool run dotnet-csharpier ." />
+	</Target>
+
+  <ItemGroup>
+
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>Alexandria.SociableTests</_Parameter1>
+    </AssemblyAttribute>
+    
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>$(MSBuildProjectName).UnitTests</_Parameter1>
+    </AssemblyAttribute>
+
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>$(MSBuildProjectName).Workbench</_Parameter1>
+    </AssemblyAttribute>
+
+
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>DynamicProxyGenAssembly2</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+</Project>
