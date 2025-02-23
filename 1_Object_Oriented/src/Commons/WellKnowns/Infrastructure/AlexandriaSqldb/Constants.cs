@@ -7,4 +7,6 @@ public static class Constants
     public const string SQLDbName = "alexandria";
     public const string SQLDbLocalSAPassword = "Password1234!";
     public const string SQLDbLocalIP = "127.0.0.1";
+    public const string SQLDbMigrationTable = "EFMigrations";
+    public const string SQLDbDefaultSchema = "dbo";
 }

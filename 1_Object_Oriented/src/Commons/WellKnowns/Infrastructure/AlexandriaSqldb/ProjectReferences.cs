@@ -2,5 +2,5 @@
 
 public static class ProjectReferences
 {
-    public const string ProjectName = "alexandria-sqldb";
+    public const string ServerName = "alexandria-sqldb";
 }

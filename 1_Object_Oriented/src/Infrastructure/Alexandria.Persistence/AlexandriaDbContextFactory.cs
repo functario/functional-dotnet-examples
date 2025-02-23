@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using WellKnowns.Infrastructure.AlexandriaSqldb;
 
 namespace Alexandria.Persistence;
 
@@ -19,10 +20,24 @@ public class AlexandriaDbContextFactory : IDesignTimeDbContextFactory<Alexandria
         return new AlexandriaDbContext(optionsBuilder.Options);
     }
 
-    public void MigrateDb(string sqlConnectionString)
+    public void ApplyDbMigrations(string sqlConnectionString)
     {
+        sqlConnectionString = EnforceDatabaseName(sqlConnectionString);
         using var context = CreateDbContext([sqlConnectionString]);
         context.Database.Migrate();
+    }
+
+    private static string EnforceDatabaseName(string sqlConnectionString)
+    {
+        ArgumentNullException.ThrowIfNullOrWhiteSpace(
+            sqlConnectionString,
+            nameof(sqlConnectionString)
+        );
+
+        var databaseSegment = $"Database={Constants.SQLDbName}";
+        return sqlConnectionString.Contains(databaseSegment, StringComparison.OrdinalIgnoreCase)
+            ? sqlConnectionString
+            : $"{sqlConnectionString};{databaseSegment}";
     }
 
     public static DbContextOptionsBuilder ConfigureDbContextOptionsBuilder(
@@ -32,11 +47,11 @@ public class AlexandriaDbContextFactory : IDesignTimeDbContextFactory<Alexandria
     {
         optionsBuilder.UseSqlServer(
             sqlConnectionString,
-            x => { }
-        //x.MigrationsHistoryTable(
-        //    HistoryRepository.DefaultTableName,
-        //    PersistenceConstants.DefaultSchema
-        //)
+            x =>
+                x.MigrationsHistoryTable(
+                    Constants.SQLDbMigrationTable,
+                    Constants.SQLDbDefaultSchema
+                )
         );
 
         return optionsBuilder;
