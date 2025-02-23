@@ -21,7 +21,7 @@
 
 
 	<!--Restore dotnet tools from ./.config/dotnet-tools.json-->
-	<Target Name="ToolRestore" BeforeTargets="Build">
+	<Target Name="ToolRestore" BeforeTargets="Restore">
 		<Message Importance="high" Text="Restoring .NET tools..." />
 		<Exec Command="dotnet tool restore" />
 	</Target>
