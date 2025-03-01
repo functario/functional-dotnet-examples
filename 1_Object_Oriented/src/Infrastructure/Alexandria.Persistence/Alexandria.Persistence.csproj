@@ -24,6 +24,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Application\Alexandria.Application.Abstractions\Alexandria.Application.Abstractions.csproj" />
+    <ProjectReference Include="..\..\Application\Alexandria.Application\Alexandria.Application.csproj" />
     <ProjectReference Include="..\..\Commons\WellKnowns\WellKnowns.csproj" />
   </ItemGroup>
 

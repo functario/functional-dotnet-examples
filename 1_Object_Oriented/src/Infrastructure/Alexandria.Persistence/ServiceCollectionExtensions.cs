@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Alexandria.Application.Abstractions.Repositories;
+using Alexandria.Persistence.Repositories;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WellKnowns.Infrastructure.AlexandriaSqldb;
 
@@ -14,7 +16,15 @@ public static class ServiceCollectionExtensions
         ArgumentNullException.ThrowIfNull(context, nameof(context));
         // csharpier-ignore
         return services
+            .WithRepositories()
             .ConfigureDatabase();
+    }
+
+    internal static IServiceCollection WithRepositories(this IServiceCollection services)
+    {
+        services.AddScoped<IAuthorRepository, AuthorRepository>();
+
+        return services;
     }
 
     private static IServiceCollection ConfigureDatabase(this IServiceCollection services)

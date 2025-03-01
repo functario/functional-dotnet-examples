@@ -11,6 +11,45 @@
   ],
   "paths": {
     "/v1/accounts": {
+      "post": {
+        "tags": [
+          "Accounts"
+        ],
+        "summary": "Add an Author.",
+        "operationId": "AddAuthor",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddAuthorRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddAuthorResult"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorAlreadyExistsResult"
+                }
+              }
+            }
+          }
+        }
+      },
       "get": {
         "tags": [
           "Accounts"
@@ -48,6 +87,91 @@
   },
   "components": {
     "schemas": {
+      "AddAuthorRequest": {
+        "required": [
+          "firstName",
+          "middleNames",
+          "lastName",
+          "birthDate"
+        ],
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "middleNames": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "birthDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "AddAuthorResult": {
+        "required": [
+          "author"
+        ],
+        "type": "object",
+        "properties": {
+          "author": {
+            "$ref": "#/components/schemas/Author"
+          }
+        }
+      },
+      "Author": {
+        "required": [
+          "id",
+          "firstName",
+          "middleNames",
+          "lastName",
+          "birthDate"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "uint64"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "middleNames": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "birthDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "AuthorAlreadyExistsResult": {
+        "required": [
+          "author"
+        ],
+        "type": "object",
+        "properties": {
+          "author": {
+            "$ref": "#/components/schemas/Author"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
       "GetAccountResponse": {
         "type": "object",
         "properties": {
