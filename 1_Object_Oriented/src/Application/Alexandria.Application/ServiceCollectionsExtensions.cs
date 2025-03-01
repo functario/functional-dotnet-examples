@@ -1,4 +1,5 @@
 ﻿using Alexandria.Application.AuthorUseCases.AddAuthor;
+using Alexandria.Application.AuthorUseCases.GetAuthor;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -17,6 +18,7 @@ public static class ServiceCollectionsExtensions
     internal static IServiceCollection WithApplicationServices(this IServiceCollection services)
     {
         services.AddScoped<IAddAuthorService, AddAuthorService>();
+        services.AddScoped<IGetAuthorService, GetAuthorService>();
 
         return services;
     }

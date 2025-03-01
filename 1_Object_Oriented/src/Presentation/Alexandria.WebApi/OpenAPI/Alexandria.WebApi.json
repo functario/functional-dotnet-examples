@@ -10,10 +10,43 @@
     }
   ],
   "paths": {
-    "/v1/accounts": {
+    "/v1/authors": {
+      "get": {
+        "tags": [
+          "Authors"
+        ],
+        "summary": "Get an Author.",
+        "operationId": "GetAuthor",
+        "parameters": [
+          {
+            "name": "authorId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAuthorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
       "post": {
         "tags": [
-          "Accounts"
+          "Authors"
         ],
         "summary": "Add an Author.",
         "operationId": "AddAuthor",
@@ -49,7 +82,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/v1/accounts": {
       "get": {
         "tags": [
           "Accounts"
@@ -179,10 +214,24 @@
             "type": "string"
           }
         }
+      },
+      "GetAuthorResponse": {
+        "required": [
+          "author"
+        ],
+        "type": "object",
+        "properties": {
+          "author": {
+            "$ref": "#/components/schemas/Author"
+          }
+        }
       }
     }
   },
   "tags": [
+    {
+      "name": "Authors"
+    },
     {
       "name": "Accounts"
     }

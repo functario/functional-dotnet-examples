@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Folder Include="AuthorUseCases\DeleteAuthor\" />
-    <Folder Include="AuthorUseCases\GetAuthor\" />
   </ItemGroup>
 
   <ItemGroup>
