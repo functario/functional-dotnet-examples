@@ -19,7 +19,8 @@ public static class ServiceCollectionExtensions
         return services
             .WithUnitOfWork()
             .WithRepositories()
-            .ConfigureDatabase();
+            .ConfigureDatabase()
+            .AddSingleton(TimeProvider.System);
     }
 
     internal static IServiceCollection WithUnitOfWork(this IServiceCollection services)

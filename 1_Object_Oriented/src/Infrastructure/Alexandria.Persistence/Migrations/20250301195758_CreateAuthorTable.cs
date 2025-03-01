@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -21,6 +22,14 @@ namespace Alexandria.Persistence.Migrations
                     MiddleNames = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BirthDate = table.Column<DateTimeOffset>(
+                        type: "datetimeoffset",
+                        nullable: false
+                    ),
+                    CreatedDate = table.Column<DateTimeOffset>(
+                        type: "datetimeoffset",
+                        nullable: false
+                    ),
+                    UpdatedDate = table.Column<DateTimeOffset>(
                         type: "datetimeoffset",
                         nullable: false
                     ),

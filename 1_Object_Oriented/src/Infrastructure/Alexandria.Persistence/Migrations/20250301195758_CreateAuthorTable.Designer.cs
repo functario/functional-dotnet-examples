@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Alexandria.Persistence.Migrations
 {
     [DbContext(typeof(AlexandriaDbContext))]
-    [Migration("20250301181634_CreateAuthorTable")]
+    [Migration("20250301195758_CreateAuthorTable")]
     partial class CreateAuthorTable
     {
         /// <inheritdoc />
@@ -36,6 +36,9 @@ namespace Alexandria.Persistence.Migrations
                     b.Property<DateTimeOffset>("BirthDate")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -47,6 +50,9 @@ namespace Alexandria.Persistence.Migrations
                     b.PrimitiveCollection<string>("MiddleNames")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
 

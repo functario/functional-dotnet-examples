@@ -9,6 +9,8 @@ internal class AuthorModel
     public ICollection<string> MiddleNames { get; init; } = [];
     public required string LastName { get; init; }
     public DateTimeOffset BirthDate { get; init; }
+    public required DateTimeOffset CreatedDate { get; init; }
+    public required DateTimeOffset UpdatedDate { get; init; }
 
     public Author ToAuthor()
     {
@@ -18,7 +20,7 @@ internal class AuthorModel
 
 internal static class AuthorExtensions
 {
-    public static AuthorModel AsAuthorModel(this Author author)
+    public static AuthorModel AsNewAuthorModel(this Author author, DateTimeOffset createdDate)
     {
         return new AuthorModel()
         {
@@ -27,6 +29,8 @@ internal static class AuthorExtensions
             MiddleNames = author.MiddleNames,
             LastName = author.LastName,
             BirthDate = author.BirthDate,
+            CreatedDate = createdDate,
+            UpdatedDate = createdDate,
         };
     }
 }
