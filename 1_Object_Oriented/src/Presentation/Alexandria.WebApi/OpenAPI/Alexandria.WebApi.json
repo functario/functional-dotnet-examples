@@ -19,7 +19,7 @@
         "operationId": "GetAuthor",
         "parameters": [
           {
-            "name": "authorId",
+            "name": "id",
             "in": "query",
             "required": true,
             "schema": {
@@ -49,7 +49,7 @@
           "Authors"
         ],
         "summary": "Add an Author.",
-        "operationId": "AddAuthor",
+        "operationId": "PostAuthor",
         "requestBody": {
           "content": {
             "application/json": {

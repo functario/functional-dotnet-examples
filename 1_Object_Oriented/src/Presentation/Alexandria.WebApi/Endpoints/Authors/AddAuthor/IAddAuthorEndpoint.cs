@@ -8,6 +8,8 @@ internal interface IAddAuthorEndpoint : IGroupedEndpoint<AuthorsGroup>
 {
     Task<Results<Created<AddAuthorResponse>, Conflict<AuthorAlreadyExistsResponse>>> HandleAsync(
         IAddAuthorService addAuthorService,
+        LinkGenerator linkGenerator,
+        HttpContext httpContext,
         AddAuthorRequest request,
         CancellationToken cancellationToken
     );

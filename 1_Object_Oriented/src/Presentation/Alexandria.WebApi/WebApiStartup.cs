@@ -42,8 +42,8 @@ internal static class WebApiStartup
             app.MapOpenApi();
             app.UseSwaggerUI(x =>
                 x.SwaggerEndpoint(
-                    WebApiUrlFragments.OpenApiContract,
-                    WebApiUrlFragments.OpenApiVersion
+                    WebApiEndPointsConstants.OpenApiContract,
+                    WebApiEndPointsConstants.OpenApiVersion
                 )
             );
         }
