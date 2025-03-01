@@ -71,9 +71,7 @@ internal static class LocalConfiguration
 
                 ArgumentNullException.ThrowIfNull(connectionString, nameof(connectionString));
 
-                var factory = new AlexandriaDbContextFactory();
-
-                factory.ApplyDbMigrations(connectionString);
+                AlexandriaDbContextFactory.ApplyDbMigrations(connectionString);
             }
         );
     }

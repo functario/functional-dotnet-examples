@@ -15,11 +15,10 @@ internal static class ServiceCollectionsExtensions
     )
     {
         return services
+            .AddEndpoints(Assembly.GetAssembly(typeof(Program))!)
             .AddLighthousePersistence(context)
             .AddAlexandriaApplication(context)
             .AddEndpointsApiExplorer()
-            // AddEndpoints must be called after persistence and application
-            .AddEndpoints(Assembly.GetExecutingAssembly())
             .WithOpenApi();
     }
 

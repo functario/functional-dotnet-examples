@@ -16,8 +16,16 @@ public static class ServiceCollectionExtensions
         ArgumentNullException.ThrowIfNull(context, nameof(context));
         // csharpier-ignore
         return services
+            .WithUnitOfWork()
             .WithRepositories()
             .ConfigureDatabase();
+    }
+
+    internal static IServiceCollection WithUnitOfWork(this IServiceCollection services)
+    {
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+        return services;
     }
 
     internal static IServiceCollection WithRepositories(this IServiceCollection services)

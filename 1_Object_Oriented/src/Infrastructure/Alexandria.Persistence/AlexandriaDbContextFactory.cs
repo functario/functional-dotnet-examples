@@ -4,7 +4,7 @@ using WellKnowns.Infrastructure.AlexandriaSqldb;
 
 namespace Alexandria.Persistence;
 
-public class AlexandriaDbContextFactory : IDesignTimeDbContextFactory<AlexandriaDbContext>
+internal class AlexandriaDbContextFactory : IDesignTimeDbContextFactory<AlexandriaDbContext>
 {
     public AlexandriaDbContext CreateDbContext(string[] args)
     {
@@ -20,10 +20,11 @@ public class AlexandriaDbContextFactory : IDesignTimeDbContextFactory<Alexandria
         return new AlexandriaDbContext(optionsBuilder.Options);
     }
 
-    public void ApplyDbMigrations(string sqlConnectionString)
+    public static void ApplyDbMigrations(string sqlConnectionString)
     {
         sqlConnectionString = EnforceDatabaseName(sqlConnectionString);
-        using var context = CreateDbContext([sqlConnectionString]);
+        var factory = new AlexandriaDbContextFactory();
+        using var context = factory.CreateDbContext([sqlConnectionString]);
         context.Database.Migrate();
     }
 

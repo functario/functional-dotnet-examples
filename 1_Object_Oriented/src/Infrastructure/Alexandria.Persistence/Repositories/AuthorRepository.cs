@@ -3,19 +3,27 @@ using Alexandria.Domain.AuthorDomain;
 
 namespace Alexandria.Persistence.Repositories;
 
-public sealed class AuthorRepository : IAuthorRepository
+internal sealed class AuthorRepository : IAuthorRepository
 {
-    public Task<Author> CreateAuthor(Author author)
+    private readonly AlexandriaDbContext _alexandriaDbContext;
+
+    public AuthorRepository(AlexandriaDbContext alexandriaDbContext)
+    {
+        _alexandriaDbContext = alexandriaDbContext;
+    }
+
+    public async Task<Author> CreateAuthor(Author author, CancellationToken cancellationToken)
+    {
+        var result = await _alexandriaDbContext.AddAsync(author, cancellationToken);
+        return result.Entity;
+    }
+
+    public Task<Author> DeleteAuthor(long authorId, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
 
-    public Task<Author> DeleteAuthor(long authorId)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<Author> GetAuthor(long authorId)
+    public Task<Author> GetAuthor(long authorId, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
