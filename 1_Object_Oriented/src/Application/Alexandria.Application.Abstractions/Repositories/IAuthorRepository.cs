@@ -4,7 +4,7 @@ namespace Alexandria.Application.Abstractions.Repositories;
 
 public interface IAuthorRepository
 {
-    Task<Func<Author>> CreateAuthor(Author author, CancellationToken cancellationToken);
-    Task<Author> GetAuthor(long authorId, CancellationToken cancellationToken);
-    Task<Author> DeleteAuthor(long authorId, CancellationToken cancellationToken);
+    Task<Func<Author>> CreateAuthorAsync(Author author, CancellationToken cancellationToken);
+    Task<Author> GetAuthorAsync(long authorId, CancellationToken cancellationToken);
+    Task<Author> DeleteAuthorAsync(long authorId, CancellationToken cancellationToken);
 }

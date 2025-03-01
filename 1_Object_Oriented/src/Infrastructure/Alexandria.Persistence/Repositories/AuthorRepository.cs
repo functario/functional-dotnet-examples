@@ -13,18 +13,21 @@ internal sealed class AuthorRepository : IAuthorRepository
         _alexandriaDbContext = alexandriaDbContext;
     }
 
-    public async Task<Func<Author>> CreateAuthor(Author author, CancellationToken cancellationToken)
+    public async Task<Func<Author>> CreateAuthorAsync(
+        Author author,
+        CancellationToken cancellationToken
+    )
     {
         var result = await _alexandriaDbContext.AddAsync(author.AsAuthorModel(), cancellationToken);
         return result.Entity.ToAuthor;
     }
 
-    public Task<Author> DeleteAuthor(long authorId, CancellationToken cancellationToken)
+    public Task<Author> DeleteAuthorAsync(long authorId, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
 
-    public Task<Author> GetAuthor(long authorId, CancellationToken cancellationToken)
+    public Task<Author> GetAuthorAsync(long authorId, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

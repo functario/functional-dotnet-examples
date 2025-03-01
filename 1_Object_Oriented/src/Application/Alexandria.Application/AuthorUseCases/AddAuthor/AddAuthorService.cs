@@ -20,7 +20,10 @@ internal sealed class AddAuthorService : IAddAuthorService
     {
         var author = request?.Author;
         ArgumentNullException.ThrowIfNull(author, nameof(request.Author));
-        var createdAuthorFunc = await _authorRepository.CreateAuthor(author, cancellationToken);
+        var createdAuthorFunc = await _authorRepository.CreateAuthorAsync(
+            author,
+            cancellationToken
+        );
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         var createdAuthor = createdAuthorFunc();
         var response = new AddAuthorResult(createdAuthor);
