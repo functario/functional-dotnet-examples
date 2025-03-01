@@ -1,3 +1,3 @@
 ﻿namespace Alexandria.Persistence.Migrations;
 
-public static class Dta { }
+public static class MigrationMarker { }

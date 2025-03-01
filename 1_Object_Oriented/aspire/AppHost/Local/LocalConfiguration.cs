@@ -1,7 +1,6 @@
 ﻿using Alexandria.Persistence;
-using AlexandriaSQL = WellKnowns.Infrastructure.AlexandriaSqldb.ProjectReferences;
-using AlexandriaSQLConstants = WellKnowns.Infrastructure.AlexandriaSqldb.Constants;
-using AlexandriaWebApi = WellKnowns.Presentation.AlexandriaWebApi.ProjectReferences;
+using WellKnowns.Infrastructure.SQL;
+using WellKnowns.Presentation.AlexandriaWebApi;
 
 namespace AppHost.Local;
 
@@ -27,9 +26,13 @@ internal static class LocalConfiguration
     )
     {
         builder
-            .AddProject<Projects.Alexandria_WebApi>(AlexandriaWebApi.ProjectName)
+            .AddProject<Projects.Alexandria_WebApi>(WebApiProjectReferences.ProjectName)
             .WithEndpoint("https", endpoint => endpoint.IsProxied = false)
             .WithEndpoint("http", endpoint => endpoint.IsProxied = false)
+            .WithEnvironment(
+                SqldbEnvVars.SQLConnectionString,
+                SqldbConstants.SQLDbLocalConnectionString
+            )
             .WithReference(sqldb)
             .WaitFor(sqldb);
 
@@ -40,14 +43,14 @@ internal static class LocalConfiguration
         IDistributedApplicationBuilder builder
     )
     {
-        var dbName = AlexandriaSQLConstants.SQLDbName;
-        var saPassword = AlexandriaSQLConstants.SQLDbLocalSAPassword;
+        var dbName = SqldbConstants.SQLDbName;
+        var saPassword = SqldbConstants.SQLDbLocalSAPassword;
         var sqlPassword = builder.AddParameter("sql-password", saPassword, secret: true);
 
         var sqlServer = builder
             .AddSqlServer(
-                AlexandriaSQL.ServerName,
-                port: AlexandriaSQLConstants.SQLLocalDefaultPort,
+                SqlProjectReferences.ServerName,
+                port: SqldbConstants.SQLLocalDefaulPort,
                 password: sqlPassword
             )
             .WithLifetime(ContainerLifetime.Persistent);
@@ -62,10 +65,11 @@ internal static class LocalConfiguration
             static async (@event, cancellationToken) =>
             {
                 var db =
-                    @event.Model.Resources.First(x => x.Name == AlexandriaSQL.ServerName)
+                    @event.Model.Resources.First(x => x.Name == SqlProjectReferences.ServerName)
                     as SqlServerServerResource;
 
                 ArgumentNullException.ThrowIfNull(db, nameof(db));
+
                 var connectionString = await db.GetConnectionStringAsync(cancellationToken)
                     .ConfigureAwait(false);
 

@@ -1,6 +1,6 @@
 ﻿namespace WellKnowns.Presentation.AlexandriaWebApi;
 
-public static class UrlFragments
+public static class WebApiUrlFragments
 {
     public const string OpenApiVersion = "v1";
 

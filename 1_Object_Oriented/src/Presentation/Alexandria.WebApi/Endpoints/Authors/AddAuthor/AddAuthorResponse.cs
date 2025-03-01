@@ -2,4 +2,4 @@
 
 namespace Alexandria.WebApi.Endpoints.Authors.AddAuthor;
 
-internal sealed record AddAuthorResult(Author Author) { }
+internal sealed record AddAuthorResponse(Author Author) { }

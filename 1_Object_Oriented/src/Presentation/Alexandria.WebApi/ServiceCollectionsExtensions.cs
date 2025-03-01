@@ -27,8 +27,8 @@ internal static class ServiceCollectionsExtensions
         return services.AddOpenApi(x =>
         {
             var openApiDeaultUrl =
-                Environment.GetEnvironmentVariable(EnvVars.OpenApiDefaultUrl)
-                ?? throw new EnvironmentNotFoundException(EnvVars.OpenApiDefaultUrl);
+                Environment.GetEnvironmentVariable(WebApiEnvVars.OpenApiDefaultUrl)
+                ?? throw new EnvironmentNotFoundException(WebApiEnvVars.OpenApiDefaultUrl);
 
             x.AddDocumentTransformer(
                 (document, context, cancellationToken) =>

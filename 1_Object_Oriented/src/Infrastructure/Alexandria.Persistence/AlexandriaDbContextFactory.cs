@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using WellKnowns.Infrastructure.AlexandriaSqldb;
+using WellKnowns.Infrastructure.SQL;
 
 namespace Alexandria.Persistence;
 
@@ -37,7 +37,7 @@ internal class AlexandriaDbContextFactory : IDesignTimeDbContextFactory<Alexandr
 
         // Adding the name in the connection string
         // replace the default name "master".
-        var databaseSegment = $"Database={Constants.SQLDbName}";
+        var databaseSegment = $"Database={SqldbConstants.SQLDbName}";
         return sqlConnectionString.Contains(databaseSegment, StringComparison.OrdinalIgnoreCase)
             ? sqlConnectionString
             : $"{sqlConnectionString};{databaseSegment}";
@@ -52,8 +52,8 @@ internal class AlexandriaDbContextFactory : IDesignTimeDbContextFactory<Alexandr
             sqlConnectionString,
             x =>
                 x.MigrationsHistoryTable(
-                    Constants.SQLDbMigrationTable,
-                    Constants.SQLDbDefaultSchema
+                    SqldbConstants.SQLDbMigrationTable,
+                    SqldbConstants.SQLDbDefaultSchema
                 )
         );
 

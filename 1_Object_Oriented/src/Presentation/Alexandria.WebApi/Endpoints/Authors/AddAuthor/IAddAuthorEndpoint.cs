@@ -7,7 +7,7 @@ namespace Alexandria.WebApi.Endpoints.Authors.AddAuthor;
 
 internal interface IAddAuthorEndpoint : IGroupedEndpoint<AccountsGroup>
 {
-    Task<Results<Created<AddAuthorResult>, Conflict<AuthorAlreadyExistsResult>>> HandleAsync(
+    Task<Results<Created<AddAuthorResponse>, Conflict<AuthorAlreadyExistsResponse>>> HandleAsync(
         IAddAuthorService addAuthorService,
         AddAuthorRequest request,
         CancellationToken cancellationToken

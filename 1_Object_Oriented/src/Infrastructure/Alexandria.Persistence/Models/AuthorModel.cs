@@ -4,7 +4,7 @@ namespace Alexandria.Persistence.Models;
 
 internal class AuthorModel
 {
-    public ulong Id { get; init; }
+    public long Id { get; init; }
     public required string FirstName { get; init; }
     public ICollection<string> MiddleNames { get; init; } = [];
     public required string LastName { get; init; }
@@ -14,8 +14,11 @@ internal class AuthorModel
     {
         return new Author(Id, FirstName, MiddleNames, LastName, BirthDate);
     }
+}
 
-    public static AuthorModel FromAuthor(Author author)
+internal static class AuthorExtensions
+{
+    public static AuthorModel AsAuthorModel(this Author author)
     {
         return new AuthorModel()
         {

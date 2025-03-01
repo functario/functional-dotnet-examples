@@ -1,5 +1,6 @@
 ﻿using Alexandria.Application.Abstractions.Repositories;
 using Alexandria.Domain.AuthorDomain;
+using Alexandria.Persistence.Models;
 
 namespace Alexandria.Persistence.Repositories;
 
@@ -12,10 +13,10 @@ internal sealed class AuthorRepository : IAuthorRepository
         _alexandriaDbContext = alexandriaDbContext;
     }
 
-    public async Task<Author> CreateAuthor(Author author, CancellationToken cancellationToken)
+    public async Task<Func<Author>> CreateAuthor(Author author, CancellationToken cancellationToken)
     {
-        var result = await _alexandriaDbContext.AddAsync(author, cancellationToken);
-        return result.Entity;
+        var result = await _alexandriaDbContext.AddAsync(author.AsAuthorModel(), cancellationToken);
+        return result.Entity.ToAuthor;
     }
 
     public Task<Author> DeleteAuthor(long authorId, CancellationToken cancellationToken)

@@ -24,11 +24,11 @@ namespace Alexandria.Persistence.Migrations
 
             modelBuilder.Entity("Alexandria.Persistence.Models.AuthorModel", b =>
                 {
-                    b.Property<decimal>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("decimal(20,0)");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<DateTimeOffset>("BirthDate")
                         .HasColumnType("datetimeoffset");

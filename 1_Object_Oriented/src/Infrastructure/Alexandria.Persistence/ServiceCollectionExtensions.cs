@@ -2,7 +2,8 @@
 using Alexandria.Persistence.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using WellKnowns.Infrastructure.AlexandriaSqldb;
+using WellKnowns.Infrastructure.SQL;
+using WellKnowns.Presentation.AlexandriaWebApi;
 
 namespace Alexandria.Persistence;
 
@@ -37,12 +38,22 @@ public static class ServiceCollectionExtensions
 
     private static IServiceCollection ConfigureDatabase(this IServiceCollection services)
     {
-        var sqlConnectionString = Environment.GetEnvironmentVariable(EnvVars.SQLConnectionString);
-
-        ArgumentNullException.ThrowIfNull(sqlConnectionString, nameof(EnvVars.SQLConnectionString));
+        if (BuildType.IsOpenApiGeneratorBuild())
+        {
+            return services;
+        }
 
         services.AddDbContext<AlexandriaDbContext>(x =>
         {
+            var sqlConnectionString = Environment.GetEnvironmentVariable(
+                SqldbEnvVars.SQLConnectionString
+            );
+
+            ArgumentException.ThrowIfNullOrWhiteSpace(
+                sqlConnectionString,
+                nameof(SqldbEnvVars.SQLConnectionString)
+            );
+
             AlexandriaDbContextFactory.ConfigureDbContextOptionsBuilder(x, sqlConnectionString);
         });
 

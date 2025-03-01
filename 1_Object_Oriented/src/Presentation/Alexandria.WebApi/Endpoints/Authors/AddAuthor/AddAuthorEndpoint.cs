@@ -16,7 +16,7 @@ internal sealed class AddAuthorEndpoint : IAddAuthorEndpoint
     }
 
     public async Task<
-        Results<Created<AddAuthorResult>, Conflict<AuthorAlreadyExistsResult>>
+        Results<Created<AddAuthorResponse>, Conflict<AuthorAlreadyExistsResponse>>
     > HandleAsync(
         [FromServices] IAddAuthorService addAuthorService,
         [FromBody] AddAuthorRequest authorRequest,
@@ -27,12 +27,12 @@ internal sealed class AddAuthorEndpoint : IAddAuthorEndpoint
         try
         {
             var response = await addAuthorService.Handle(command, cancellationToken);
-            var result = new AddAuthorResult(response.Author);
+            var result = new AddAuthorResponse(response.Author);
             return TypedResults.Created("", result);
         }
         catch (AuthorAlreadyExistsException)
         {
-            return TypedResults.Conflict(new AuthorAlreadyExistsResult(authorRequest.ToAuthor()));
+            return TypedResults.Conflict(new AuthorAlreadyExistsResponse(authorRequest.ToAuthor()));
         }
     }
 }

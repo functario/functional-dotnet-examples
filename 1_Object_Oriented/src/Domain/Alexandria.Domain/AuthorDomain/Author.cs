@@ -3,7 +3,7 @@
 public class Author
 {
     public Author(
-        ulong id,
+        long id,
         string firstName,
         ICollection<string> middleNames,
         string lastName,
@@ -17,7 +17,7 @@ public class Author
         BirthDate = birthDate;
     }
 
-    public ulong Id { get; }
+    public long Id { get; }
     public string FirstName { get; }
     public ICollection<string> MiddleNames { get; }
     public string LastName { get; }
