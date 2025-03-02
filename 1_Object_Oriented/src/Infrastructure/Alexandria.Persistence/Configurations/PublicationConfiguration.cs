@@ -20,7 +20,7 @@ internal class PublicationConfiguration : IEntityTypeConfiguration<PublicationMo
         builder
             .HasMany<AuthorModel>()
             .WithOne()
-            .HasForeignKey(x => x.Id)
+            .HasForeignKey(author => author.Id)
             .IsRequired();
 
         // csharpier-ignore-end

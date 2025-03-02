@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Alexandria.Persistence.Migrations
 {
     [DbContext(typeof(AlexandriaDbContext))]
-    [Migration("20250302131935_CreateTables")]
+    [Migration("20250302150846_CreateTables")]
     partial class CreateTables
     {
         /// <inheritdoc />
