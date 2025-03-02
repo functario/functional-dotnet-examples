@@ -4,5 +4,5 @@ namespace Alexandria.WebApi.Endpoints.Authors.AddAuthor;
 
 internal sealed record AuthorAlreadyExistsResponse(Author Author)
 {
-    public string Message => $"The Author '{Author.Id}' already exists.";
+    public string Message => $"{nameof(Author)} with Id '{Author.Id}' already exists.";
 }

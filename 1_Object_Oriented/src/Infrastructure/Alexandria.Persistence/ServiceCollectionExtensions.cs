@@ -33,6 +33,7 @@ public static class ServiceCollectionExtensions
     internal static IServiceCollection WithRepositories(this IServiceCollection services)
     {
         services.AddScoped<IAuthorRepository, AuthorRepository>();
+        services.AddScoped<IBookRepository, BookRepository>();
 
         return services;
     }

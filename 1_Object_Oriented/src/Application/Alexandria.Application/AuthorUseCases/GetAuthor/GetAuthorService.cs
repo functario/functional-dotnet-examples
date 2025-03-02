@@ -5,12 +5,10 @@ namespace Alexandria.Application.AuthorUseCases.GetAuthor;
 internal sealed class GetAuthorService : IGetAuthorService
 {
     private readonly IAuthorRepository _authorRepository;
-    private readonly IUnitOfWork _unitOfWork;
 
-    public GetAuthorService(IAuthorRepository authorRepository, IUnitOfWork unitOfWork)
+    public GetAuthorService(IAuthorRepository authorRepository)
     {
         _authorRepository = authorRepository;
-        _unitOfWork = unitOfWork;
     }
 
     public async Task<GetAuthorResult?> Handle(
@@ -23,7 +21,6 @@ internal sealed class GetAuthorService : IGetAuthorService
             cancellationToken
         );
 
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
         return authorFound is not null ? new GetAuthorResult(authorFound) : null;
     }
 }

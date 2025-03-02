@@ -1,5 +1,7 @@
 ﻿using Alexandria.Application.AuthorUseCases.AddAuthor;
 using Alexandria.Application.AuthorUseCases.GetAuthor;
+using Alexandria.Application.BookUseCases.AddBook;
+using Alexandria.Application.BookUseCases.GetBook;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -19,6 +21,8 @@ public static class ServiceCollectionsExtensions
     {
         services.AddScoped<IAddAuthorService, AddAuthorService>();
         services.AddScoped<IGetAuthorService, GetAuthorService>();
+        services.AddScoped<IAddBookService, AddBookService>();
+        services.AddScoped<IGetBookService, GetBookService>();
 
         return services;
     }

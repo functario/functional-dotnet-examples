@@ -4,9 +4,9 @@ namespace Alexandria.Persistence.Models;
 
 internal class PublicationModel
 {
-    public long Id { get; set; }
-    public long BookId { get; set; }
-    public DateTimeOffset PublicationDate { get; set; }
+    public long Id { get; init; }
+    public long BookId { get; init; }
+    public DateTimeOffset PublicationDate { get; init; }
     public ICollection<long> AuthorsIds { get; init; } = [];
     public required DateTimeOffset CreatedDate { get; init; }
     public required DateTimeOffset UpdatedDate { get; init; }
@@ -21,13 +21,14 @@ internal static class PublicationExtensions
 {
     public static PublicationModel AsNewPublicationModel(
         this Publication publication,
+        long bookId,
         DateTimeOffset createdDate
     )
     {
         return new PublicationModel()
         {
             Id = publication.Id,
-            BookId = publication.BookId,
+            BookId = bookId,
             PublicationDate = publication.PublicationDate,
             AuthorsIds = publication.AuthorsIds,
             CreatedDate = createdDate,

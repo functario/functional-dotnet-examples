@@ -6,13 +6,19 @@ internal class BookModel
 {
     public long Id { get; init; }
     public required string Title { get; init; }
-    public required PublicationModel Publication { get; init; }
     public required DateTimeOffset CreatedDate { get; init; }
     public required DateTimeOffset UpdatedDate { get; init; }
 
-    public Book ToBook()
+    public Book ToDomainBook(PublicationModel publication)
     {
-        return new Book(Id, Title, Publication.ToDomainPublication());
+        return new Book(Id, Title, publication.ToDomainPublication());
+    }
+
+    public Book ToNewDomainBook()
+    {
+        var transientPublication = new Publication(0, Id, default, []);
+
+        return new Book(Id, Title, transientPublication);
     }
 }
 
@@ -24,7 +30,6 @@ internal static class BookExtensions
         {
             Id = book.Id,
             Title = book.Title,
-            Publication = book.Publication.AsNewPublicationModel(createdDate),
             CreatedDate = createdDate,
             UpdatedDate = createdDate,
         };
