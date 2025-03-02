@@ -20,16 +20,14 @@ public sealed class AddBookService : IAddBookService
     )
     {
         ArgumentNullException.ThrowIfNull(request, nameof(request));
-        var publicationTransient = new Publication(
-            0,
-            0,
+        var transientPublication = Publication.CreateTransient(
             request.PublicationDate,
             request.AuthorsIds
         );
 
-        var bookTransient = new Book(0, request.Title, publicationTransient);
+        var transientBook = Book.CreateTransient(request.Title, transientPublication);
 
-        var bookFunc = await _bookRepository.CreateBookAsync(bookTransient, cancellationToken);
+        var bookFunc = await _bookRepository.CreateBookAsync(transientBook, cancellationToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -41,15 +39,10 @@ public sealed class AddBookService : IAddBookService
         // This is definatly something to revisit once the domain is more understood.
         // Domain rules should be:
         // - Publication cannot exist without Book and at least 1 Author
-        var publicationNew = new Publication(
-            0,
-            book.Id,
-            request.PublicationDate,
-            request.AuthorsIds
-        );
+        transientPublication = transientPublication.AssociateBookId(book.Id);
 
         var publicationFunc = await _bookRepository.CreatePublicationAsync(
-            publicationNew,
+            transientPublication,
             cancellationToken
         );
 
