@@ -8,11 +8,9 @@ public class UnitTest1
 {
     private readonly IGetAccountEndpoint _getAccountEndpoint;
 
-    // Doc: Interface and test constructor must be Public.
-    // Cannot be internal, otherwise xunit raises an error
-    public UnitTest1(IGetAccountEndpoint getAccountEndpoint)
+    public UnitTest1(WebAppServicesFactory webAppServicesFactory)
     {
-        _getAccountEndpoint = getAccountEndpoint;
+        _getAccountEndpoint = webAppServicesFactory.CreateService<IGetAccountEndpoint>();
     }
 
     [Fact]

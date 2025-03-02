@@ -1,7 +1,8 @@
-﻿using Alexandria.WebApi.Supports.EndpointMapper;
-using Microsoft.AspNetCore.Builder;
+﻿using Alexandria.Application.Abstractions.Repositories;
+using Alexandria.WebApi.Supports.EndpointMapper;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NSubstitute;
 
 namespace Alexandria.SociableTests.DI;
 
@@ -13,79 +14,108 @@ internal static class ServiceCollectionExtensions
     )
     {
         ArgumentNullException.ThrowIfNull(context, nameof(context));
-        var webApplicationBuilder = WebApiStartup.CreateWebHostBuilder([]);
-        services
-        //.RegisterTestRepositoriesInTestAssembly()
-        .ConfigureWebApplicationBuilder(webApplicationBuilder);
-
-        // Need to build the app to resolve dependencies
-        var app = WebApiStartup.BuildWebAppAsync(webApplicationBuilder).GetAwaiter().GetResult();
-
-        services
-            .AddSingleton(app)
-            .RegisterAppServicesAsSelfInterfaces(app, webApplicationBuilder, typeof(IEndpoint));
+        services.AddWebAppResolver();
     }
 
-    /// <summary>
-    /// Register as scoped, all concrete types (self)
-    /// implementing a generic interface from the WebApplication (the app under test)
-    /// into the test project DI container
-    /// as interface matching the pattern "INameOfClass".
-    /// </summary>
-    /// <param name="services">The ServiceCollection of the test project.</param>
-    /// <param name="webApplication">The WebApplication.</param>
-    /// <param name="webApplicationBuilder">The WebApplicationBuilder.</param>
-    /// <param name="genericInterfaceType">The type of the interface</param>
-    /// <returns>The ServiceCollection of the test project</returns>
-    /// (ex: ServiceA : IGenericInterface; then ServiceA is registered as ServiceA and
-    /// ServiceB : IGenericInterface; then ServiceB is registered as ServiceB.)
-    private static IServiceCollection RegisterAppServicesAsSelfInterfaces(
-        this IServiceCollection services,
-        WebApplication webApplication,
-        WebApplicationBuilder webApplicationBuilder,
-        Type genericInterfaceType
-    )
+    private static IServiceCollection AddWebAppResolver(this IServiceCollection services)
     {
-        var serviceDescriptors = webApplicationBuilder
-            .Services.Where(s => genericInterfaceType.IsAssignableFrom(s.ServiceType))
-            .ToList();
-
-        foreach (var serviceDescriptor in serviceDescriptors)
+        services.AddScoped(x =>
         {
-            var match = $"I{serviceDescriptor.ServiceType.Name}";
-            var endpointInterface =
-                serviceDescriptor
-                    .ServiceType.GetInterfaces()
-                    .Where(x => x.Name == match)
-                    .SingleOrDefault()
-                ?? throw new InvalidOperationException(
-                    $"{serviceDescriptor.ServiceType.Name} does not implement maching interface {match}"
+            // Each WebAppServicesFactory has a built WebApi.
+            // This ensure to isolate each tests.
+            var webApplicationBuilder = WebApiStartup.CreateWebHostBuilder([]);
+            webApplicationBuilder
+                .Services.RegisterRepositoryInWebApplicationAsMock()
+                .RegisterConcreteClassesAsInterfacesInWebApplication(
+                    typeof(IEndpoint),
+                    (implementedInterface, concreteImplementation) =>
+                        implementedInterface.Name.Contains(
+                            concreteImplementation.Name,
+                            StringComparison.OrdinalIgnoreCase
+                        )
                 );
 
-            services.AddScoped(
-                endpointInterface,
-                x =>
-                {
-                    // Force scope registration otherwise the same instance is provided
-                    // even if it is registered as scoped in WebApplicaton.
-                    using var scope = webApplication.Services.CreateScope();
-                    return scope.ServiceProvider.GetRequiredService(serviceDescriptor.ServiceType!);
-                }
-            );
-        }
+            var app = WebApiStartup
+                .BuildWebAppAsync(webApplicationBuilder)
+                .GetAwaiter()
+                .GetResult();
+
+            return new WebAppServicesFactory(app);
+        });
 
         return services;
     }
 
-    private static WebApplicationBuilder ConfigureWebApplicationBuilder(
-        this IServiceCollection _, //services
-        WebApplicationBuilder webApplicationBuilder
+    /// <summary>
+    /// Replace IRepository concrete registrations by mock.
+    /// </summary>
+    /// <param name="webApplicationServiceCollection">The WebApplication service collection.</param>
+    /// <returns></returns>
+    private static IServiceCollection RegisterRepositoryInWebApplicationAsMock(
+        this IServiceCollection webApplicationServiceCollection
     )
     {
-        // csharpier-ignore
-        webApplicationBuilder.Services
-            .RegisterWebApiEndpointsInWebApplication();
+        var iRepositories = webApplicationServiceCollection
+            .Where(s => typeof(IRepository).IsAssignableFrom(s.ServiceType))
+            .ToList();
 
-        return webApplicationBuilder;
+        foreach (var iRepository in iRepositories)
+        {
+            webApplicationServiceCollection.Remove(iRepository);
+            webApplicationServiceCollection.AddScoped(
+                iRepository.ServiceType,
+                x => Substitute.For([iRepository.ServiceType], null)
+            );
+        }
+
+        return webApplicationServiceCollection;
+    }
+
+    /// <summary>
+    /// Register inside AppService container matching implemented interfaces as scoped, from concret types
+    /// implementing a generic interface.
+    /// </summary>
+    /// <param name="webApplicationServiceCollection">The ServiceCollection of the WebApp.</param>
+    /// <param name="genericInterfaceType">The type of the one interface implemented by the concret types.
+    /// It does not have to be the matching implemented interface resolved by the predicate.</param>
+    /// <param name="predicate">The predicate comparing implemented interface with the implementation type.</param>
+    /// <returns>The ServiceCollection of WebApp.</returns>
+    /// <example>ServiceA : IServiceA. And IServiceA : IGenericInterface;
+    /// then ServiceA is registered as IServiceA given a predicate
+    /// (interface, class) => interface.Name.Contains(class.Name). </example>
+    private static IServiceCollection RegisterConcreteClassesAsInterfacesInWebApplication(
+        this IServiceCollection webApplicationServiceCollection,
+        Type genericInterfaceType,
+        Func<Type, Type, bool> predicate
+    )
+    {
+        var serviceDescriptors = webApplicationServiceCollection
+            .Where(s => genericInterfaceType.IsAssignableFrom(s.ServiceType))
+            .ToList();
+
+        foreach (var serviceDescriptor in serviceDescriptors)
+        {
+            var concreteType = serviceDescriptor.ImplementationType;
+            var matchingInterface =
+                (
+                    concreteType
+                        ?.GetInterfaces()
+                        .Where(x => predicate(x, concreteType))
+                        .FirstOrDefault()
+                )
+                ?? throw new InvalidCastException(
+                    $"No matching interface implementation in '{nameof(serviceDescriptor.ImplementationType)}'."
+                );
+
+            webApplicationServiceCollection.AddScoped(
+                matchingInterface,
+                x =>
+                {
+                    return x.GetRequiredService(concreteType!);
+                }
+            );
+        }
+
+        return webApplicationServiceCollection;
     }
 }

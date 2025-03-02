@@ -8,9 +8,9 @@ public class UnitTest2
 {
     private readonly IGetAccountEndpoint _getAccountEndpoint;
 
-    public UnitTest2(IGetAccountEndpoint getAccountEndpoint)
+    public UnitTest2(WebAppServicesFactory webAppServicesFactory)
     {
-        _getAccountEndpoint = getAccountEndpoint;
+        _getAccountEndpoint = webAppServicesFactory.CreateService<IGetAccountEndpoint>();
     }
 
     [Fact]
