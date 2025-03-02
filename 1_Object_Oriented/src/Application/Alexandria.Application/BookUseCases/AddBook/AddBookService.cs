@@ -37,6 +37,10 @@ public sealed class AddBookService : IAddBookService
         // Here the choice is made to create the publication in the same flow than than the book.
         // But it could be create by event (OnBookCreated) or by dedicated CreatePublication endpoint.
         // This is definatly something to revisit once the domain is more understood.
+        //
+        // This also buggy since if the Book is created in DB
+        // but that the Publication transaction failed, there is no rollback!
+        //
         // Domain rules should be:
         // - Publication cannot exist without Book and at least 1 Author
         transientPublication = transientPublication.AssociateBookId(book.Id);

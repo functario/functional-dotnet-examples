@@ -19,12 +19,12 @@ internal class AlexandriaDbContext : DbContext
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
     {
-        await OnPublicationModelModified(cancellationToken);
+        await OnPublicationModelUpsert(cancellationToken);
 
         return base.SaveChanges();
     }
 
-    private async Task OnPublicationModelModified(CancellationToken cancellationToken)
+    private async Task OnPublicationModelUpsert(CancellationToken cancellationToken)
     {
         var entries = ChangeTracker
             .Entries<PublicationModel>()
