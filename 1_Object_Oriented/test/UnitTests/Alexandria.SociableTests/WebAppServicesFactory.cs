@@ -26,19 +26,6 @@ public sealed class WebAppServicesFactory
         return (T)service;
     }
 
-    private object[] CreateScopeMany(params Type[] types)
-    {
-        var objects = new List<object>();
-        using var scope = _app.Services.CreateScope();
-        foreach (var type in types)
-        {
-            var obj = scope.ServiceProvider.GetRequiredService(type);
-            objects.Add(obj);
-        }
-
-        return [.. objects];
-    }
-
     public (T1 service1, T2 service2) CreateServices<T1, T2>()
     {
         var type1 = typeof(T1);
@@ -57,5 +44,18 @@ public sealed class WebAppServicesFactory
         var objects = CreateScopeMany(type1, type2);
 
         return ((T1)objects[1], (T2)objects[2], (T3)objects[3]);
+    }
+
+    private object[] CreateScopeMany(params Type[] types)
+    {
+        var objects = new List<object>();
+        using var scope = _app.Services.CreateScope();
+        foreach (var type in types)
+        {
+            var obj = scope.ServiceProvider.GetRequiredService(type);
+            objects.Add(obj);
+        }
+
+        return [.. objects];
     }
 }

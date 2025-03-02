@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NSubstitute;
 
-namespace Alexandria.SociableTests.DI;
+namespace Alexandria.SociableTests;
 
 internal static class ServiceCollectionExtensions
 {
