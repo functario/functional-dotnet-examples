@@ -1,5 +1,4 @@
-﻿using Alexandria.SociableTests.DI;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Hosting;
 
 namespace Alexandria.SociableTests;
 
