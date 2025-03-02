@@ -1,8 +1,9 @@
-﻿using Alexandria.Domain.BookDomain;
+﻿using System.ComponentModel.DataAnnotations;
+using Alexandria.Domain.BookDomain;
 
 namespace Alexandria.Persistence.Models;
 
-internal class PublicationModel
+internal class PublicationModel : IValidatableObject
 {
     public long Id { get; init; }
     public long BookId { get; init; }
@@ -14,5 +15,16 @@ internal class PublicationModel
     public Publication ToDomainPublication()
     {
         return new Publication(Id, BookId, PublicationDate, AuthorsIds);
+    }
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        if (AuthorsIds == null || AuthorsIds.Count == 0)
+        {
+            yield return new ValidationResult(
+                "A publication must have at least one author.",
+                [nameof(AuthorsIds)]
+            );
+        }
     }
 }

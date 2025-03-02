@@ -19,30 +19,20 @@ internal class AlexandriaDbContext : DbContext
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
     {
-        await Toto(cancellationToken);
+        await OnPublicationModelModified(cancellationToken);
 
         return base.SaveChanges();
     }
 
-    private async Task Toto(CancellationToken cancellationToken)
+    private async Task OnPublicationModelModified(CancellationToken cancellationToken)
     {
         var entries = ChangeTracker
-    .Entries<PublicationModel>()
-    .Where(e => e.State == EntityState.Added);
+            .Entries<PublicationModel>()
+            .Where(e => e.State is EntityState.Added or EntityState.Modified);
 
         foreach (var entry in entries)
         {
             var publication = entry.Entity;
-
-            if (publication.AuthorsIds == null || publication.AuthorsIds.Count == 0)
-            {
-                throw new InvalidOperationException("A publication must have at least one author.");
-            }
-
-            var allExist = publication.AuthorsIds.Select(x =>
-                FindAsync<AuthorModel>([x], cancellationToken)
-            );
-
             var missingAuthorIds = new List<long>();
             foreach (var authorId in publication.AuthorsIds)
             {
