@@ -6,10 +6,158 @@
   },
   "servers": [
     {
-      "url": ""
+      "url": "https://localhost"
     }
   ],
   "paths": {
+    "/v1/books": {
+      "get": {
+        "tags": [
+          "Books"
+        ],
+        "summary": "Get a Book.",
+        "operationId": "GetBook",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBookResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Books"
+        ],
+        "summary": "Add a Book.",
+        "operationId": "PostBook",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddBookRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddBookResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookAlreadyExistsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/authors": {
+      "get": {
+        "tags": [
+          "Authors"
+        ],
+        "summary": "Get an Author.",
+        "operationId": "GetAuthor",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAuthorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Authors"
+        ],
+        "summary": "Add an Author.",
+        "operationId": "PostAuthor",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddAuthorRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddAuthorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorAlreadyExistsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/accounts": {
       "get": {
         "tags": [
@@ -48,6 +196,161 @@
   },
   "components": {
     "schemas": {
+      "AddAuthorRequest": {
+        "required": [
+          "firstName",
+          "middleNames",
+          "lastName",
+          "birthDate"
+        ],
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "middleNames": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "birthDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "AddAuthorResponse": {
+        "required": [
+          "author"
+        ],
+        "type": "object",
+        "properties": {
+          "author": {
+            "$ref": "#/components/schemas/Author"
+          }
+        }
+      },
+      "AddBookRequest": {
+        "required": [
+          "title",
+          "publicationDate",
+          "authorsIds"
+        ],
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "publicationDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "authorsIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        }
+      },
+      "AddBookResponse": {
+        "required": [
+          "book"
+        ],
+        "type": "object",
+        "properties": {
+          "book": {
+            "$ref": "#/components/schemas/Book"
+          }
+        }
+      },
+      "Author": {
+        "required": [
+          "id",
+          "firstName",
+          "middleNames",
+          "lastName",
+          "birthDate"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "middleNames": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "birthDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "AuthorAlreadyExistsResponse": {
+        "required": [
+          "author"
+        ],
+        "type": "object",
+        "properties": {
+          "author": {
+            "$ref": "#/components/schemas/Author"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "Book": {
+        "required": [
+          "id",
+          "title",
+          "publication"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "title": {
+            "type": "string"
+          },
+          "publication": {
+            "$ref": "#/components/schemas/Publication"
+          }
+        }
+      },
+      "BookAlreadyExistsResponse": {
+        "required": [
+          "book"
+        ],
+        "type": "object",
+        "properties": {
+          "book": {
+            "$ref": "#/components/schemas/Book"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
       "GetAccountResponse": {
         "type": "object",
         "properties": {
@@ -55,10 +358,68 @@
             "type": "string"
           }
         }
+      },
+      "GetAuthorResponse": {
+        "required": [
+          "author"
+        ],
+        "type": "object",
+        "properties": {
+          "author": {
+            "$ref": "#/components/schemas/Author"
+          }
+        }
+      },
+      "GetBookResponse": {
+        "required": [
+          "book"
+        ],
+        "type": "object",
+        "properties": {
+          "book": {
+            "$ref": "#/components/schemas/Book"
+          }
+        }
+      },
+      "Publication": {
+        "required": [
+          "id",
+          "bookId",
+          "publicationDate",
+          "authorsIds"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "bookId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "publicationDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "authorsIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        }
       }
     }
   },
   "tags": [
+    {
+      "name": "Books"
+    },
+    {
+      "name": "Authors"
+    },
     {
       "name": "Accounts"
     }

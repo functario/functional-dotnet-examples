@@ -19,12 +19,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
-    <Folder Include="Configurations\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\..\Application\Alexandria.Application.Abstractions\Alexandria.Application.Abstractions.csproj" />
+    <ProjectReference Include="..\..\Application\Alexandria.Application\Alexandria.Application.csproj" />
     <ProjectReference Include="..\..\Commons\WellKnowns\WellKnowns.csproj" />
   </ItemGroup>
 
+
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+            <_Parameter1>AppHost</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
 </Project>

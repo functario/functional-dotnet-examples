@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using WellKnowns.Infrastructure.AlexandriaSqldb;
+using WellKnowns.Infrastructure.SQL;
 
 namespace Alexandria.Persistence;
 
-public class AlexandriaDbContextFactory : IDesignTimeDbContextFactory<AlexandriaDbContext>
+internal class AlexandriaDbContextFactory : IDesignTimeDbContextFactory<AlexandriaDbContext>
 {
     public AlexandriaDbContext CreateDbContext(string[] args)
     {
@@ -20,10 +20,11 @@ public class AlexandriaDbContextFactory : IDesignTimeDbContextFactory<Alexandria
         return new AlexandriaDbContext(optionsBuilder.Options);
     }
 
-    public void ApplyDbMigrations(string sqlConnectionString)
+    public static void ApplyDbMigrations(string sqlConnectionString)
     {
         sqlConnectionString = EnforceDatabaseName(sqlConnectionString);
-        using var context = CreateDbContext([sqlConnectionString]);
+        var factory = new AlexandriaDbContextFactory();
+        using var context = factory.CreateDbContext([sqlConnectionString]);
         context.Database.Migrate();
     }
 
@@ -36,7 +37,7 @@ public class AlexandriaDbContextFactory : IDesignTimeDbContextFactory<Alexandria
 
         // Adding the name in the connection string
         // replace the default name "master".
-        var databaseSegment = $"Database={Constants.SQLDbName}";
+        var databaseSegment = $"Database={SqldbConstants.SQLDbName}";
         return sqlConnectionString.Contains(databaseSegment, StringComparison.OrdinalIgnoreCase)
             ? sqlConnectionString
             : $"{sqlConnectionString};{databaseSegment}";
@@ -51,8 +52,8 @@ public class AlexandriaDbContextFactory : IDesignTimeDbContextFactory<Alexandria
             sqlConnectionString,
             x =>
                 x.MigrationsHistoryTable(
-                    Constants.SQLDbMigrationTable,
-                    Constants.SQLDbDefaultSchema
+                    SqldbConstants.SQLDbMigrationTable,
+                    SqldbConstants.SQLDbDefaultSchema
                 )
         );
 

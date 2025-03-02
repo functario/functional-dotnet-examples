@@ -1,6 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Alexandria.Application.Abstractions.Repositories;
+using Alexandria.Persistence.Repositories;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using WellKnowns.Infrastructure.AlexandriaSqldb;
+using WellKnowns.Infrastructure.SQL;
+using WellKnowns.Presentation.AlexandriaWebApi;
 
 namespace Alexandria.Persistence;
 
@@ -14,17 +17,45 @@ public static class ServiceCollectionExtensions
         ArgumentNullException.ThrowIfNull(context, nameof(context));
         // csharpier-ignore
         return services
-            .ConfigureDatabase();
+            .WithUnitOfWork()
+            .WithRepositories()
+            .ConfigureDatabase()
+            .AddSingleton(TimeProvider.System);
+    }
+
+    internal static IServiceCollection WithUnitOfWork(this IServiceCollection services)
+    {
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+        return services;
+    }
+
+    internal static IServiceCollection WithRepositories(this IServiceCollection services)
+    {
+        services.AddScoped<IAuthorRepository, AuthorRepository>();
+        services.AddScoped<IBookRepository, BookRepository>();
+
+        return services;
     }
 
     private static IServiceCollection ConfigureDatabase(this IServiceCollection services)
     {
-        var sqlConnectionString = Environment.GetEnvironmentVariable(EnvVars.SQLConnectionString);
-
-        ArgumentNullException.ThrowIfNull(sqlConnectionString, nameof(EnvVars.SQLConnectionString));
+        if (BuildType.IsOpenApiGeneratorBuild())
+        {
+            return services;
+        }
 
         services.AddDbContext<AlexandriaDbContext>(x =>
         {
+            var sqlConnectionString = Environment.GetEnvironmentVariable(
+                SqldbEnvVars.SQLConnectionString
+            );
+
+            ArgumentException.ThrowIfNullOrWhiteSpace(
+                sqlConnectionString,
+                nameof(SqldbEnvVars.SQLConnectionString)
+            );
+
             AlexandriaDbContextFactory.ConfigureDbContextOptionsBuilder(x, sqlConnectionString);
         });
 
