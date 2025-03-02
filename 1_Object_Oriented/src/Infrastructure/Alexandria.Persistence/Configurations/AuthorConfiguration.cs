@@ -8,8 +8,15 @@ internal class AuthorConfiguration : IEntityTypeConfiguration<AuthorModel>
 {
     public void Configure(EntityTypeBuilder<AuthorModel> builder)
     {
-        // dotnet ef migrations add CreateAuthorTable -- "Server=127.0.0.1,50925;User ID=sa;Password=Password1234!;TrustServerCertificate=true;Database=alexandria" --verbose
-        builder.ToTable("Author");
+        builder.ToTable("Authors");
         builder.HasKey(x => x.Id);
+
+        //builder
+        //    .HasMany<BookModel>()
+        //    .WithMany()
+        //    .UsingEntity<BookAuthor>(
+        //        j => j.HasOne<BookModel>().WithMany().HasForeignKey("BookId"), // Relationship with BookModel by BookId
+        //        j => j.HasOne<AuthorModel>().WithMany().HasForeignKey("AuthorId") // Relationship with AuthorModel by AuthorId
+        //    );
     }
 }

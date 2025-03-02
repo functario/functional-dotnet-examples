@@ -11,10 +11,11 @@ internal class AuthorModel
     public DateTimeOffset BirthDate { get; init; }
     public required DateTimeOffset CreatedDate { get; init; }
     public required DateTimeOffset UpdatedDate { get; init; }
+    public ICollection<long> BooksIds { get; init; } = [];
 
     public Author ToAuthor()
     {
-        return new Author(Id, FirstName, MiddleNames, LastName, BirthDate);
+        return new Author(Id, FirstName, MiddleNames, LastName, BirthDate, BooksIds);
     }
 }
 

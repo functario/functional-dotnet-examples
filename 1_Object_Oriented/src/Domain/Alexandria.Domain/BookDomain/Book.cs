@@ -2,16 +2,16 @@
 
 public class Book
 {
-    public Book(ulong id, string title, ulong authorId, DateTimeOffset publicationDate)
+    public Book(long id, string title, ICollection<long> authorsIds, DateTimeOffset publicationDate)
     {
         Id = id;
         Title = title;
-        AuthorId = authorId;
+        AuthorsIds = authorsIds;
         PublicationDate = publicationDate;
     }
 
-    public ulong Id { get; }
+    public long Id { get; }
     public string Title { get; }
-    public ulong AuthorId { get; }
+    public ICollection<long> AuthorsIds { get; }
     public DateTimeOffset PublicationDate { get; }
 }

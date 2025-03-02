@@ -33,6 +33,10 @@ namespace Alexandria.Persistence.Migrations
                     b.Property<DateTimeOffset>("BirthDate")
                         .HasColumnType("datetimeoffset");
 
+                    b.PrimitiveCollection<string>("BooksIds")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("datetimeoffset");
 
@@ -54,6 +58,49 @@ namespace Alexandria.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Authors");
+                });
+
+            modelBuilder.Entity("Alexandria.Persistence.Models.BookAuthor", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("AuthorId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("BookId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BookAuthors");
+                });
+
+            modelBuilder.Entity("Alexandria.Persistence.Models.BookModel", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.PrimitiveCollection<string>("AuthorsIds")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("PublicationDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Books");
                 });
 #pragma warning restore 612, 618
         }

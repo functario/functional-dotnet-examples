@@ -11,4 +11,8 @@ internal class AlexandriaDbContext : DbContext
         : base(options) { }
 
     public DbSet<AuthorModel> Authors { get; init; }
+
+    public DbSet<BookModel> Books { get; init; }
+
+    public DbSet<BookAuthor> BookAuthors { get; set; }
 }
