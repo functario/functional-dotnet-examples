@@ -6,12 +6,13 @@ internal class BookModel
 {
     public long Id { get; init; }
     public required string Title { get; init; }
-    public ICollection<long> AuthorsIds { get; init; } = [];
-    public DateTimeOffset PublicationDate { get; init; }
+    public required PublicationModel Publication { get; init; }
+    public required DateTimeOffset CreatedDate { get; init; }
+    public required DateTimeOffset UpdatedDate { get; init; }
 
     public Book ToBook()
     {
-        return new Book(Id, Title, AuthorsIds, PublicationDate);
+        return new Book(Id, Title, Publication.ToDomainPublication());
     }
 }
 
@@ -23,8 +24,9 @@ internal static class BookExtensions
         {
             Id = book.Id,
             Title = book.Title,
-            AuthorsIds = book.AuthorsIds,
-            PublicationDate = createdDate,
+            Publication = book.Publication.AsNewPublicationModel(createdDate),
+            CreatedDate = createdDate,
+            UpdatedDate = createdDate,
         };
     }
 }

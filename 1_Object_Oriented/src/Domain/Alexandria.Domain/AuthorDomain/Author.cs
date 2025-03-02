@@ -7,8 +7,7 @@ public class Author
         string firstName,
         ICollection<string> middleNames,
         string lastName,
-        DateTimeOffset birthDate,
-        ICollection<long> booksIds
+        DateTimeOffset birthDate
     )
     {
         Id = id;
@@ -16,7 +15,6 @@ public class Author
         MiddleNames = middleNames;
         LastName = lastName;
         BirthDate = birthDate;
-        BooksIds = booksIds;
     }
 
     public long Id { get; }
@@ -24,5 +22,4 @@ public class Author
     public ICollection<string> MiddleNames { get; }
     public string LastName { get; }
     public DateTimeOffset BirthDate { get; }
-    public ICollection<long> BooksIds { get; }
 }

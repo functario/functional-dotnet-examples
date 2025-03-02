@@ -6,8 +6,7 @@ internal sealed record AddAuthorRequest(
     string FirstName,
     ICollection<string> MiddleNames,
     string LastName,
-    DateTimeOffset BirthDate,
-    ICollection<long> BooksIds
+    DateTimeOffset BirthDate
 )
 {
     internal Author ToAuthor()
@@ -18,7 +17,7 @@ internal sealed record AddAuthorRequest(
             FirstName,
             MiddleNames,
             LastName,
-            BirthDate,
-            BooksIds);
+            BirthDate
+            );
     }
 }

@@ -33,11 +33,7 @@ namespace Alexandria.Persistence.Migrations
                     b.Property<DateTimeOffset>("BirthDate")
                         .HasColumnType("datetimeoffset");
 
-                    b.PrimitiveCollection<string>("BooksIds")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset>("CreatedDate")
+                    b.Property<DateTimeOffset?>("CreatedDate")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("FirstName")
@@ -52,7 +48,7 @@ namespace Alexandria.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTimeOffset>("UpdatedDate")
+                    b.Property<DateTimeOffset?>("UpdatedDate")
                         .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
@@ -60,7 +56,7 @@ namespace Alexandria.Persistence.Migrations
                     b.ToTable("Authors");
                 });
 
-            modelBuilder.Entity("Alexandria.Persistence.Models.BookAuthor", b =>
+            modelBuilder.Entity("Alexandria.Persistence.Models.BookModel", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -68,18 +64,27 @@ namespace Alexandria.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<long>("AuthorId")
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<long>("PublicationId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("BookId")
-                        .HasColumnType("bigint");
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
 
-                    b.ToTable("BookAuthors");
+                    b.HasIndex("PublicationId");
+
+                    b.ToTable("Books");
                 });
 
-            modelBuilder.Entity("Alexandria.Persistence.Models.BookModel", b =>
+            modelBuilder.Entity("Alexandria.Persistence.Models.PublicationModel", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -91,16 +96,32 @@ namespace Alexandria.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long>("BookId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<DateTimeOffset>("PublicationDate")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTimeOffset>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Books");
+                    b.ToTable("Publications");
+                });
+
+            modelBuilder.Entity("Alexandria.Persistence.Models.BookModel", b =>
+                {
+                    b.HasOne("Alexandria.Persistence.Models.PublicationModel", "Publication")
+                        .WithMany()
+                        .HasForeignKey("PublicationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Publication");
                 });
 #pragma warning restore 612, 618
         }

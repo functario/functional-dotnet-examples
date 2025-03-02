@@ -127,8 +127,7 @@
           "firstName",
           "middleNames",
           "lastName",
-          "birthDate",
-          "booksIds"
+          "birthDate"
         ],
         "type": "object",
         "properties": {
@@ -147,13 +146,6 @@
           "birthDate": {
             "type": "string",
             "format": "date-time"
-          },
-          "booksIds": {
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "format": "int64"
-            }
           }
         }
       },
@@ -174,8 +166,7 @@
           "firstName",
           "middleNames",
           "lastName",
-          "birthDate",
-          "booksIds"
+          "birthDate"
         ],
         "type": "object",
         "properties": {
@@ -198,13 +189,6 @@
           "birthDate": {
             "type": "string",
             "format": "date-time"
-          },
-          "booksIds": {
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "format": "int64"
-            }
           }
         }
       },

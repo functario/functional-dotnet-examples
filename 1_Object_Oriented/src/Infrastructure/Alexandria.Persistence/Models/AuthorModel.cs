@@ -9,13 +9,12 @@ internal class AuthorModel
     public ICollection<string> MiddleNames { get; init; } = [];
     public required string LastName { get; init; }
     public DateTimeOffset BirthDate { get; init; }
-    public required DateTimeOffset CreatedDate { get; init; }
-    public required DateTimeOffset UpdatedDate { get; init; }
-    public ICollection<long> BooksIds { get; init; } = [];
+    public required DateTimeOffset? CreatedDate { get; init; }
+    public required DateTimeOffset? UpdatedDate { get; init; }
 
-    public Author ToAuthor()
+    public Author ToDomainAuthor()
     {
-        return new Author(Id, FirstName, MiddleNames, LastName, BirthDate, BooksIds);
+        return new Author(Id, FirstName, MiddleNames, LastName, BirthDate);
     }
 }
 
@@ -32,6 +31,20 @@ internal static class AuthorExtensions
             BirthDate = author.BirthDate,
             CreatedDate = createdDate,
             UpdatedDate = createdDate,
+        };
+    }
+
+    public static AuthorModel AsExistingAuthorModel(this Author author)
+    {
+        return new AuthorModel()
+        {
+            Id = author.Id,
+            FirstName = author.FirstName,
+            MiddleNames = author.MiddleNames,
+            LastName = author.LastName,
+            BirthDate = author.BirthDate,
+            CreatedDate = null,
+            UpdatedDate = null,
         };
     }
 }

@@ -14,5 +14,5 @@ internal class AlexandriaDbContext : DbContext
 
     public DbSet<BookModel> Books { get; init; }
 
-    public DbSet<BookAuthor> BookAuthors { get; set; }
+    public DbSet<PublicationModel> Publications { get; set; }
 }

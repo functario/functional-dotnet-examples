@@ -2,16 +2,14 @@
 
 public class Book
 {
-    public Book(long id, string title, ICollection<long> authorsIds, DateTimeOffset publicationDate)
+    public Book(long id, string title, Publication publication)
     {
         Id = id;
         Title = title;
-        AuthorsIds = authorsIds;
-        PublicationDate = publicationDate;
+        Publication = publication;
     }
 
     public long Id { get; }
     public string Title { get; }
-    public ICollection<long> AuthorsIds { get; }
-    public DateTimeOffset PublicationDate { get; }
+    public Publication Publication { get; }
 }

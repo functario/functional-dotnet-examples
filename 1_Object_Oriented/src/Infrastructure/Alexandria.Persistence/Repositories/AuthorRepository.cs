@@ -26,7 +26,7 @@ internal sealed class AuthorRepository : IAuthorRepository
             cancellationToken
         );
 
-        return result.Entity.ToAuthor;
+        return result.Entity.ToDomainAuthor;
     }
 
     public Task<Author> DeleteAuthorAsync(long authorId, CancellationToken cancellationToken)
@@ -41,6 +41,6 @@ internal sealed class AuthorRepository : IAuthorRepository
             cancellationToken
         );
 
-        return result?.ToAuthor();
+        return result?.ToDomainAuthor();
     }
 }
