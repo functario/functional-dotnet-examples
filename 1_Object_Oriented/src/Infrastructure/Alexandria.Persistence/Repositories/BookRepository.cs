@@ -16,24 +16,6 @@ internal sealed class BookRepository : IBookRepository
         _timeProvider = timeProvider;
     }
 
-    public async Task<Func<Book>> CreateBookAsync(string title, CancellationToken cancellationToken)
-    {
-        var creationDate = _timeProvider.GetUtcNow();
-        var book = new BookModel()
-        {
-            Id = 0,
-            Title = title,
-            CreatedDate = creationDate,
-            UpdatedDate = creationDate,
-        };
-
-        var result = await _alexandriaDbContext.Books.AddAsync(book, cancellationToken);
-
-        var createdBookModel = result.Entity;
-
-        return result.Entity.ToNewDomainBook;
-    }
-
     public async Task<Func<Book>> CreateBookAsync(Book book, CancellationToken cancellationToken)
     {
         var creationDate = _timeProvider.GetUtcNow();
@@ -71,33 +53,6 @@ internal sealed class BookRepository : IBookRepository
 
         var result = await _alexandriaDbContext.Publications.AddAsync(
             publicationModel,
-            cancellationToken
-        );
-
-        return result.Entity.ToDomainPublication;
-    }
-
-    public async Task<Func<Publication>> CreatePublicationAsync(
-        long bookId,
-        DateTimeOffset publicationDate,
-        ICollection<long> authorIds,
-        CancellationToken cancellationToken
-    )
-    {
-        var creationDate = _timeProvider.GetUtcNow();
-
-        var publication = new PublicationModel()
-        {
-            Id = 0,
-            BookId = bookId,
-            PublicationDate = publicationDate,
-            AuthorsIds = authorIds,
-            CreatedDate = creationDate,
-            UpdatedDate = creationDate,
-        };
-
-        var result = await _alexandriaDbContext.Publications.AddAsync(
-            publication,
             cancellationToken
         );
 
