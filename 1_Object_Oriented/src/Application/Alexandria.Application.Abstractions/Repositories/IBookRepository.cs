@@ -4,11 +4,10 @@ namespace Alexandria.Application.Abstractions.Repositories;
 
 public interface IBookRepository
 {
-    Task<Func<Book>> CreateBookAsync(string title, CancellationToken cancellationToken);
+    Task<Func<Book>> CreateBookAsync(Book book, CancellationToken cancellationToken);
+
     Task<Func<Publication>> CreatePublicationAsync(
-        long bookId,
-        DateTimeOffset publicationDate,
-        ICollection<long> authorIds,
+        Publication publication,
         CancellationToken cancellationToken
     );
 

@@ -20,16 +20,36 @@ public sealed class AddBookService : IAddBookService
     )
     {
         ArgumentNullException.ThrowIfNull(request, nameof(request));
-        var bookFunc = await _bookRepository.CreateBookAsync(request.Title, cancellationToken);
+        var publicationTransient = new Publication(
+            0,
+            0,
+            request.PublicationDate,
+            request.AuthorsIds
+        );
+
+        var bookTransient = new Book(0, request.Title, publicationTransient);
+
+        var bookFunc = await _bookRepository.CreateBookAsync(bookTransient, cancellationToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        var bookTransient = bookFunc();
+        var book = bookFunc();
+
+        // Publication is an Entity that map a book with its authors
+        // Here the choice is made to create the publication in the same flow than than the book.
+        // But it could be create by event (OnBookCreated) or by dedicated CreatePublication endpoint.
+        // This is definatly something to revisit once the domain is more understood.
+        // Domain rules should be:
+        // - Publication cannot exist without Book and at least 1 Author
+        var publicationNew = new Publication(
+            0,
+            book.Id,
+            request.PublicationDate,
+            request.AuthorsIds
+        );
 
         var publicationFunc = await _bookRepository.CreatePublicationAsync(
-            bookTransient.Id,
-            request.PublicationDate,
-            request.AuthorsIds,
+            publicationNew,
             cancellationToken
         );
 
@@ -37,7 +57,7 @@ public sealed class AddBookService : IAddBookService
 
         var publication = publicationFunc();
 
-        var createdBook = new Book(bookTransient.Id, bookTransient.Title, publication);
+        var createdBook = new Book(book.Id, book.Title, publication);
         var response = new AddBookResult(createdBook);
         return response;
     }

@@ -16,23 +16,3 @@ internal class PublicationModel
         return new Publication(Id, BookId, PublicationDate, AuthorsIds);
     }
 }
-
-internal static class PublicationExtensions
-{
-    public static PublicationModel AsNewPublicationModel(
-        this Publication publication,
-        long bookId,
-        DateTimeOffset createdDate
-    )
-    {
-        return new PublicationModel()
-        {
-            Id = publication.Id,
-            BookId = bookId,
-            PublicationDate = publication.PublicationDate,
-            AuthorsIds = publication.AuthorsIds,
-            CreatedDate = createdDate,
-            UpdatedDate = createdDate,
-        };
-    }
-}

@@ -33,18 +33,4 @@ internal static class AuthorExtensions
             UpdatedDate = createdDate,
         };
     }
-
-    public static AuthorModel AsExistingAuthorModel(this Author author)
-    {
-        return new AuthorModel()
-        {
-            Id = author.Id,
-            FirstName = author.FirstName,
-            MiddleNames = author.MiddleNames,
-            LastName = author.LastName,
-            BirthDate = author.BirthDate,
-            CreatedDate = null,
-            UpdatedDate = null,
-        };
-    }
 }

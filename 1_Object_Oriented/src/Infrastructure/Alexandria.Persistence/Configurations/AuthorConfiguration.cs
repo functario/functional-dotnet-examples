@@ -10,13 +10,5 @@ internal class AuthorConfiguration : IEntityTypeConfiguration<AuthorModel>
     {
         builder.ToTable("Authors");
         builder.HasKey(x => x.Id);
-
-        //builder
-        //    .HasMany<BookModel>()
-        //    .WithMany()
-        //    .UsingEntity<BookAuthor>(
-        //        j => j.HasOne<BookModel>().WithMany().HasForeignKey("BookId"), // Relationship with BookModel by BookId
-        //        j => j.HasOne<AuthorModel>().WithMany().HasForeignKey("AuthorId") // Relationship with AuthorModel by AuthorId
-        //    );
     }
 }
