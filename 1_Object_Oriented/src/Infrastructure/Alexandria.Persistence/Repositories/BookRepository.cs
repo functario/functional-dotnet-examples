@@ -30,6 +30,7 @@ internal sealed class BookRepository : IBookRepository
 
         var result = await _alexandriaDbContext.Books.AddAsync(bookModel, cancellationToken);
 
+        var entry = _alexandriaDbContext.Entry(bookModel);
         var createdBookModel = result.Entity;
 
         return result.Entity.ToNewDomainBook;
@@ -45,7 +46,6 @@ internal sealed class BookRepository : IBookRepository
         var publicationModel = new PublicationModel()
         {
             Id = 0,
-            BookId = publication.BookId,
             PublicationDate = publication.PublicationDate,
             AuthorsIds = publication.AuthorsIds,
             CreatedDate = creationDate,
@@ -73,7 +73,7 @@ internal sealed class BookRepository : IBookRepository
         }
 
         var publication = await _alexandriaDbContext.Publications.FirstOrDefaultAsync(
-            x => x.BookId == bookModel.Id,
+            x => x.Id == bookModel.Id,
             cancellationToken
         );
 

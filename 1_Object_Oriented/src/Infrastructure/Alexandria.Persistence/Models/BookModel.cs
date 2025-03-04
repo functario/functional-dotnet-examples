@@ -17,8 +17,7 @@ internal class BookModel
 
     public Book ToNewDomainBook()
     {
-        var transientPublication = new Publication(0, Id, default, []);
-
-        return new Book(Id, Title, transientPublication);
+        var publication = Publication.ToDomainPublication();
+        return new Book(Id, Title, publication);
     }
 }

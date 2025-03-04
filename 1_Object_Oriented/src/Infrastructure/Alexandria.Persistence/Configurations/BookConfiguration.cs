@@ -16,16 +16,17 @@ internal class BookConfiguration : IEntityTypeConfiguration<BookModel>
             {
                 od.ToTable("Publications");
                 od.HasKey(x => x.Id);
+                od.WithOwner().HasForeignKey(od => od.Id);
+                od.Property(x => x.PublicationDate).IsRequired();
+                od.Property(x => x.CreatedDate).IsRequired();
+                od.Property(x => x.UpdatedDate).IsRequired();
+                od.Property(x => x.AuthorsIds).IsRequired();
+                //od.Property(x => x.AuthorsIds)
+                //    .HasConversion(
+                //        v => string.Join(",", v), // Convert list of long to comma-separated string
+                //        v => v.Split(",", StringSplitOptions.None).Select(long.Parse).ToList() // Convert back to list of long
+                //    );
             }
         );
-
-        //builder.Property<PublicationModel>(b =>
-        //{
-        //        Id = b.Publication!.Id,
-        //        BookId = b.Id,
-        //        CreatedDate = b.CreatedDate,
-        //        UpdatedDate = b.UpdatedDate,
-        //        PublicationDate = b.PublicationDate
-        //    })
     }
 }

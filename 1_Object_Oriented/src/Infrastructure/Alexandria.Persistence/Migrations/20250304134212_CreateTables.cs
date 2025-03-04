@@ -47,7 +47,6 @@ namespace Alexandria.Persistence.Migrations
                     Id = table
                         .Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    BookId = table.Column<long>(type: "bigint", nullable: false),
                     PublicationDate = table.Column<DateTimeOffset>(
                         type: "datetimeoffset",
                         nullable: false
