@@ -5,12 +5,12 @@ namespace Alexandria.Persistence.Models;
 
 internal class PublicationModel : IValidatableObject
 {
-    public long Id { get; init; }
-    public long BookId { get; init; }
-    public DateTimeOffset PublicationDate { get; init; }
-    public ICollection<long> AuthorsIds { get; init; } = [];
-    public required DateTimeOffset CreatedDate { get; init; }
-    public required DateTimeOffset UpdatedDate { get; init; }
+    public long Id { get; set; }
+    public long BookId { get; set; }
+    public DateTimeOffset PublicationDate { get; set; }
+    public ICollection<long> AuthorsIds { get; set; } = [];
+    public required DateTimeOffset CreatedDate { get; set; }
+    public required DateTimeOffset UpdatedDate { get; set; }
 
     public Publication ToDomainPublication()
     {
@@ -26,5 +26,22 @@ internal class PublicationModel : IValidatableObject
                 [nameof(AuthorsIds)]
             );
         }
+    }
+}
+
+internal static class PublicationModelExtensions
+{
+    public static PublicationModel AsNewPublicationModel(
+        this Publication publication,
+        DateTimeOffset createdDate
+    )
+    {
+        return new PublicationModel()
+        {
+            Id = publication.Id,
+            AuthorsIds = publication.AuthorsIds,
+            CreatedDate = createdDate,
+            UpdatedDate = createdDate,
+        };
     }
 }

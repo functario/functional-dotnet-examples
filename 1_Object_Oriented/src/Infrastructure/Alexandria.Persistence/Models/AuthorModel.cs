@@ -4,13 +4,13 @@ namespace Alexandria.Persistence.Models;
 
 internal class AuthorModel
 {
-    public long Id { get; init; }
-    public required string FirstName { get; init; }
-    public ICollection<string> MiddleNames { get; init; } = [];
-    public required string LastName { get; init; }
-    public DateTimeOffset BirthDate { get; init; }
-    public required DateTimeOffset? CreatedDate { get; init; }
-    public required DateTimeOffset? UpdatedDate { get; init; }
+    public long Id { get; set; }
+    public required string FirstName { get; set; }
+    public ICollection<string> MiddleNames { get; set; } = [];
+    public required string LastName { get; set; }
+    public DateTimeOffset BirthDate { get; set; }
+    public required DateTimeOffset? CreatedDate { get; set; }
+    public required DateTimeOffset? UpdatedDate { get; set; }
 
     public Author ToDomainAuthor()
     {

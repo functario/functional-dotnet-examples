@@ -10,4 +10,8 @@
     <ProjectReference Include="..\..\Domain\Alexandria.Domain\Alexandria.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DTOs\" />
+  </ItemGroup>
+
 </Project>

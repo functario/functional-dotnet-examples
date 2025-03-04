@@ -67,6 +67,9 @@ namespace Alexandria.Persistence.Migrations
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<long?>("PublicationId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -75,6 +78,8 @@ namespace Alexandria.Persistence.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PublicationId");
 
                     b.ToTable("Books");
                 });
@@ -106,6 +111,15 @@ namespace Alexandria.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Publications");
+                });
+
+            modelBuilder.Entity("Alexandria.Persistence.Models.BookModel", b =>
+                {
+                    b.HasOne("Alexandria.Persistence.Models.PublicationModel", "Publication")
+                        .WithMany()
+                        .HasForeignKey("PublicationId");
+
+                    b.Navigation("Publication");
                 });
 #pragma warning restore 612, 618
         }

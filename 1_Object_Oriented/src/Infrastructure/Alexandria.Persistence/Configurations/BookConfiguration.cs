@@ -9,6 +9,16 @@ internal class BookConfiguration : IEntityTypeConfiguration<BookModel>
     public void Configure(EntityTypeBuilder<BookModel> builder)
     {
         builder.ToTable("Books");
-        builder.HasKey(x => x.Id);
+        builder.HasKey(b => b.Id);
+        builder.OwnsOne<PublicationModel>(b => b.Publication);
+
+        //builder.Property<PublicationModel>(b =>
+        //{
+        //        Id = b.Publication!.Id,
+        //        BookId = b.Id,
+        //        CreatedDate = b.CreatedDate,
+        //        UpdatedDate = b.UpdatedDate,
+        //        PublicationDate = b.PublicationDate
+        //    })
     }
 }

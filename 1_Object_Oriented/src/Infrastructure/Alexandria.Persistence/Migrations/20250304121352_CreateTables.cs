@@ -41,29 +41,6 @@ namespace Alexandria.Persistence.Migrations
             );
 
             migrationBuilder.CreateTable(
-                name: "Books",
-                columns: table => new
-                {
-                    Id = table
-                        .Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedDate = table.Column<DateTimeOffset>(
-                        type: "datetimeoffset",
-                        nullable: false
-                    ),
-                    UpdatedDate = table.Column<DateTimeOffset>(
-                        type: "datetimeoffset",
-                        nullable: false
-                    ),
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Books", x => x.Id);
-                }
-            );
-
-            migrationBuilder.CreateTable(
                 name: "Publications",
                 columns: table => new
                 {
@@ -89,6 +66,42 @@ namespace Alexandria.Persistence.Migrations
                 {
                     table.PrimaryKey("PK_Publications", x => x.Id);
                 }
+            );
+
+            migrationBuilder.CreateTable(
+                name: "Books",
+                columns: table => new
+                {
+                    Id = table
+                        .Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDate = table.Column<DateTimeOffset>(
+                        type: "datetimeoffset",
+                        nullable: false
+                    ),
+                    UpdatedDate = table.Column<DateTimeOffset>(
+                        type: "datetimeoffset",
+                        nullable: false
+                    ),
+                    PublicationId = table.Column<long>(type: "bigint", nullable: true),
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Books", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Books_Publications_PublicationId",
+                        column: x => x.PublicationId,
+                        principalTable: "Publications",
+                        principalColumn: "Id"
+                    );
+                }
+            );
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Books_PublicationId",
+                table: "Books",
+                column: "PublicationId"
             );
         }
 
