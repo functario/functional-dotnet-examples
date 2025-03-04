@@ -10,7 +10,14 @@ internal class BookConfiguration : IEntityTypeConfiguration<BookModel>
     {
         builder.ToTable("Books");
         builder.HasKey(b => b.Id);
-        builder.OwnsOne<PublicationModel>(b => b.Publication);
+        builder.OwnsOne<PublicationModel>(
+            b => b.Publication,
+            od =>
+            {
+                od.ToTable("Publications");
+                od.HasKey(x => x.Id);
+            }
+        );
 
         //builder.Property<PublicationModel>(b =>
         //{

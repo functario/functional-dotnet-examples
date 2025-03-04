@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Alexandria.Persistence.Migrations
 {
     [DbContext(typeof(AlexandriaDbContext))]
-    [Migration("20250304121352_CreateTables")]
+    [Migration("20250304124929_CreateTables")]
     partial class CreateTables
     {
         /// <inheritdoc />
@@ -70,7 +70,7 @@ namespace Alexandria.Persistence.Migrations
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<long?>("PublicationId")
+                    b.Property<long>("PublicationId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Title")
@@ -120,7 +120,9 @@ namespace Alexandria.Persistence.Migrations
                 {
                     b.HasOne("Alexandria.Persistence.Models.PublicationModel", "Publication")
                         .WithMany()
-                        .HasForeignKey("PublicationId");
+                        .HasForeignKey("PublicationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Publication");
                 });

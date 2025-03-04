@@ -84,7 +84,7 @@ namespace Alexandria.Persistence.Migrations
                         type: "datetimeoffset",
                         nullable: false
                     ),
-                    PublicationId = table.Column<long>(type: "bigint", nullable: true),
+                    PublicationId = table.Column<long>(type: "bigint", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -93,7 +93,8 @@ namespace Alexandria.Persistence.Migrations
                         name: "FK_Books_Publications_PublicationId",
                         column: x => x.PublicationId,
                         principalTable: "Publications",
-                        principalColumn: "Id"
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade
                     );
                 }
             );

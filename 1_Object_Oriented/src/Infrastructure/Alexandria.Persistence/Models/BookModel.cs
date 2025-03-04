@@ -8,7 +8,7 @@ internal class BookModel
     public required string Title { get; set; }
     public required DateTimeOffset CreatedDate { get; set; }
     public required DateTimeOffset UpdatedDate { get; set; }
-    public PublicationModel? Publication { get; set; }
+    public required PublicationModel Publication { get; set; }
 
     public Book ToDomainBook(PublicationModel publication)
     {

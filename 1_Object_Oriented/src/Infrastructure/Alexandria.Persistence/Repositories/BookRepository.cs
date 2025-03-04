@@ -25,6 +25,7 @@ internal sealed class BookRepository : IBookRepository
             Title = book.Title,
             CreatedDate = creationDate,
             UpdatedDate = creationDate,
+            Publication = book.Publication.AsNewPublicationModel(creationDate),
         };
 
         var result = await _alexandriaDbContext.Books.AddAsync(bookModel, cancellationToken);

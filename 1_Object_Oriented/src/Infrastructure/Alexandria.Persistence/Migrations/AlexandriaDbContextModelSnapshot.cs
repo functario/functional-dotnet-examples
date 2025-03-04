@@ -67,7 +67,7 @@ namespace Alexandria.Persistence.Migrations
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<long?>("PublicationId")
+                    b.Property<long>("PublicationId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Title")
@@ -117,7 +117,9 @@ namespace Alexandria.Persistence.Migrations
                 {
                     b.HasOne("Alexandria.Persistence.Models.PublicationModel", "Publication")
                         .WithMany()
-                        .HasForeignKey("PublicationId");
+                        .HasForeignKey("PublicationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Publication");
                 });
