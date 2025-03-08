@@ -1,5 +1,5 @@
-﻿using Alexandria.Application.BookUseCases.GetBook;
-using Alexandria.Domain.BookDomain;
+﻿using Alexandria.Application.Abstractions.DTOs;
+using Alexandria.Application.BookUseCases.GetBook;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -37,5 +37,5 @@ internal sealed class GetBookEndpoint : IGetBookEndpoint
     /// </summary>
     /// <param name="book">The author to query.</param>
     /// <returns>The query object value.</returns>
-    internal static object QueryObjectValue(Book book) => new { id = book.Id };
+    internal static object QueryObjectValue(BookDto book) => new { id = book.Id };
 }

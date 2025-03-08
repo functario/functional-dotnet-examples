@@ -16,19 +16,28 @@ internal class AlexandriaDbContext : DbContext
     public DbSet<BookModel> Books { get; init; }
 
     public DbSet<PublicationModel> Publications { get; set; }
+    public DbSet<AuthorPublicationModel> AuthorModelPublicationModel { get; set; }
+
+    //protected override void OnModelCreating(ModelBuilder modelBuilder)
+    //{
+    //    base.OnModelCreating(modelBuilder);
+
+    //    // Explicitly apply the configuration for AuthorPublicationModel
+    //    modelBuilder.ApplyConfiguration(new AuthorsPublicationsConfiguration());
+    //}
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
     {
-        await OnPublicationModelUpsert(cancellationToken);
+        await OnPublicationModelCreated(cancellationToken);
 
         return base.SaveChanges();
     }
 
-    private async Task OnPublicationModelUpsert(CancellationToken cancellationToken)
+    private async Task OnPublicationModelCreated(CancellationToken cancellationToken)
     {
         var entries = ChangeTracker
             .Entries<PublicationModel>()
-            .Where(e => e.State is EntityState.Added or EntityState.Modified);
+            .Where(e => e.State is EntityState.Added);
 
         foreach (var entry in entries)
         {
@@ -40,7 +49,17 @@ internal class AlexandriaDbContext : DbContext
                 if (author is null)
                 {
                     missingAuthorIds.Add(authorId);
+                    continue;
                 }
+
+                // Join Author and Publication
+                var authorPublication = new AuthorPublicationModel
+                {
+                    AuthorId = authorId,
+                    PublicationId = publication.Id,
+                };
+
+                await AuthorModelPublicationModel.AddAsync(authorPublication, cancellationToken);
             }
 
             if (missingAuthorIds.Count > 0)

@@ -16,7 +16,7 @@ internal sealed class GetBookService : IGetBookService
         CancellationToken cancellationToken
     )
     {
-        var bookFound = await _authorRepository.GetBookAsync(request.BookId, cancellationToken);
+        var bookFound = await _authorRepository.GetBookDtoAsync(request.BookId, cancellationToken);
         return bookFound is not null ? new GetBookResult(bookFound) : null;
     }
 }

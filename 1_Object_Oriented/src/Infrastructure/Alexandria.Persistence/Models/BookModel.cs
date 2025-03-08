@@ -1,4 +1,5 @@
-﻿using Alexandria.Domain.BookDomain;
+﻿using Alexandria.Application.Abstractions.DTOs;
+using Alexandria.Domain.BookDomain;
 
 namespace Alexandria.Persistence.Models;
 
@@ -15,9 +16,20 @@ internal class BookModel
         return new Book(Id, Title, publication.ToDomainPublication());
     }
 
+    public BookDto ToBookDto(PublicationModel publication)
+    {
+        return new BookDto(Id, Title, publication.ToPublicationDto());
+    }
+
     public Book ToNewDomainBook()
     {
         var publication = Publication.ToDomainPublication();
         return new Book(Id, Title, publication);
+    }
+
+    public BookDto ToNewBookDto()
+    {
+        var publication = Publication.ToPublicationDto();
+        return new BookDto(Id, Title, publication);
     }
 }

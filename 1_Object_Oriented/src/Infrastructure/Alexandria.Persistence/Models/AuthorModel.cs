@@ -1,4 +1,5 @@
-﻿using Alexandria.Domain.AuthorDomain;
+﻿using Alexandria.Application.Abstractions.DTOs;
+using Alexandria.Domain.AuthorDomain;
 
 namespace Alexandria.Persistence.Models;
 
@@ -11,10 +12,16 @@ internal class AuthorModel
     public DateTimeOffset BirthDate { get; set; }
     public required DateTimeOffset? CreatedDate { get; set; }
     public required DateTimeOffset? UpdatedDate { get; set; }
+    public virtual ICollection<PublicationModel>? Publications { get; }
 
     public Author ToDomainAuthor()
     {
         return new Author(Id, FirstName, MiddleNames, LastName, BirthDate);
+    }
+
+    public AuthorDto ToAuthorDto()
+    {
+        return new AuthorDto(Id, FirstName, MiddleNames, LastName, BirthDate);
     }
 }
 

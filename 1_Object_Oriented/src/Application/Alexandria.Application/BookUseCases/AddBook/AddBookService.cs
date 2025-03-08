@@ -27,7 +27,9 @@ public sealed class AddBookService : IAddBookService
 
         var transientBook = Book.CreateTransient(request.Title, transientPublication);
 
-        var bookFunc = await _bookRepository.CreateBookAsync(transientBook, cancellationToken);
+        //var bookFunc = await _bookRepository.CreateBookAsync(transientBook, cancellationToken);
+
+        var bookFunc = await _bookRepository.CreateBookDtoAsync(transientBook, cancellationToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

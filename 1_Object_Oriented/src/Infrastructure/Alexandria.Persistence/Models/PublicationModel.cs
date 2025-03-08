@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Alexandria.Application.Abstractions.DTOs;
 using Alexandria.Domain.BookDomain;
 
 namespace Alexandria.Persistence.Models;
@@ -10,10 +11,17 @@ internal class PublicationModel : IValidatableObject
     public ICollection<long> AuthorsIds { get; set; } = [];
     public required DateTimeOffset CreatedDate { get; set; }
     public required DateTimeOffset UpdatedDate { get; set; }
+    public virtual ICollection<AuthorModel> Authors { get; } = [];
 
     public Publication ToDomainPublication()
     {
         return new Publication(Id, PublicationDate, AuthorsIds);
+    }
+
+    public PublicationDto ToPublicationDto()
+    {
+        var authorDtos = Authors.Select(a => a.ToAuthorDto()).ToList();
+        return new PublicationDto(Id, PublicationDate, authorDtos);
     }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

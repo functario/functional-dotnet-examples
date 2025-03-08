@@ -1,15 +1,11 @@
-﻿using Alexandria.Domain.BookDomain;
+﻿using Alexandria.Application.Abstractions.DTOs;
+using Alexandria.Domain.BookDomain;
 
 namespace Alexandria.Application.Abstractions.Repositories;
 
 public interface IBookRepository : IRepository
 {
-    Task<Func<Book>> CreateBookAsync(Book book, CancellationToken cancellationToken);
+    Task<Func<BookDto>> CreateBookDtoAsync(Book book, CancellationToken cancellationToken);
 
-    Task<Func<Publication>> CreatePublicationAsync(
-        Publication publication,
-        CancellationToken cancellationToken
-    );
-
-    Task<Book?> GetBookAsync(long bookId, CancellationToken cancellationToken);
+    Task<BookDto?> GetBookDtoAsync(long bookId, CancellationToken cancellationToken);
 }

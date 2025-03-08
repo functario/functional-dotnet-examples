@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Alexandria.Persistence.Configurations;
 
-internal class BookConfiguration : IEntityTypeConfiguration<BookModel>
+internal class BooksConfiguration : IEntityTypeConfiguration<BookModel>
 {
     public void Configure(EntityTypeBuilder<BookModel> builder)
     {
@@ -21,11 +21,6 @@ internal class BookConfiguration : IEntityTypeConfiguration<BookModel>
                 od.Property(x => x.CreatedDate).IsRequired();
                 od.Property(x => x.UpdatedDate).IsRequired();
                 od.Property(x => x.AuthorsIds).IsRequired();
-                //od.Property(x => x.AuthorsIds)
-                //    .HasConversion(
-                //        v => string.Join(",", v), // Convert list of long to comma-separated string
-                //        v => v.Split(",", StringSplitOptions.None).Select(long.Parse).ToList() // Convert back to list of long
-                //    );
             }
         );
     }
