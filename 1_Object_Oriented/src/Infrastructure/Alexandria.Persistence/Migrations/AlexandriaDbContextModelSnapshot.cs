@@ -110,7 +110,7 @@ namespace Alexandria.Persistence.Migrations
                     b.ToTable("Publications");
                 });
 
-            modelBuilder.Entity("AuthorModelPublicationModel", b =>
+            modelBuilder.Entity("AuthorsPublications", b =>
                 {
                     b.Property<long>("AuthorsId")
                         .HasColumnType("bigint");
@@ -118,11 +118,17 @@ namespace Alexandria.Persistence.Migrations
                     b.Property<long>("PublicationsId")
                         .HasColumnType("bigint");
 
+                    b.Property<long>("AuthorId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("PublicationId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("AuthorsId", "PublicationsId");
 
                     b.HasIndex("PublicationsId");
 
-                    b.ToTable("AuthorModelPublicationModel");
+                    b.ToTable("AuthorsPublications");
                 });
 
             modelBuilder.Entity("Alexandria.Persistence.Models.BookModel", b =>
@@ -136,7 +142,7 @@ namespace Alexandria.Persistence.Migrations
                     b.Navigation("Publication");
                 });
 
-            modelBuilder.Entity("AuthorModelPublicationModel", b =>
+            modelBuilder.Entity("AuthorsPublications", b =>
                 {
                     b.HasOne("Alexandria.Persistence.Models.AuthorModel", null)
                         .WithMany()

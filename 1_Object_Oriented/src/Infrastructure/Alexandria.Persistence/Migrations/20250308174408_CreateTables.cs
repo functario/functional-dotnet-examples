@@ -68,27 +68,29 @@ namespace Alexandria.Persistence.Migrations
             );
 
             migrationBuilder.CreateTable(
-                name: "AuthorModelPublicationModel",
+                name: "AuthorsPublications",
                 columns: table => new
                 {
                     AuthorsId = table.Column<long>(type: "bigint", nullable: false),
                     PublicationsId = table.Column<long>(type: "bigint", nullable: false),
+                    AuthorId = table.Column<long>(type: "bigint", nullable: false),
+                    PublicationId = table.Column<long>(type: "bigint", nullable: false),
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey(
-                        "PK_AuthorModelPublicationModel",
+                        "PK_AuthorsPublications",
                         x => new { x.AuthorsId, x.PublicationsId }
                     );
                     table.ForeignKey(
-                        name: "FK_AuthorModelPublicationModel_Authors_AuthorsId",
+                        name: "FK_AuthorsPublications_Authors_AuthorsId",
                         column: x => x.AuthorsId,
                         principalTable: "Authors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade
                     );
                     table.ForeignKey(
-                        name: "FK_AuthorModelPublicationModel_Publications_PublicationsId",
+                        name: "FK_AuthorsPublications_Publications_PublicationsId",
                         column: x => x.PublicationsId,
                         principalTable: "Publications",
                         principalColumn: "Id",
@@ -129,8 +131,8 @@ namespace Alexandria.Persistence.Migrations
             );
 
             migrationBuilder.CreateIndex(
-                name: "IX_AuthorModelPublicationModel_PublicationsId",
-                table: "AuthorModelPublicationModel",
+                name: "IX_AuthorsPublications_PublicationsId",
+                table: "AuthorsPublications",
                 column: "PublicationsId"
             );
 
@@ -144,7 +146,7 @@ namespace Alexandria.Persistence.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(name: "AuthorModelPublicationModel");
+            migrationBuilder.DropTable(name: "AuthorsPublications");
 
             migrationBuilder.DropTable(name: "Books");
 

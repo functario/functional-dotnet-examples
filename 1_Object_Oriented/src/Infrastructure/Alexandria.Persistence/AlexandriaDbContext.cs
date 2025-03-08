@@ -30,6 +30,21 @@ internal class AlexandriaDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        modelBuilder
+            .Entity<AuthorModel>()
+            .HasMany(a => a.Publications)
+            .WithMany(p => p.Authors)
+            .UsingEntity<AuthorsPublications>("AuthorsPublications");
+        //modelBuilder
+        //    .Entity<AuthorModel>()
+        //    .HasMany(a => a.Publications)
+        //    .WithMany(p => p.Authors)
+        //    .UsingEntity<AuthorModelPublicationModel>(
+        //        "AuthorsPublications",
+        //        l => l.HasOne<PublicationModel>().WithMany(),
+        //        r => r.HasOne<AuthorModel>().WithMany(),
+        //        j => j.HasKey("AuthorsId", "PublicationsId")
+        //    );
     }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)

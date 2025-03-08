@@ -11,7 +11,7 @@ internal class PublicationModel : IValidatableObject
     public ICollection<long> AuthorsIds { get; set; } = [];
     public required DateTimeOffset CreatedDate { get; set; }
     public required DateTimeOffset UpdatedDate { get; set; }
-    public virtual ICollection<AuthorModel>? Authors { get; }
+    public virtual ICollection<AuthorModel>? Authors { get; set; }
 
     public Publication ToDomainPublication()
     {
@@ -40,7 +40,8 @@ internal static class PublicationModelExtensions
 {
     public static PublicationModel AsNewPublicationModel(
         this Publication publication,
-        DateTimeOffset createdDate
+        DateTimeOffset createdDate,
+        List<AuthorModel> authors
     )
     {
         return new PublicationModel()
@@ -50,6 +51,7 @@ internal static class PublicationModelExtensions
             CreatedDate = createdDate,
             UpdatedDate = createdDate,
             PublicationDate = publication.PublicationDate,
+            Authors = authors,
         };
     }
 }
