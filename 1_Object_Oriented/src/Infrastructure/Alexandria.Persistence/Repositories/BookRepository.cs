@@ -17,30 +17,6 @@ internal sealed class BookRepository : IBookRepository
         _timeProvider = timeProvider;
     }
 
-    public async Task<Func<BookDto>> CreateBookDtoAsync(
-        Book book,
-        CancellationToken cancellationToken
-    )
-    {
-        var creationDate = _timeProvider.GetUtcNow();
-
-        var bookModel = new BookModel()
-        {
-            Id = 0,
-            Title = book.Title,
-            CreatedDate = creationDate,
-            UpdatedDate = creationDate,
-            Publication = book.Publication.ToNewModel(creationDate),
-        };
-
-        var result = await _alexandriaDbContext.Books.AddAsync(bookModel, cancellationToken);
-
-        var entry = _alexandriaDbContext.Entry(bookModel);
-        var createdBookModel = result.Entity;
-
-        return result.Entity.ToNewDto;
-    }
-
     public async Task<Func<Book>> CreateBookAsync(Book book, CancellationToken cancellationToken)
     {
         var creationDate = _timeProvider.GetUtcNow();
