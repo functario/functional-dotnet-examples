@@ -11,25 +11,25 @@ internal class BookModel
     public required DateTimeOffset UpdatedDate { get; set; }
     public required PublicationModel Publication { get; set; }
 
-    public Book ToDomainBook(PublicationModel publication)
+    public Book ToDomain(PublicationModel publication)
     {
-        return new Book(Id, Title, publication.ToDomainPublication());
+        return new Book(Id, Title, publication.ToDomain());
     }
 
-    public BookDto ToBookDto(PublicationModel publication)
+    public BookDto ToDto(PublicationModel publication)
     {
-        return new BookDto(Id, Title, publication.ToPublicationDto());
+        return new BookDto(Id, Title, publication.ToDto());
     }
 
-    public Book ToNewDomainBook()
+    public Book ToNewDomain()
     {
-        var publication = Publication.ToDomainPublication();
+        var publication = Publication.ToDomain();
         return new Book(Id, Title, publication);
     }
 
-    public BookDto ToNewBookDto()
+    public BookDto ToNewDto()
     {
-        var publication = Publication.ToPublicationDto();
+        var publication = Publication.ToDto();
         return new BookDto(Id, Title, publication);
     }
 }

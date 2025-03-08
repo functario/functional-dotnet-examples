@@ -118,12 +118,6 @@ namespace Alexandria.Persistence.Migrations
                     b.Property<long>("PublicationsId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("AuthorId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("PublicationId")
-                        .HasColumnType("bigint");
-
                     b.HasKey("AuthorsId", "PublicationsId");
 
                     b.HasIndex("PublicationsId");

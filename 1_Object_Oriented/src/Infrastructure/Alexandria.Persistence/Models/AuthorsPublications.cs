@@ -2,6 +2,6 @@
 
 internal class AuthorsPublications
 {
-    public long AuthorId { get; set; }
-    public long PublicationId { get; set; }
+    public long AuthorsId { get; set; }
+    public long PublicationsId { get; set; }
 }

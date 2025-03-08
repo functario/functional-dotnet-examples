@@ -14,12 +14,12 @@ internal class AuthorModel
     public required DateTimeOffset? UpdatedDate { get; set; }
     public virtual ICollection<PublicationModel>? Publications { get; }
 
-    public Author ToDomainAuthor()
+    public Author ToDomain()
     {
         return new Author(Id, FirstName, MiddleNames, LastName, BirthDate);
     }
 
-    public AuthorDto ToAuthorDto()
+    public AuthorDto ToDto()
     {
         return new AuthorDto(Id, FirstName, MiddleNames, LastName, BirthDate);
     }
@@ -27,7 +27,7 @@ internal class AuthorModel
 
 internal static class AuthorExtensions
 {
-    public static AuthorModel AsNewAuthorModel(this Author author, DateTimeOffset createdDate)
+    public static AuthorModel ToNewModel(this Author author, DateTimeOffset createdDate)
     {
         return new AuthorModel()
         {

@@ -1,4 +1,7 @@
-﻿namespace Alexandria.Application.Abstractions.DTOs;
+﻿using Alexandria.Domain.AuthorDomain;
+using Alexandria.Domain.BookDomain;
+
+namespace Alexandria.Application.Abstractions.DTOs;
 
 public sealed record BookDto(long Id, string Title, PublicationDto Publication) { }
 
@@ -15,3 +18,31 @@ public sealed record AuthorDto(
     string LastName,
     DateTimeOffset BirthDate
 ) { }
+
+public static class BookDtoExtensions
+{
+    public static BookDto AsDto(this Book book, ICollection<Author> authors)
+    {
+        ArgumentNullException.ThrowIfNull(book, nameof(book));
+        return new BookDto(book.Id, book.Title, book.Publication.AsDto(authors));
+    }
+
+    public static PublicationDto AsDto(this Publication publication, ICollection<Author> authors)
+    {
+        ArgumentNullException.ThrowIfNull(publication, nameof(publication));
+        var authorDtos = authors.Select(x => x.AsDto()).ToList();
+        return new PublicationDto(publication.Id, publication.PublicationDate, authorDtos);
+    }
+
+    public static AuthorDto AsDto(this Author author)
+    {
+        ArgumentNullException.ThrowIfNull(author, nameof(author));
+        return new AuthorDto(
+            author.Id,
+            author.FirstName,
+            author.MiddleNames,
+            author.LastName,
+            author.BirthDate
+        );
+    }
+}

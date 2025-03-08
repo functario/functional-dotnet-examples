@@ -73,8 +73,6 @@ namespace Alexandria.Persistence.Migrations
                 {
                     AuthorsId = table.Column<long>(type: "bigint", nullable: false),
                     PublicationsId = table.Column<long>(type: "bigint", nullable: false),
-                    AuthorId = table.Column<long>(type: "bigint", nullable: false),
-                    PublicationId = table.Column<long>(type: "bigint", nullable: false),
                 },
                 constraints: table =>
                 {

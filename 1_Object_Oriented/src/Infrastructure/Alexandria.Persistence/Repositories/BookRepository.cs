@@ -23,16 +23,6 @@ internal sealed class BookRepository : IBookRepository
     )
     {
         var creationDate = _timeProvider.GetUtcNow();
-        var authors = new List<AuthorModel>();
-        foreach (var authorId in book.Publication.AuthorsIds)
-        {
-            var author = await _alexandriaDbContext.FindAsync<AuthorModel>(
-                [authorId],
-                cancellationToken
-            );
-
-            authors.Add(author!);
-        }
 
         var bookModel = new BookModel()
         {
@@ -40,7 +30,7 @@ internal sealed class BookRepository : IBookRepository
             Title = book.Title,
             CreatedDate = creationDate,
             UpdatedDate = creationDate,
-            Publication = book.Publication.AsNewPublicationModel(creationDate, authors),
+            Publication = book.Publication.ToNewModel(creationDate),
         };
 
         var result = await _alexandriaDbContext.Books.AddAsync(bookModel, cancellationToken);
@@ -48,7 +38,28 @@ internal sealed class BookRepository : IBookRepository
         var entry = _alexandriaDbContext.Entry(bookModel);
         var createdBookModel = result.Entity;
 
-        return result.Entity.ToNewBookDto;
+        return result.Entity.ToNewDto;
+    }
+
+    public async Task<Func<Book>> CreateBookAsync(Book book, CancellationToken cancellationToken)
+    {
+        var creationDate = _timeProvider.GetUtcNow();
+
+        var bookModel = new BookModel()
+        {
+            Id = 0,
+            Title = book.Title,
+            CreatedDate = creationDate,
+            UpdatedDate = creationDate,
+            Publication = book.Publication.ToNewModel(creationDate),
+        };
+
+        var result = await _alexandriaDbContext.Books.AddAsync(bookModel, cancellationToken);
+
+        var entry = _alexandriaDbContext.Entry(bookModel);
+        var createdBookModel = result.Entity;
+
+        return result.Entity.ToNewDomain;
     }
 
     public async Task<BookDto?> GetBookDtoAsync(long bookId, CancellationToken cancellationToken)
@@ -71,6 +82,6 @@ internal sealed class BookRepository : IBookRepository
             ? throw new InvalidOperationException(
                 $"No {nameof(Publication)} match the Book with Id '{bookModel.Id}'"
             )
-            : bookModel.ToBookDto(publication);
+            : bookModel.ToDto(publication);
     }
 }

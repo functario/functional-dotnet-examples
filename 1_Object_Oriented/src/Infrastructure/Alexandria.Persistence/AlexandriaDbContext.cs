@@ -17,34 +17,16 @@ internal class AlexandriaDbContext : DbContext
 
     public DbSet<PublicationModel> Publications { get; set; }
 
-    //public DbSet<AuthorModelPublicationModel> AuthorModelPublicationModel { get; set; }
-
-    //protected override void OnModelCreating(ModelBuilder modelBuilder)
-    //{
-    //    base.OnModelCreating(modelBuilder);
-
-    //    // Explicitly apply the configuration for AuthorPublicationModel
-    //    modelBuilder.ApplyConfiguration(new AuthorsPublicationsConfiguration());
-    //}
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        // Join table between Authors and Publication
         modelBuilder
             .Entity<AuthorModel>()
             .HasMany(a => a.Publications)
             .WithMany(p => p.Authors)
             .UsingEntity<AuthorsPublications>("AuthorsPublications");
-        //modelBuilder
-        //    .Entity<AuthorModel>()
-        //    .HasMany(a => a.Publications)
-        //    .WithMany(p => p.Authors)
-        //    .UsingEntity<AuthorModelPublicationModel>(
-        //        "AuthorsPublications",
-        //        l => l.HasOne<PublicationModel>().WithMany(),
-        //        r => r.HasOne<AuthorModel>().WithMany(),
-        //        j => j.HasKey("AuthorsId", "PublicationsId")
-        //    );
     }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
@@ -73,14 +55,8 @@ internal class AlexandriaDbContext : DbContext
                     continue;
                 }
 
-                // Join Author and Publication
-                //var authorPublication = new AuthorModelPublicationModel
-                //{
-                //    AuthorId = authorId,
-                //    PublicationId = publication.Id,
-                //};
-
-                //await AuthorModelPublicationModel.AddAsync(authorPublication, cancellationToken);
+                // Join Author and Publication via AuthorsPublications join table.
+                publication.Authors.Add(author);
             }
 
             if (missingAuthorIds.Count > 0)
