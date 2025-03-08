@@ -1,8 +1,7 @@
 ﻿namespace Alexandria.Persistence.Models;
 
-internal class AuthorPublicationModel
+internal class AuthorModelPublicationModel
 {
-    public long Id { get; set; }
     public long AuthorId { get; set; }
     public long PublicationId { get; set; }
 }
