@@ -1,5 +1,5 @@
-﻿using Alexandria.Domain.BookDomain;
+﻿using Alexandria.Application.Abstractions.DTOs;
 
 namespace Alexandria.WebApi.Endpoints.Books.AddBook;
 
-internal sealed record AddBookResponse(Book Book) { }
+internal sealed record AddBookResponse(BookDto Book) { }

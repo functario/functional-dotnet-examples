@@ -1,4 +1,6 @@
-﻿using Alexandria.Application.Abstractions.Repositories;
+﻿//using Alexandria.Application.Abstractions.DTOs;
+using Alexandria.Application.Abstractions.DTOs;
+using Alexandria.Application.Abstractions.Repositories;
 using Alexandria.Domain.BookDomain;
 
 namespace Alexandria.Application.BookUseCases.AddBook;
@@ -6,14 +8,25 @@ namespace Alexandria.Application.BookUseCases.AddBook;
 public sealed class AddBookService : IAddBookService
 {
     private readonly IBookRepository _bookRepository;
+    private readonly IAuthorRepository _authorRepository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public AddBookService(IBookRepository bookRepository, IUnitOfWork unitOfWork)
+    public AddBookService(
+        IBookRepository bookRepository,
+        IAuthorRepository authorRepository,
+        IUnitOfWork unitOfWork
+    )
     {
         _bookRepository = bookRepository;
+        _authorRepository = authorRepository;
         _unitOfWork = unitOfWork;
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage(
+        "Style",
+        "IDE0059:Unnecessary assignment of a value",
+        Justification = "<Pending>"
+    )]
     public async Task<AddBookResult> Handle(
         AddBookCommand request,
         CancellationToken cancellationToken
@@ -25,37 +38,24 @@ public sealed class AddBookService : IAddBookService
             request.AuthorsIds
         );
 
+        // Create Book and related Publication
         var transientBook = Book.CreateTransient(request.Title, transientPublication);
-
         var bookFunc = await _bookRepository.CreateBookAsync(transientBook, cancellationToken);
 
+        // Note: The Many-to-Many relation between Publication and Author
+        // is created via an overload of SaveChangeAsync.
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
+        // Get book with information from database.
         var book = bookFunc();
 
-        // Publication is an Entity that map a book with its authors
-        // Here the choice is made to create the publication in the same flow than than the book.
-        // But it could be create by event (OnBookCreated) or by dedicated CreatePublication endpoint.
-        // This is definatly something to revisit once the domain is more understood.
-        //
-        // This also buggy since if the Book is created in DB
-        // but that the Publication transaction failed, there is no rollback!
-        //
-        // Domain rules should be:
-        // - Publication cannot exist without Book and at least 1 Author
-        transientPublication = transientPublication.AssociateBookId(book.Id);
-
-        var publicationFunc = await _bookRepository.CreatePublicationAsync(
-            transientPublication,
+        // Create the response.
+        var authors = await _authorRepository.FindAuthorsAsync(
+            book.Publication.AuthorsIds,
             cancellationToken
         );
 
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
-
-        var publication = publicationFunc();
-
-        var createdBook = new Book(book.Id, book.Title, publication);
-        var response = new AddBookResult(createdBook);
+        var response = new AddBookResult(book.AsDto(authors));
         return response;
     }
 }

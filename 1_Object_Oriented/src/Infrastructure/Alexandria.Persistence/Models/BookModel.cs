@@ -1,37 +1,35 @@
-﻿using Alexandria.Domain.BookDomain;
+﻿using Alexandria.Application.Abstractions.DTOs;
+using Alexandria.Domain.BookDomain;
 
 namespace Alexandria.Persistence.Models;
 
 internal class BookModel
 {
-    public long Id { get; init; }
-    public required string Title { get; init; }
-    public required DateTimeOffset CreatedDate { get; init; }
-    public required DateTimeOffset UpdatedDate { get; init; }
+    public long Id { get; set; }
+    public required string Title { get; set; }
+    public required DateTimeOffset CreatedDate { get; set; }
+    public required DateTimeOffset UpdatedDate { get; set; }
+    public required PublicationModel Publication { get; set; }
 
-    public Book ToDomainBook(PublicationModel publication)
+    public Book ToDomain(PublicationModel publication)
     {
-        return new Book(Id, Title, publication.ToDomainPublication());
+        return new Book(Id, Title, publication.ToDomain());
     }
 
-    public Book ToNewDomainBook()
+    public BookDto ToDto(PublicationModel publication)
     {
-        var transientPublication = new Publication(0, Id, default, []);
-
-        return new Book(Id, Title, transientPublication);
+        return new BookDto(Id, Title, publication.ToDto());
     }
-}
 
-internal static class BookExtensions
-{
-    public static BookModel AsNewBookModel(this Book book, DateTimeOffset createdDate)
+    public Book ToNewDomain()
     {
-        return new BookModel()
-        {
-            Id = book.Id,
-            Title = book.Title,
-            CreatedDate = createdDate,
-            UpdatedDate = createdDate,
-        };
+        var publication = Publication.ToDomain();
+        return new Book(Id, Title, publication);
+    }
+
+    public BookDto ToNewDto()
+    {
+        var publication = Publication.ToDto();
+        return new BookDto(Id, Title, publication);
     }
 }

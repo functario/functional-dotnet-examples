@@ -1,26 +1,33 @@
-﻿using Alexandria.Domain.AuthorDomain;
+﻿using Alexandria.Application.Abstractions.DTOs;
+using Alexandria.Domain.AuthorDomain;
 
 namespace Alexandria.Persistence.Models;
 
 internal class AuthorModel
 {
-    public long Id { get; init; }
-    public required string FirstName { get; init; }
-    public ICollection<string> MiddleNames { get; init; } = [];
-    public required string LastName { get; init; }
-    public DateTimeOffset BirthDate { get; init; }
-    public required DateTimeOffset? CreatedDate { get; init; }
-    public required DateTimeOffset? UpdatedDate { get; init; }
+    public long Id { get; set; }
+    public required string FirstName { get; set; }
+    public ICollection<string> MiddleNames { get; set; } = [];
+    public required string LastName { get; set; }
+    public DateTimeOffset BirthDate { get; set; }
+    public required DateTimeOffset? CreatedDate { get; set; }
+    public required DateTimeOffset? UpdatedDate { get; set; }
+    public virtual ICollection<PublicationModel>? Publications { get; }
 
-    public Author ToDomainAuthor()
+    public Author ToDomain()
     {
         return new Author(Id, FirstName, MiddleNames, LastName, BirthDate);
+    }
+
+    public AuthorDto ToDto()
+    {
+        return new AuthorDto(Id, FirstName, MiddleNames, LastName, BirthDate);
     }
 }
 
 internal static class AuthorExtensions
 {
-    public static AuthorModel AsNewAuthorModel(this Author author, DateTimeOffset createdDate)
+    public static AuthorModel ToNewModel(this Author author, DateTimeOffset createdDate)
     {
         return new AuthorModel()
         {

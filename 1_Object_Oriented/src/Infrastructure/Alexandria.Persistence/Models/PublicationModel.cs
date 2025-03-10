@@ -1,20 +1,27 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Alexandria.Application.Abstractions.DTOs;
 using Alexandria.Domain.BookDomain;
 
 namespace Alexandria.Persistence.Models;
 
 internal class PublicationModel : IValidatableObject
 {
-    public long Id { get; init; }
-    public long BookId { get; init; }
-    public DateTimeOffset PublicationDate { get; init; }
-    public ICollection<long> AuthorsIds { get; init; } = [];
-    public required DateTimeOffset CreatedDate { get; init; }
-    public required DateTimeOffset UpdatedDate { get; init; }
+    public long Id { get; set; }
+    public DateTimeOffset PublicationDate { get; set; }
+    public ICollection<long> AuthorsIds { get; set; } = [];
+    public required DateTimeOffset CreatedDate { get; set; }
+    public required DateTimeOffset UpdatedDate { get; set; }
+    public virtual ICollection<AuthorModel> Authors { get; } = [];
 
-    public Publication ToDomainPublication()
+    public Publication ToDomain()
     {
-        return new Publication(Id, BookId, PublicationDate, AuthorsIds);
+        return new Publication(Id, PublicationDate, AuthorsIds);
+    }
+
+    public PublicationDto ToDto()
+    {
+        var authorDtos = Authors?.Select(a => a.ToDto()).ToList() ?? [];
+        return new PublicationDto(Id, PublicationDate, authorDtos);
     }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -26,5 +33,23 @@ internal class PublicationModel : IValidatableObject
                 [nameof(AuthorsIds)]
             );
         }
+    }
+}
+
+internal static class PublicationModelExtensions
+{
+    public static PublicationModel ToNewModel(
+        this Publication publication,
+        DateTimeOffset createdDate
+    )
+    {
+        return new PublicationModel()
+        {
+            Id = publication.Id,
+            AuthorsIds = publication.AuthorsIds,
+            CreatedDate = createdDate,
+            UpdatedDate = createdDate,
+            PublicationDate = publication.PublicationDate,
+        };
     }
 }

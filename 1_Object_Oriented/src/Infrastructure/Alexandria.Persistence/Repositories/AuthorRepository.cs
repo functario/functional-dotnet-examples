@@ -22,11 +22,11 @@ internal sealed class AuthorRepository : IAuthorRepository
     {
         var creationDate = _timeProvider.GetUtcNow();
         var result = await _alexandriaDbContext.Authors.AddAsync(
-            author.AsNewAuthorModel(creationDate),
+            author.ToNewModel(creationDate),
             cancellationToken
         );
 
-        return result.Entity.ToDomainAuthor;
+        return result.Entity.ToDomain;
     }
 
     public Task<Author> DeleteAuthorAsync(long authorId, CancellationToken cancellationToken)
@@ -41,6 +41,23 @@ internal sealed class AuthorRepository : IAuthorRepository
             cancellationToken
         );
 
-        return result?.ToDomainAuthor();
+        return result?.ToDomain();
+    }
+
+    public async Task<List<Author>> FindAuthorsAsync(
+        ICollection<long> authorIds,
+        CancellationToken cancellationToken
+    )
+    {
+        var list = new List<Author>();
+        foreach (var authorId in authorIds)
+        {
+            var result =
+                await _alexandriaDbContext.FindAsync<AuthorModel>([authorId], cancellationToken)
+                ?? throw new InvalidOperationException();
+            list.Add(result.ToDomain());
+        }
+
+        return list;
     }
 }

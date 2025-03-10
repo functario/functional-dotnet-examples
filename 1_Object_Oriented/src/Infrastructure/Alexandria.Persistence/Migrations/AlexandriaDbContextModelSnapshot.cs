@@ -67,6 +67,9 @@ namespace Alexandria.Persistence.Migrations
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<long>("PublicationId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -75,6 +78,8 @@ namespace Alexandria.Persistence.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PublicationId");
 
                     b.ToTable("Books");
                 });
@@ -91,9 +96,6 @@ namespace Alexandria.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("BookId")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("datetimeoffset");
 
@@ -106,6 +108,47 @@ namespace Alexandria.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Publications");
+                });
+
+            modelBuilder.Entity("AuthorsPublications", b =>
+                {
+                    b.Property<long>("AuthorsId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("PublicationsId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("AuthorsId", "PublicationsId");
+
+                    b.HasIndex("PublicationsId");
+
+                    b.ToTable("AuthorsPublications");
+                });
+
+            modelBuilder.Entity("Alexandria.Persistence.Models.BookModel", b =>
+                {
+                    b.HasOne("Alexandria.Persistence.Models.PublicationModel", "Publication")
+                        .WithMany()
+                        .HasForeignKey("PublicationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Publication");
+                });
+
+            modelBuilder.Entity("AuthorsPublications", b =>
+                {
+                    b.HasOne("Alexandria.Persistence.Models.AuthorModel", null)
+                        .WithMany()
+                        .HasForeignKey("AuthorsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Alexandria.Persistence.Models.PublicationModel", null)
+                        .WithMany()
+                        .HasForeignKey("PublicationsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

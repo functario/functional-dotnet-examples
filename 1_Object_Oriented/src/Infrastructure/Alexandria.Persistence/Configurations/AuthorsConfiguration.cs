@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Alexandria.Persistence.Configurations;
 
-internal class AuthorConfiguration : IEntityTypeConfiguration<AuthorModel>
+internal class AuthorsConfiguration : IEntityTypeConfiguration<AuthorModel>
 {
     public void Configure(EntityTypeBuilder<AuthorModel> builder)
     {
