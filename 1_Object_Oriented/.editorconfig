@@ -319,3 +319,6 @@ indent_style = unset
 insert_final_newline = false
 tab_width = unset
 trim_trailing_whitespace = false
+
+[*/Migrations/*]
+generated_code = true
