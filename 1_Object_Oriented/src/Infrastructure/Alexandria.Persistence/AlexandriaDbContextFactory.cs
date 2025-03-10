@@ -48,6 +48,11 @@ internal class AlexandriaDbContextFactory : IDesignTimeDbContextFactory<Alexandr
         string sqlConnectionString
     )
     {
+        // The connection string comming from Aspire could miss the DataBase name depending when it is resolved.
+        // if it is missing, the configuration will be on "master" db
+        // but later operations will be on "alexandria" once migrations are applied.
+        sqlConnectionString = EnforceDatabaseName(sqlConnectionString);
+
         optionsBuilder.UseSqlServer(
             sqlConnectionString,
             x =>

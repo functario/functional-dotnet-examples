@@ -30,5 +30,7 @@
     <PackageVersion Include="Microsoft.Extensions.ApiDescription.Server" Version="9.0.2" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="7.3.1" />
     <PackageVersion Include="Xunit.DependencyInjection" Version="10.3.0" />
+    <PackageVersion Include="Aspire.Hosting.Testing" Version="9.1.0" />
+    <PackageVersion Include="coverlet.collector" Version="6.0.2" />
   </ItemGroup>
 </Project>

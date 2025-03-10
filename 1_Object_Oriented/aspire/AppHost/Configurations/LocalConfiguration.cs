@@ -2,11 +2,11 @@
 using WellKnowns.Infrastructure.SQL;
 using WellKnowns.Presentation.AlexandriaWebApi;
 
-namespace AppHost.Local;
+namespace AppHost.Configurations;
 
 internal static class LocalConfiguration
 {
-    internal static IDistributedApplicationBuilder Configure(
+    internal static IDistributedApplicationBuilder ConfigureAsLocal(
         this IDistributedApplicationBuilder builder
     )
     {
