@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
-using System.Net;
 using System.Net.Http.Json;
+using Alexandria.Local.IntegrationTests.Support;
 using WellKnowns.Presentation.AlexandriaWebApi;
 
 namespace Alexandria.Local.IntegrationTests.Tests;
@@ -50,6 +50,6 @@ public class IntegrationTest1
         );
 
         // Assert
-        sut.StatusCode.Should().Be(HttpStatusCode.Created);
+        await sut.VerifyHttpResponseAsync();
     }
 }
