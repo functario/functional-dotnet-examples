@@ -25,4 +25,8 @@
     <ProjectReference Include="..\..\..\src\Commons\WellKnowns\WellKnowns.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Tests\IntegrationTest1_Snapshots\" />
+  </ItemGroup>
+
 </Project>

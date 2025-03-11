@@ -34,7 +34,7 @@ public static class VerifyExtension
 
                 var directory = Path.Combine(projectDirectory, $"{typePath}_Snapshots");
 
-                return new(directory, type.Name, method.Name);
+                return new PathInfo(directory, typeName: "_", methodName: method.Name);
             }
         );
 
