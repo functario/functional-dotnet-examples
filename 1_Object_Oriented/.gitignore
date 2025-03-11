@@ -42,3 +42,6 @@ msbuild.wrn
 
 # Environment variables
 .env
+
+# Kiota
+*.kiota.log

@@ -1,55 +1,52 @@
 ﻿using System.Globalization;
-using System.Net.Http.Json;
 using Alexandria.Local.IntegrationTests.Support;
-using WellKnowns.Presentation.AlexandriaWebApi;
+using CleanArchitecture.WebAPI.Client.Models;
+using Microsoft.Kiota.Abstractions;
 
 namespace Alexandria.Local.IntegrationTests.Tests;
 
 public class IntegrationTest1
 {
     private readonly AspireEnvironment _aspireEnvironment;
+    private readonly AlexandriaClientFactory _alexandriaClientFactory;
+    private readonly NativeResponseHandler _postAuthorsResponseHandler;
 
-    public IntegrationTest1(AspireEnvironment aspireEnvironment)
+    public IntegrationTest1(
+        AspireEnvironment aspireEnvironment,
+        AlexandriaClientFactory alexandriaClientFactory
+    )
     {
         _aspireEnvironment = aspireEnvironment;
+        _alexandriaClientFactory = alexandriaClientFactory;
+        _postAuthorsResponseHandler = new NativeResponseHandler();
     }
 
     [Fact]
     public async Task PostAuthorTest()
     {
         // Arrange
-        using var aspireEnvironment = await _aspireEnvironment.StartAsync(
-            TestContext.Current.CancellationToken
-        );
+        using var app = await _aspireEnvironment.StartAsync(TestContext.Current.CancellationToken);
 
-        using var webApiHttpClient = aspireEnvironment.CreateHttpClient(
-            WebApiProjectReferences.ProjectName
-        );
+        var alexandriaClient = _alexandriaClientFactory.CreateAlexandriaClient(app);
 
-        using var content = JsonContent.Create(
-            new
-            {
-                FirstName = "Tom",
-                MiddleNames = new List<string>() { "The 3rd" },
-                LastName = "Challenge",
-                BirthDate = DateTime.Parse(
-                    "2025-03-10T11:17:38.733Z",
-                    CultureInfo.InvariantCulture
-                ),
-            }
-        );
-
-        var baseAddress = webApiHttpClient.BaseAddress ?? throw new InvalidOperationException();
-        var uri = new Uri(baseAddress, "/v1/authors");
+        var authorRequest = new AddAuthorRequest()
+        {
+            FirstName = "Tom",
+            MiddleNames = ["The 3rd"],
+            LastName = "Challenge",
+            BirthDate = DateTime.Parse("2025-03-10T11:17:38.733Z", CultureInfo.InvariantCulture),
+        };
 
         // Act
-        var sut = await webApiHttpClient.PostAsync(
-            uri,
-            content,
-            TestContext.Current.CancellationToken
+        var sut = await alexandriaClient.V1.Authors.PostAsync(
+            authorRequest,
+            c => SetResponseHandler(c, _postAuthorsResponseHandler),
+            cancellationToken: TestContext.Current.CancellationToken
         );
 
+        var response = _postAuthorsResponseHandler.GetHttpResponse();
+
         // Assert
-        await sut.VerifyHttpResponseAsync();
+        await response.VerifyHttpResponseAsync();
     }
 }

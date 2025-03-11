@@ -1,9 +1,9 @@
 ﻿{
+  "Version": "2.0",
   "Status": "201 Created",
   "Headers": {
     "Date": "DateTime_1",
-    "Location": "https://localhost:7027/v1/authors?id=1",
-    "Transfer-Encoding": "chunked"
+    "Location": "https://localhost:7027/v1/authors?id=1"
   },
   "Content": {
     "Headers": {

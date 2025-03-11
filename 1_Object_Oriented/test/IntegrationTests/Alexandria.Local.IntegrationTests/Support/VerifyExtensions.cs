@@ -8,7 +8,7 @@ public static class ModuleInitializer
     public static void Initialize() => VerifierSettings.InitializePlugins();
 }
 
-public static class VerifyExtension
+public static class VerifyExtensions
 {
     public static VerifySettings GetVerifySettings()
     {
@@ -18,7 +18,7 @@ public static class VerifyExtension
         return verifySettings;
     }
 
-    public static async Task<VerifyResult> VerifyHttpResponseAsync(this object toVerify)
+    public static async Task<VerifyResult> VerifyHttpResponseAsync(this object? toVerify)
     {
         var verifySettings = GetVerifySettings();
         DerivePathInfo(

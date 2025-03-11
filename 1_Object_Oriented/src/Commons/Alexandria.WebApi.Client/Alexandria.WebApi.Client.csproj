@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+    <TargetFramework>$(SdkTargetFramework)</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+    <PackageReference Include="Microsoft.Kiota.Bundle" />
+    </ItemGroup>
+
+    <!--There is no need for reference to Alexandria.WebApi since only the OpenApi file is required.
+    Still to ensure Client project is generated after the WebApi, the Build Order has been configured manually.-->
+    <!--<ItemGroup>
+    <ProjectReference Include="..\..\Presentation\Alexandria.WebApi\Alexandria.WebApi.csproj" />
+    </ItemGroup>-->
+
+    <!--Running before "CoreCompile" prevents desync between the OpenApi json contract and the client generation-->
+    <Target Name="GenerateAPIClient" BeforeTargets="CoreCompile">
+        <Message Importance="high" Text="Generating API client..." />
+        <Exec Command="dotnet tool run kiota generate --openapi &quot;$(SolutionDir)\src\Presentation\Alexandria.WebAPI\OpenAPI\Alexandria.WebAPI.json&quot; --language csharp --output &quot;$(SolutionDir)\src\Commons\Alexandria.WebAPI.Client&quot; --namespace-name CleanArchitecture.WebAPI.Client --class-name AlexandriaClient" />
+    </Target>
+
+
+</Project>
