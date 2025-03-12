@@ -22,3 +22,10 @@ using System.Diagnostics.CodeAnalysis;
     Scope = "namespaceanddescendants",
     Target = "~N:Alexandria.Local.IntegrationTests.Tests"
 )]
+[assembly: SuppressMessage(
+    "Usage",
+    "CA1816:Dispose methods should call SuppressFinalize",
+    Justification = "Allowed for test project",
+    Scope = "namespaceanddescendants",
+    Target = "~N:Alexandria.Local.IntegrationTests.Tests"
+)]

@@ -7,7 +7,7 @@ var context = Enum.TryParse(args.FirstOrDefault(), true, out AspireContexts ctx)
 
 var builder = DistributedApplication.CreateBuilder(args);
 
-builder = context switch
+_ = context switch
 {
     AspireContexts.Local => builder.ConfigureAsLocal(),
     AspireContexts.Test => builder.ConfigureAsTest(),

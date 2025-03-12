@@ -65,7 +65,7 @@ internal static class TestConfiguration
 
         var sqlServer = builder
             .AddSqlServer(
-                SqlProjectReferences.ServerName,
+                SqlProjectReferences.ProjectName,
                 port: SqldbConstants.SQLLocalDefaulPort,
                 password: sqlPassword
             )
@@ -106,7 +106,7 @@ internal static class TestConfiguration
             static async (@event, cancellationToken) =>
             {
                 var db =
-                    @event.Model.Resources.First(x => x.Name == SqlProjectReferences.ServerName)
+                    @event.Model.Resources.First(x => x.Name == SqlProjectReferences.ProjectName)
                     as SqlServerServerResource;
 
                 ArgumentNullException.ThrowIfNull(db, nameof(db));

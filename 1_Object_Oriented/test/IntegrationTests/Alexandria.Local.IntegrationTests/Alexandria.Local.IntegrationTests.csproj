@@ -26,6 +26,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Tests\Authors\AddAuthorTests2.PostAuthorTest.received.txt">
+      <DependentUpon>AddAuthorTests2.cs</DependentUpon>
+    </None>
     <None Update="Tests\Authors\AddAuthorTests.PostAuthorTest.received.txt">
       <DependentUpon>AddAuthorTests.cs</DependentUpon>
     </None>

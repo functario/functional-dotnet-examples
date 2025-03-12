@@ -5,13 +5,13 @@ using Microsoft.Kiota.Abstractions;
 
 namespace Alexandria.Local.IntegrationTests.Tests.Authors;
 
-public class AddAuthorTests
+public class AddAuthorTests2
 {
     private readonly AspireEnvironment _aspireEnvironment;
     private readonly AlexandriaClientFactory _alexandriaClientFactory;
     private readonly NativeResponseHandler _postAuthorsResponseHandler;
 
-    public AddAuthorTests(
+    public AddAuthorTests2(
         AspireEnvironment aspireEnvironment,
         AlexandriaClientFactory alexandriaClientFactory
     )

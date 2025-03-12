@@ -49,7 +49,7 @@ internal static class LocalConfiguration
 
         var sqlServer = builder
             .AddSqlServer(
-                SqlProjectReferences.ServerName,
+                SqlProjectReferences.ProjectName,
                 port: SqldbConstants.SQLLocalDefaulPort,
                 password: sqlPassword
             )
@@ -65,7 +65,7 @@ internal static class LocalConfiguration
             static async (@event, cancellationToken) =>
             {
                 var db =
-                    @event.Model.Resources.First(x => x.Name == SqlProjectReferences.ServerName)
+                    @event.Model.Resources.First(x => x.Name == SqlProjectReferences.ProjectName)
                     as SqlServerServerResource;
 
                 ArgumentNullException.ThrowIfNull(db, nameof(db));
