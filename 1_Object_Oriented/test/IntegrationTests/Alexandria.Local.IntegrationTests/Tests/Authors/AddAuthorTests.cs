@@ -3,15 +3,15 @@ using Alexandria.Local.IntegrationTests.Support;
 using CleanArchitecture.WebAPI.Client.Models;
 using Microsoft.Kiota.Abstractions;
 
-namespace Alexandria.Local.IntegrationTests.Tests;
+namespace Alexandria.Local.IntegrationTests.Tests.Authors;
 
-public class IntegrationTest1
+public class AddAuthorTests
 {
     private readonly AspireEnvironment _aspireEnvironment;
     private readonly AlexandriaClientFactory _alexandriaClientFactory;
     private readonly NativeResponseHandler _postAuthorsResponseHandler;
 
-    public IntegrationTest1(
+    public AddAuthorTests(
         AspireEnvironment aspireEnvironment,
         AlexandriaClientFactory alexandriaClientFactory
     )
@@ -22,7 +22,7 @@ public class IntegrationTest1
     }
 
     [Fact]
-    public async Task PostAuthorTest()
+    public async Task Create_1_Author()
     {
         // Arrange
         using var app = await _aspireEnvironment.StartAsync(TestContext.Current.CancellationToken);

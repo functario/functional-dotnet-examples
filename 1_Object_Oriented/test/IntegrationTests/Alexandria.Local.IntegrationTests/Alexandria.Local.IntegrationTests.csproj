@@ -17,7 +17,6 @@
     <PackageReference Include="xunit.v3" />
     <PackageReference Include="xunit.runner.visualstudio" />
     <PackageReference Include="Xunit.DependencyInjection" />
-    <PackageReference Include="AwesomeAssertions" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,7 +26,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Tests\IntegrationTest1_Snapshots\" />
+    <None Update="Tests\Authors\AddAuthorTests.PostAuthorTest.received.txt">
+      <DependentUpon>AddAuthorTests.cs</DependentUpon>
+    </None>
   </ItemGroup>
 
 </Project>
