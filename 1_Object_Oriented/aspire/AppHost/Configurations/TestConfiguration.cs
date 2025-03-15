@@ -45,20 +45,7 @@ internal static class TestConfiguration
 
         builder
             .AddProject<Projects.Alexandria_WebApi>(WebApiProjectReferences.ProjectName)
-            .WithEndpoint(
-                "https",
-                endpoint =>
-                {
-                    endpoint.Port = 5557;
-                }
-            )
-            .WithEndpoint(
-                "http",
-                endpoint =>
-                {
-                    endpoint.Port = 5556;
-                }
-            )
+            .WithEndpoint()
             .WithEnvironment(SqldbEnvVars.SQLConnectionString, SqlConnectionString)
             .WithReference(sqldb)
             .WaitFor(sqldb);
