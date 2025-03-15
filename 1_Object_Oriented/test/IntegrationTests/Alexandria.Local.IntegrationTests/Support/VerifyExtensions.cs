@@ -9,6 +9,12 @@ public static class ModuleInitializer
     public static void Initialize() => VerifierSettings.InitializePlugins();
 }
 
+public class VerifyChecksTests
+{
+    [Fact]
+    public Task Run() => VerifyChecks.Run();
+}
+
 public static class VerifyExtensions
 {
     public static VerifySettings GetVerifySettings()
@@ -44,8 +50,8 @@ public static class VerifyExtensions
                 var root = Path.GetFileName(projectDirectory!.TrimEnd(Path.DirectorySeparatorChar));
                 var typePath = type
                     .FullName?.Replace(root, "", StringComparison.OrdinalIgnoreCase)
-                    ?.Replace(".", "\\", StringComparison.OrdinalIgnoreCase)
-                    ?.TrimStart('\\')!;
+                    ?.Replace(".", "/", StringComparison.OrdinalIgnoreCase)
+                    ?.TrimStart('/')!;
 
                 var directory = Path.Combine(projectDirectory, $"{typePath}_Snapshots");
 
