@@ -32,7 +32,7 @@ internal static class TestConfiguration
             var awaiter = sqlServer.Resource.GetConnectionStringAsync().GetAwaiter();
             while (!awaiter.IsCompleted)
             {
-                Thread.Sleep(100);
+                Thread.Sleep(10);
             }
 
             var connectionString = awaiter.GetResult();

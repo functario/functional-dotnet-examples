@@ -17,7 +17,7 @@
 
   <!--Warnings ignores for the solution-->
   <PropertyGroup>
-    <NoWarn>1591, IDE0055, CS1591, IDE2006, IDE0058, IDE0290, IDE2000, xUnit1050, IDE0008</NoWarn>
+    <NoWarn>IDE0055, CS1591, IDE2006, IDE0058, IDE0290, IDE2000, xUnit1050, IDE0008</NoWarn>
   </PropertyGroup>
 
 

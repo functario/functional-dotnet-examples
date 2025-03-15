@@ -9,7 +9,7 @@
   </PropertyGroup>
 
     <PropertyGroup>
-        <NoWarn>1591, IDE0055, CS1591, IDE2006, IDE0058, IDE0290, IDE2000, xUnit1050, IDE0008, CS8618</NoWarn>
+        <NoWarn>IDE0055, CS1591, IDE2006, IDE0058, IDE0290, IDE2000, xUnit1050, IDE0008, CS8618</NoWarn>
     </PropertyGroup>
 
   <ItemGroup>
@@ -32,19 +32,6 @@
     <ProjectReference Include="..\..\..\src\Commons\Alexandria.SQLSeeding\Alexandria.SQLSeeding.csproj" />
     <ProjectReference Include="..\..\..\src\Commons\Alexandria.WebApi.Client\Alexandria.WebApi.Client.csproj" />
     <ProjectReference Include="..\..\..\src\Commons\WellKnowns\WellKnowns.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Tests\Authors\AddAuthorTests2.PostAuthorTest.received.txt">
-      <DependentUpon>AddAuthorTests2.cs</DependentUpon>
-    </None>
-    <None Update="Tests\Authors\AddAuthorTests.PostAuthorTest.received.txt">
-      <DependentUpon>AddAuthorTests.cs</DependentUpon>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Tests\Authors\AddAuthorTests2_Snapshots\" />
   </ItemGroup>
 
 </Project>

@@ -12,7 +12,7 @@ public static class ModuleInitializer
 public class VerifyChecksTests
 {
     [Fact]
-    public Task Run() => VerifyChecks.Run();
+    public Task CheckVerifyConventions() => VerifyChecks.Run();
 }
 
 public static class VerifyExtensions
