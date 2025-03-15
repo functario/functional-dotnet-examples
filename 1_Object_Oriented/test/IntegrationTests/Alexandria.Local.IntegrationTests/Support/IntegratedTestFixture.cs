@@ -1,4 +1,5 @@
-﻿using Alexandria.SQLSeeding;
+﻿using System.Diagnostics.CodeAnalysis;
+using Alexandria.SQLSeeding;
 using Aspire.Hosting;
 using CleanArchitecture.WebAPI.Client;
 using Microsoft.Kiota.Abstractions.Authentication;
@@ -11,14 +12,15 @@ namespace Alexandria.Local.IntegrationTests.Support;
 
 public class IntegratedTestFixture
 {
-#pragma warning disable CA1822 // Mark members as static
+    [SuppressMessage(
+        "Performance",
+        "CA1822:Mark members as static",
+        Justification = "Allowed for DI injection given this class may extend."
+    )]
     public async Task<(
-        DistributedApplication appHost,
         HttpClient alexandriaHttpClient,
-        HttpClientRequestAdapter requestAdapdter,
         AlexandriaClient alexandriaClient
     )> InitializeAsync()
-#pragma warning restore CA1822 // Mark members as static
     {
         // Create AppHost with Aspire
         var appHost = await StartAppHostAsync(TestContext.Current.CancellationToken);
@@ -27,16 +29,14 @@ public class IntegratedTestFixture
         await ResetSQLDatabaseAsync(appHost, TestContext.Current.CancellationToken);
 
         // Configure Alexandria HttpClient
-#pragma warning disable CA2000 // Dispose objects before losing scope
         var alexandriaHttpClient = appHost.CreateHttpClient(WebApiProjectReferences.ProjectName);
-#pragma warning restore CA2000 // Dispose objects before losing scope
         using var requestAdapter = new HttpClientRequestAdapter(
             new AnonymousAuthenticationProvider(),
             httpClient: alexandriaHttpClient
         );
 
         var alexandriaClient = new AlexandriaClient(requestAdapter);
-        return (appHost, alexandriaHttpClient, requestAdapter, alexandriaClient);
+        return (alexandriaHttpClient, alexandriaClient);
     }
 
     private static async Task ResetSQLDatabaseAsync(

@@ -8,6 +8,10 @@
     <IsTestProject>true</IsTestProject>
   </PropertyGroup>
 
+    <PropertyGroup>
+        <NoWarn>1591, IDE0055, CS1591, IDE2006, IDE0058, IDE0290, IDE2000, xUnit1050, IDE0008, CS8618</NoWarn>
+    </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Aspire.Hosting.Testing" />
     <PackageReference Include="Azure.Identity" />
@@ -41,6 +45,10 @@
     <None Update="Tests\Authors\AddAuthorTests.PostAuthorTest.received.txt">
       <DependentUpon>AddAuthorTests.cs</DependentUpon>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Tests\Authors\AddAuthorTests2_Snapshots\" />
   </ItemGroup>
 
 </Project>

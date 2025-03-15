@@ -1,88 +1,59 @@
-﻿//using System.Globalization;
-//using Alexandria.Local.IntegrationTests.Support;
-//using Alexandria.SQLSeeding;
-//using Aspire.Hosting;
-//using CleanArchitecture.WebAPI.Client.Models;
-//using Microsoft.Kiota.Abstractions;
-//using WellKnowns.Aspires;
-//using WellKnowns.Infrastructure.SQL;
-//using WellKnowns.Presentation.AlexandriaWebApi;
+﻿using System.Globalization;
+using Alexandria.Local.IntegrationTests.Support;
+using CleanArchitecture.WebAPI.Client;
+using CleanArchitecture.WebAPI.Client.Models;
+using Microsoft.Kiota.Abstractions;
 
-//namespace Alexandria.Local.IntegrationTests.Tests.Authors;
+namespace Alexandria.Local.IntegrationTests.Tests.Authors;
 
-//[Collection(nameof(IntegratedTestCollection))]
-//public class AddAuthorTests2 : IntegratedTestFixture
-//{
-//    private readonly NativeResponseHandler _postAuthorsResponseHandler;
+[Trait("Category", "Aspire")]
+[Collection(nameof(IntegratedTests))]
+public class AddAuthorTests2 : IAsyncLifetime
+{
+    private readonly NativeResponseHandler _postAuthorsResponseHandler;
+    private readonly IntegratedTestFixture _integratedTestFixture;
+    private AlexandriaClient _alexandriaClient;
+    private HttpClient _alexandriaHttpClient;
 
-//    public AddAuthorTests2()
-//    {
-//        _postAuthorsResponseHandler = new NativeResponseHandler();
-//    }
+    public AddAuthorTests2(IntegratedTestFixture integratedTestFixture)
+    {
+        _postAuthorsResponseHandler = new NativeResponseHandler();
+        _integratedTestFixture = integratedTestFixture;
+    }
 
-//    [Fact]
-//    public async Task Create_1_Author()
-//    {
-//        // Arrange
-//        var authorRequest = new AddAuthorRequest()
-//        {
-//            FirstName = "Tom",
-//            MiddleNames = ["The 3rd"],
-//            LastName = "Challenge",
-//            BirthDate = DateTime.Parse("2025-03-10T11:17:38.733Z", CultureInfo.InvariantCulture),
-//        };
+    public async ValueTask InitializeAsync()
+    {
+        (_alexandriaHttpClient, _alexandriaClient) = await _integratedTestFixture.InitializeAsync();
+    }
 
-//        // Act
-//        var sut = await AlexandriaClient.V1.Authors.PostAsync(
-//            authorRequest,
-//            c => SetResponseHandler(c, _postAuthorsResponseHandler),
-//            cancellationToken: TestContext.Current.CancellationToken
-//        );
+    public ValueTask DisposeAsync()
+    {
+        _alexandriaHttpClient?.Dispose();
+        return ValueTask.CompletedTask;
+    }
 
-//        var response = _postAuthorsResponseHandler.GetHttpResponse();
+    [Fact]
+    public async Task Create_1_Author()
+    {
+        // Arrange
+        var authorRequest = new AddAuthorRequest()
+        {
+            FirstName = "Tom",
+            MiddleNames = ["The 3rd"],
+            LastName = "Challenge",
+            BirthDate = DateTime.Parse("2025-03-10T11:17:38.733Z", CultureInfo.InvariantCulture),
+        };
 
-//        // Assert
-//        //await response.VerifyHttpResponseAsync();
-//    }
+        // Act
+        var sut = await _alexandriaClient.V1.Authors.PostAsync(
+            authorRequest,
+            c => SetResponseHandler(c, _postAuthorsResponseHandler),
+            cancellationToken: TestContext.Current.CancellationToken
+        );
 
+        var response = _postAuthorsResponseHandler.GetHttpResponse();
 
-//    private static async Task ResetSQLDatabaseAsync(
-//        DistributedApplication appHost,
-//        CancellationToken cancellationToken
-//    )
-//    {
-//        var connectionString =
-//            await appHost.GetConnectionStringAsync(
-//                SqlProjectReferences.ProjectName,
-//                cancellationToken
-//            )
-//            ?? throw new InvalidOperationException(
-//                $"Could not get SQL Connection string from {SqlProjectReferences.ProjectName}"
-//            );
-
-//        await SQLSeeder.ResetAsync(connectionString, cancellationToken);
-//    }
-
-//    private static async Task<DistributedApplication> StartAppHostAsync(
-//        CancellationToken cancellationToken
-//    )
-//    {
-//        var aspire = await DistributedApplicationTestingBuilder.CreateAsync<Projects.AppHost>(
-//            [AspireContexts.Test.ToString()],
-//            cancellationToken
-//        );
-
-//        var alexandriaWebApi = aspire.CreateResourceBuilder<ProjectResource>(
-//            WebApiProjectReferences.ProjectName
-//        );
-
-//        alexandriaWebApi.ApplicationBuilder.Services.ConfigureHttpClientDefaults(builder =>
-//        {
-//            builder.AddStandardResilienceHandler();
-//        });
-
-//        var appHost = await aspire.BuildAsync(cancellationToken);
-//        await appHost.StartAsync(cancellationToken);
-//        return appHost;
-//    }
-//}
+        // Assert
+        await response.VerifyHttpResponseAsync();
+    }
+}

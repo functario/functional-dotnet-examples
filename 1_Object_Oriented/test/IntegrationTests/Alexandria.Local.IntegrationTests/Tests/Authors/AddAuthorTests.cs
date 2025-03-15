@@ -10,16 +10,12 @@ namespace Alexandria.Local.IntegrationTests.Tests.Authors;
 [Collection(nameof(IntegratedTests))]
 public class AddAuthorTests : IAsyncLifetime
 {
-#pragma warning disable IDE0044 // Add readonly modifier
-    private NativeResponseHandler _postAuthorsResponseHandler;
-    private IntegratedTestFixture _integratedTestFixture;
+    private readonly NativeResponseHandler _postAuthorsResponseHandler;
+    private readonly IntegratedTestFixture _integratedTestFixture;
     private AlexandriaClient _alexandriaClient;
     private HttpClient _alexandriaHttpClient;
 
-#pragma warning restore IDE0044 // Add readonly modifier
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     public AddAuthorTests(IntegratedTestFixture integratedTestFixture)
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     {
         _postAuthorsResponseHandler = new NativeResponseHandler();
         _integratedTestFixture = integratedTestFixture;
@@ -27,8 +23,7 @@ public class AddAuthorTests : IAsyncLifetime
 
     public async ValueTask InitializeAsync()
     {
-        (_, _alexandriaHttpClient, _, _alexandriaClient) =
-            await _integratedTestFixture.InitializeAsync();
+        (_alexandriaHttpClient, _alexandriaClient) = await _integratedTestFixture.InitializeAsync();
     }
 
     public ValueTask DisposeAsync()
@@ -59,6 +54,6 @@ public class AddAuthorTests : IAsyncLifetime
         var response = _postAuthorsResponseHandler.GetHttpResponse();
 
         // Assert
-        //await response.VerifyHttpResponseAsync();
+        await response.VerifyHttpResponseAsync();
     }
 }

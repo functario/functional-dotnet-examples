@@ -1,7 +1,5 @@
 ﻿namespace Alexandria.Local.IntegrationTests.Support;
 
-#pragma warning disable IDE0059 // Unnecessary assignment of a value
-
 [CollectionDefinition(nameof(IntegratedTestFixture))]
 public class IntegratedTestCollection : ICollectionFixture<IntegratedTests>
 {
@@ -10,4 +8,5 @@ public class IntegratedTestCollection : ICollectionFixture<IntegratedTests>
     // ICollectionFixture<> interfaces.
 }
 
-#pragma warning restore IDE0059 // Unnecessary assignment of a value
+// Empty class for reference
+public class IntegratedTests { }

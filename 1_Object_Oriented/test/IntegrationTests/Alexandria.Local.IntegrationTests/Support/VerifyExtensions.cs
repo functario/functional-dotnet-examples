@@ -1,4 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 
 namespace Alexandria.Local.IntegrationTests.Support;
 
@@ -14,6 +15,20 @@ public static class VerifyExtensions
     {
         var verifySettings = new VerifySettings();
         verifySettings.AddScrubber(x => x.Replace("\r\n", "\n"));
+
+        verifySettings.ScrubLinesWithReplace(line =>
+        {
+            if (line.Contains("http", StringComparison.OrdinalIgnoreCase))
+            {
+                // Scrub dynamic port from Location url
+                var pattern = @":\d+";
+                var modifiedUrl = Regex.Replace(line, pattern, ":Port_1");
+                return modifiedUrl;
+            }
+
+            return line;
+        });
+
         verifySettings.UseStrictJson();
         return verifySettings;
     }
