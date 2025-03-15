@@ -68,6 +68,8 @@ internal static class TestConfiguration
                 port: SqldbConstants.SQLLocalDefaulPort,
                 password: sqlPassword
             )
+            // If ContainerLifetime.Session, a new Docker container is created for each test
+            // but they are only disposed once all tests have run.
             .WithLifetime(ContainerLifetime.Persistent);
 
         var sqldb = sqlServer.AddDatabase(dbName);
