@@ -29,3 +29,8 @@ using System.Diagnostics.CodeAnalysis;
     Scope = "namespaceanddescendants",
     Target = "~N:Alexandria.Local.IntegrationTests.Tests"
 )]
+[assembly: SuppressMessage(
+    "Naming",
+    "CA1711:Identifiers should not have incorrect suffix",
+    Justification = "Allowed with xunit"
+)]

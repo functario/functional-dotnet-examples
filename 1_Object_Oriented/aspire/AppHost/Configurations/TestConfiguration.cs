@@ -45,8 +45,20 @@ internal static class TestConfiguration
 
         builder
             .AddProject<Projects.Alexandria_WebApi>(WebApiProjectReferences.ProjectName)
-            .WithEndpoint("https", endpoint => endpoint.IsProxied = false)
-            .WithEndpoint("http", endpoint => endpoint.IsProxied = false)
+            .WithEndpoint(
+                "https",
+                endpoint =>
+                {
+                    endpoint.Port = 5557;
+                }
+            )
+            .WithEndpoint(
+                "http",
+                endpoint =>
+                {
+                    endpoint.Port = 5556;
+                }
+            )
             .WithEnvironment(SqldbEnvVars.SQLConnectionString, SqlConnectionString)
             .WithReference(sqldb)
             .WaitFor(sqldb);
@@ -69,17 +81,7 @@ internal static class TestConfiguration
                 port: SqldbConstants.SQLLocalDefaulPort,
                 password: sqlPassword
             )
-            // Using Persistent will make tests faster
-            // but then we need to manage the concurrency between tests.
-            // Also, the same db will be used locally if the resource name (SqlProjectReferences.ServerName)
-            // is used in both configuration.
-            // One one way to manage this will be to:
-            // - have a repository of sql resource (ex: 3) splitted by name with a borrow mechanism
-            // - limit the test concurrency in xunit to the same number (ex: 3)
-            // - pass in arguments the sql resource name from the test
-            // - manage cleanup inside the test
-            //.WithLifetime(ContainerLifetime.Persistent);
-            .WithLifetime(ContainerLifetime.Session);
+            .WithLifetime(ContainerLifetime.Persistent);
 
         var sqldb = sqlServer.AddDatabase(dbName);
         return (sqlServer, sqldb);

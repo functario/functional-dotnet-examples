@@ -62,6 +62,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IntegrationTests", "Integra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alexandria.Local.IntegrationTests", "test\IntegrationTests\Alexandria.Local.IntegrationTests\Alexandria.Local.IntegrationTests.csproj", "{181B9946-93AE-431A-9D1B-ABB575799166}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alexandria.SQLSeeding", "src\Commons\Alexandria.SQLSeeding\Alexandria.SQLSeeding.csproj", "{77DE46C0-A177-4DD8-8561-77061118F466}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -116,6 +118,10 @@ Global
 		{181B9946-93AE-431A-9D1B-ABB575799166}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{181B9946-93AE-431A-9D1B-ABB575799166}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{181B9946-93AE-431A-9D1B-ABB575799166}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77DE46C0-A177-4DD8-8561-77061118F466}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77DE46C0-A177-4DD8-8561-77061118F466}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77DE46C0-A177-4DD8-8561-77061118F466}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77DE46C0-A177-4DD8-8561-77061118F466}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -141,5 +147,6 @@ Global
 		{D0B8B135-D89B-40F4-9118-CE56F5AB743D} = {EC4DC049-6886-471B-B02C-A9FA1EBC5740}
 		{E2797F65-0422-4979-8164-D644CF676CC4} = {E9386FA2-8440-47A0-B3AA-D3C67A600298}
 		{181B9946-93AE-431A-9D1B-ABB575799166} = {E2797F65-0422-4979-8164-D644CF676CC4}
+		{77DE46C0-A177-4DD8-8561-77061118F466} = {EC4DC049-6886-471B-B02C-A9FA1EBC5740}
 	EndGlobalSection
 EndGlobal
