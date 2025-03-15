@@ -70,7 +70,7 @@ internal static class TestConfiguration
             )
             // If ContainerLifetime.Session, a new Docker container is created for each test
             // but they are only disposed once all tests have run.
-            .WithLifetime(ContainerLifetime.Persistent);
+            .WithLifetime(ContainerLifetime.Session);
 
         var sqldb = sqlServer.AddDatabase(dbName);
         return (sqlServer, sqldb);

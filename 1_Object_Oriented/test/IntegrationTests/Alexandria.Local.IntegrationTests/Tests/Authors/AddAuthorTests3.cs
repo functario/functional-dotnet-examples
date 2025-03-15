@@ -1,40 +1,65 @@
 ﻿using System.Globalization;
 using Alexandria.Local.IntegrationTests.Support;
+using Alexandria.SQLSeeding;
+using Aspire.Hosting;
 using CleanArchitecture.WebAPI.Client;
 using CleanArchitecture.WebAPI.Client.Models;
 using Microsoft.Kiota.Abstractions;
+using Microsoft.Kiota.Abstractions.Authentication;
+using Microsoft.Kiota.Http.HttpClientLibrary;
+using WellKnowns.Aspires;
+using WellKnowns.Infrastructure.SQL;
+using WellKnowns.Presentation.AlexandriaWebApi;
 
 namespace Alexandria.Local.IntegrationTests.Tests.Authors;
 
 [Trait("Category", "Aspire")]
 [Collection(nameof(IntegratedTests))]
-public class AddAuthorTests3 : IAsyncLifetime
+public class AddAuthorTests3
 {
     private readonly NativeResponseHandler _postAuthorsResponseHandler;
-    private readonly IntegratedTestFixture _integratedTestFixture;
-    private AlexandriaClient _alexandriaClient;
-    private HttpClient _alexandriaHttpClient;
 
-    public AddAuthorTests3(IntegratedTestFixture integratedTestFixture)
+    public AddAuthorTests3()
     {
         _postAuthorsResponseHandler = new NativeResponseHandler();
-        _integratedTestFixture = integratedTestFixture;
-    }
-
-    public async ValueTask InitializeAsync()
-    {
-        (_alexandriaHttpClient, _alexandriaClient) = await _integratedTestFixture.InitializeAsync();
-    }
-
-    public ValueTask DisposeAsync()
-    {
-        _alexandriaHttpClient?.Dispose();
-        return ValueTask.CompletedTask;
     }
 
     [Fact]
     public async Task Create_1_Author()
     {
+        var aspire = await DistributedApplicationTestingBuilder.CreateAsync<Projects.AppHost>(
+            [AspireContexts.Test.ToString()],
+            TestContext.Current.CancellationToken
+        );
+
+        var alexandriaWebApi = aspire.CreateResourceBuilder<ProjectResource>(
+            WebApiProjectReferences.ProjectName
+        );
+
+        alexandriaWebApi.ApplicationBuilder.Services.ConfigureHttpClientDefaults(builder =>
+        {
+            builder.AddStandardResilienceHandler();
+        });
+
+        using var appHost = await aspire.BuildAsync(TestContext.Current.CancellationToken);
+
+        // Configure Alexandria HttpClient
+        await appHost.StartAsync(TestContext.Current.CancellationToken);
+
+        // Reset database between test. The database is persistent.
+        await ResetSQLDatabaseAsync(appHost, TestContext.Current.CancellationToken);
+
+        using var alexandriaHttpClient = appHost.CreateHttpClient(
+            WebApiProjectReferences.ProjectName
+        );
+
+        using var requestAdapter = new HttpClientRequestAdapter(
+            new AnonymousAuthenticationProvider(),
+            httpClient: alexandriaHttpClient
+        );
+
+        var alexandriaClient = new AlexandriaClient(requestAdapter);
+
         // Arrange
         var authorRequest = new AddAuthorRequest()
         {
@@ -45,7 +70,7 @@ public class AddAuthorTests3 : IAsyncLifetime
         };
 
         // Act
-        var sut = await _alexandriaClient.V1.Authors.PostAsync(
+        var sut = await alexandriaClient.V1.Authors.PostAsync(
             authorRequest,
             c => SetResponseHandler(c, _postAuthorsResponseHandler),
             cancellationToken: TestContext.Current.CancellationToken
@@ -55,5 +80,22 @@ public class AddAuthorTests3 : IAsyncLifetime
 
         // Assert
         await response.VerifyHttpResponseAsync();
+    }
+
+    private static async Task ResetSQLDatabaseAsync(
+        DistributedApplication appHost,
+        CancellationToken cancellationToken
+    )
+    {
+        var connectionString =
+            await appHost.GetConnectionStringAsync(
+                SqlProjectReferences.ProjectName,
+                cancellationToken
+            )
+            ?? throw new InvalidOperationException(
+                $"Could not get SQL Connection string from {SqlProjectReferences.ProjectName}"
+            );
+
+        await SQLSeeder.ResetAsync(connectionString, cancellationToken);
     }
 }
