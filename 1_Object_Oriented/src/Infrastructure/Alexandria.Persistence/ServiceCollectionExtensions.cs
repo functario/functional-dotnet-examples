@@ -47,8 +47,12 @@ public static class ServiceCollectionExtensions
 
         services.AddDbContext<AlexandriaDbContext>(x =>
         {
+            //var sqlConnectionString = Environment.GetEnvironmentVariable(
+            //    SqldbEnvVars.SQLConnectionString
+            //);
+
             var sqlConnectionString = Environment.GetEnvironmentVariable(
-                SqldbEnvVars.SQLConnectionString
+                "ConnectionStrings__alexandria"
             );
 
             ArgumentException.ThrowIfNullOrWhiteSpace(
