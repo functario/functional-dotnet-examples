@@ -2,7 +2,7 @@
 
 #pragma warning disable IDE0059 // Unnecessary assignment of a value
 
-[CollectionDefinition(nameof(IntegratedTests))]
+[CollectionDefinition(nameof(IntegratedTestFixture))]
 public class IntegratedTestCollection : ICollectionFixture<IntegratedTests>
 {
     // This class has no code, and is never created. Its purpose is simply

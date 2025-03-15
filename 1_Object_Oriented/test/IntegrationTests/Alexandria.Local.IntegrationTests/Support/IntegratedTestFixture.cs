@@ -9,54 +9,34 @@ using WellKnowns.Presentation.AlexandriaWebApi;
 
 namespace Alexandria.Local.IntegrationTests.Support;
 
-public class IntegratedTestFixture : IAsyncLifetime
+public class IntegratedTestFixture
 {
-    public static CancellationToken TestCancellationToken => TestContext.Current.CancellationToken;
-    public DistributedApplication AppHost { get; private set; } = null!;
-
-    public AlexandriaClient AlexandriaClient { get; private set; } = null!;
-
-    private HttpClient? HttpClient { get; set; } = null!;
-
-    private HttpClientRequestAdapter? RequestAdapter { get; set; } = null!;
-
-    public async ValueTask DisposeAsync()
-    {
-        await Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-
-    protected virtual async ValueTask Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            HttpClient?.Dispose();
-            RequestAdapter?.Dispose();
-
-            if (AppHost is not null)
-            {
-                await AppHost.StopAsync(TestCancellationToken);
-                await AppHost.DisposeAsync();
-            }
-        }
-    }
-
-    public async ValueTask InitializeAsync()
+#pragma warning disable CA1822 // Mark members as static
+    public async Task<(
+        DistributedApplication appHost,
+        HttpClient alexandriaHttpClient,
+        HttpClientRequestAdapter requestAdapdter,
+        AlexandriaClient alexandriaClient
+    )> InitializeAsync()
+#pragma warning restore CA1822 // Mark members as static
     {
         // Create AppHost with Aspire
-        AppHost = await StartAppHostAsync(TestContext.Current.CancellationToken);
+        var appHost = await StartAppHostAsync(TestContext.Current.CancellationToken);
 
         // Reset database between test. The database is persistent.
-        await ResetSQLDatabaseAsync(AppHost, TestCancellationToken);
+        await ResetSQLDatabaseAsync(appHost, TestContext.Current.CancellationToken);
 
         // Configure Alexandria HttpClient
-        HttpClient = AppHost.CreateHttpClient(WebApiProjectReferences.ProjectName);
-        RequestAdapter = new HttpClientRequestAdapter(
+#pragma warning disable CA2000 // Dispose objects before losing scope
+        var alexandriaHttpClient = appHost.CreateHttpClient(WebApiProjectReferences.ProjectName);
+#pragma warning restore CA2000 // Dispose objects before losing scope
+        using var requestAdapter = new HttpClientRequestAdapter(
             new AnonymousAuthenticationProvider(),
-            httpClient: HttpClient
+            httpClient: alexandriaHttpClient
         );
 
-        AlexandriaClient = new AlexandriaClient(RequestAdapter);
+        var alexandriaClient = new AlexandriaClient(requestAdapter);
+        return (appHost, alexandriaHttpClient, requestAdapter, alexandriaClient);
     }
 
     private static async Task ResetSQLDatabaseAsync(
@@ -99,5 +79,3 @@ public class IntegratedTestFixture : IAsyncLifetime
         return appHost;
     }
 }
-
-#pragma warning restore IDE0059 // Unnecessary assignment of a value

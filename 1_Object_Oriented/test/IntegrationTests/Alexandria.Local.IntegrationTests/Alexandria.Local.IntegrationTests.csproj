@@ -31,6 +31,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Tests\Authors\AddAuthorTests3.PostAuthorTest.received.txt">
+      <ParentFile>$([System.String]::Copy('%(FileName)').Split('.')[0].Split('(')[0])</ParentFile>
+      <DependentUpon>AddAuthorTests3.cs</DependentUpon>
+    </None>
     <None Update="Tests\Authors\AddAuthorTests2.PostAuthorTest.received.txt">
       <DependentUpon>AddAuthorTests2.cs</DependentUpon>
     </None>

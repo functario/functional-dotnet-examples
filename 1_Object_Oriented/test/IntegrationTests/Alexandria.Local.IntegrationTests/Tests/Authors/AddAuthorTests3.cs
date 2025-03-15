@@ -8,7 +8,7 @@ namespace Alexandria.Local.IntegrationTests.Tests.Authors;
 
 [Trait("Category", "Aspire")]
 [Collection(nameof(IntegratedTests))]
-public class AddAuthorTests : IAsyncLifetime
+public class AddAuthorTests3 : IAsyncLifetime
 {
 #pragma warning disable IDE0044 // Add readonly modifier
     private NativeResponseHandler _postAuthorsResponseHandler;
@@ -18,7 +18,7 @@ public class AddAuthorTests : IAsyncLifetime
 
 #pragma warning restore IDE0044 // Add readonly modifier
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
-    public AddAuthorTests(IntegratedTestFixture integratedTestFixture)
+    public AddAuthorTests3(IntegratedTestFixture integratedTestFixture)
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     {
         _postAuthorsResponseHandler = new NativeResponseHandler();
