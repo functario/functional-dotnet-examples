@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using Alexandria.Local.IntegrationTests.Support;
-using Alexandria.SQLSeeding;
 using Aspire.Hosting;
 using CleanArchitecture.WebAPI.Client;
 using CleanArchitecture.WebAPI.Client.Models;
@@ -8,7 +7,6 @@ using Microsoft.Kiota.Abstractions;
 using Microsoft.Kiota.Abstractions.Authentication;
 using Microsoft.Kiota.Http.HttpClientLibrary;
 using WellKnowns.Aspires;
-using WellKnowns.Infrastructure.SQL;
 using WellKnowns.Presentation.AlexandriaWebApi;
 
 namespace Alexandria.Local.IntegrationTests.Tests.Authors;
@@ -27,7 +25,7 @@ public class AddAuthorTests2
     [Fact]
     public async Task Create_1_Author()
     {
-        var aspire = await DistributedApplicationTestingBuilder.CreateAsync<Projects.AppHost>(
+        using var aspire = await DistributedApplicationTestingBuilder.CreateAsync<Projects.AppHost>(
             [AspireContexts.Test.ToString()],
             TestContext.Current.CancellationToken
         );
@@ -45,9 +43,6 @@ public class AddAuthorTests2
 
         // Configure Alexandria HttpClient
         await appHost.StartAsync(TestContext.Current.CancellationToken);
-
-        // Reset database between test. The database is persistent.
-        await ResetSQLDatabaseAsync(appHost, TestContext.Current.CancellationToken);
 
         using var alexandriaHttpClient = appHost.CreateHttpClient(
             WebApiProjectReferences.ProjectName
@@ -80,22 +75,5 @@ public class AddAuthorTests2
 
         // Assert
         await response.VerifyHttpResponseAsync();
-    }
-
-    private static async Task ResetSQLDatabaseAsync(
-        DistributedApplication appHost,
-        CancellationToken cancellationToken
-    )
-    {
-        var connectionString =
-            await appHost.GetConnectionStringAsync(
-                SqlProjectReferences.ProjectName,
-                cancellationToken
-            )
-            ?? throw new InvalidOperationException(
-                $"Could not get SQL Connection string from {SqlProjectReferences.ProjectName}"
-            );
-
-        await SQLSeeder.ResetAsync(connectionString, cancellationToken);
     }
 }

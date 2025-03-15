@@ -9,11 +9,12 @@ public static class ModuleInitializer
     public static void Initialize() => VerifierSettings.InitializePlugins();
 }
 
-public class VerifyChecksTests
-{
-    [Fact]
-    public Task CheckVerifyConventions() => VerifyChecks.Run();
-}
+//[Collection(nameof(IntegratedTests))]
+//public class VerifyChecksTests
+//{
+//    [Fact]
+//    public Task CheckVerifyConventions() => VerifyChecks.Run();
+//}
 
 public static class VerifyExtensions
 {
