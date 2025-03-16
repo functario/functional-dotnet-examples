@@ -21,7 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Commons\WellKnowns\WellKnowns.csproj" IsAspireProjectResource="false" />
-    <ProjectReference Include="..\..\src\Infrastructure\Alexandria.Persistence\Alexandria.Persistence.csproj" IsAspireProjectResource="false" />
+    <ProjectReference Include="..\..\src\Infrastructure\Alexandria.Migration\Alexandria.Migration.csproj" />
     <ProjectReference Include="..\..\src\Presentation\Alexandria.WebApi\Alexandria.WebApi.csproj" />
   </ItemGroup>
 
