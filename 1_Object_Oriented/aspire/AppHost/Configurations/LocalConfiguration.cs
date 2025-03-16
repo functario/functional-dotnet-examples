@@ -1,5 +1,4 @@
-﻿using Alexandria.Persistence;
-using WellKnowns.Infrastructure.SQL;
+﻿using WellKnowns.Infrastructure.SQL;
 using WellKnowns.Presentation.AlexandriaWebApi;
 
 namespace AppHost.Configurations;
@@ -12,17 +11,36 @@ internal static class LocalConfiguration
     {
         // Sql
         var sqldb = ConfigureSqlDb(builder);
-        OnDBCreateApplySqlDbMigrations(builder);
+
+        var migration = builder.ConfigureMigration(sqldb);
 
         // WebApi
-        builder.ConfigureWebApi(sqldb);
+        builder.ConfigureWebApi(sqldb, migration);
 
         return builder;
     }
 
-    private static IDistributedApplicationBuilder ConfigureWebApi(
+    private static IResourceBuilder<ProjectResource> ConfigureMigration(
         this IDistributedApplicationBuilder builder,
         IResourceBuilder<SqlServerDatabaseResource> sqldb
+    )
+    {
+        var migration = builder
+            .AddProject<Projects.Alexandria_Migration>("migration")
+            .WithEnvironment(
+                SqldbEnvVars.SQLConnectionString,
+                SqldbConstants.SQLDbLocalConnectionString
+            )
+            .WithReference(sqldb)
+            .WaitFor(sqldb);
+
+        return migration;
+    }
+
+    private static IDistributedApplicationBuilder ConfigureWebApi(
+        this IDistributedApplicationBuilder builder,
+        IResourceBuilder<SqlServerDatabaseResource> sqldb,
+        IResourceBuilder<ProjectResource> migration
     )
     {
         builder
@@ -34,7 +52,8 @@ internal static class LocalConfiguration
                 SqldbConstants.SQLDbLocalConnectionString
             )
             .WithReference(sqldb)
-            .WaitFor(sqldb);
+            .WaitFor(sqldb)
+            .WaitForCompletion(migration);
 
         return builder;
     }
@@ -57,26 +76,5 @@ internal static class LocalConfiguration
 
         var sqldb = sqlServer.AddDatabase(dbName);
         return sqldb;
-    }
-
-    private static void OnDBCreateApplySqlDbMigrations(IDistributedApplicationBuilder builder)
-    {
-        builder.Eventing.Subscribe<AfterResourcesCreatedEvent>(
-            static async (@event, cancellationToken) =>
-            {
-                var db =
-                    @event.Model.Resources.First(x => x.Name == SqlProjectReferences.ProjectName)
-                    as SqlServerServerResource;
-
-                ArgumentNullException.ThrowIfNull(db, nameof(db));
-
-                var connectionString = await db.GetConnectionStringAsync(cancellationToken)
-                    .ConfigureAwait(false);
-
-                ArgumentNullException.ThrowIfNull(connectionString, nameof(connectionString));
-
-                AlexandriaDbContextFactory.ApplyDbMigrations(connectionString);
-            }
-        );
     }
 }
