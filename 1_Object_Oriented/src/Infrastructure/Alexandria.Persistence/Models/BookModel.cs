@@ -11,14 +11,16 @@ internal class BookModel
     public required DateTimeOffset UpdatedDate { get; set; }
     public required PublicationModel Publication { get; set; }
 
+    public virtual ICollection<AuthorModel> Authors { get; } = [];
+
     public Book ToDomain(PublicationModel publication)
     {
         return new Book(Id, Title, publication.ToDomain());
     }
 
-    public BookDto ToDto(PublicationModel publication)
+    public BookDto ToDto()
     {
-        return new BookDto(Id, Title, publication.ToDto());
+        return new BookDto(Id, Title, Publication.ToDto(), GetAuthorDtos());
     }
 
     public Book ToNewDomain()
@@ -29,7 +31,9 @@ internal class BookModel
 
     public BookDto ToNewDto()
     {
-        var publication = Publication.ToDto();
-        return new BookDto(Id, Title, publication);
+        var publicationDto = Publication.ToDto();
+        return new BookDto(Id, Title, publicationDto, GetAuthorDtos());
     }
+
+    private List<AuthorDto> GetAuthorDtos() => Authors?.Select(a => a.ToDto()).ToList() ?? [];
 }

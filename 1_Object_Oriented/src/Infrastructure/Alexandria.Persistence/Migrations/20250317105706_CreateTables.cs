@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -67,36 +68,6 @@ namespace Alexandria.Persistence.Migrations
             );
 
             migrationBuilder.CreateTable(
-                name: "AuthorsPublications",
-                columns: table => new
-                {
-                    AuthorsId = table.Column<long>(type: "bigint", nullable: false),
-                    PublicationsId = table.Column<long>(type: "bigint", nullable: false),
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey(
-                        "PK_AuthorsPublications",
-                        x => new { x.AuthorsId, x.PublicationsId }
-                    );
-                    table.ForeignKey(
-                        name: "FK_AuthorsPublications_Authors_AuthorsId",
-                        column: x => x.AuthorsId,
-                        principalTable: "Authors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade
-                    );
-                    table.ForeignKey(
-                        name: "FK_AuthorsPublications_Publications_PublicationsId",
-                        column: x => x.PublicationsId,
-                        principalTable: "Publications",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade
-                    );
-                }
-            );
-
-            migrationBuilder.CreateTable(
                 name: "Books",
                 columns: table => new
                 {
@@ -127,10 +98,37 @@ namespace Alexandria.Persistence.Migrations
                 }
             );
 
+            migrationBuilder.CreateTable(
+                name: "AuthorsBooks",
+                columns: table => new
+                {
+                    AuthorsId = table.Column<long>(type: "bigint", nullable: false),
+                    BooksId = table.Column<long>(type: "bigint", nullable: false),
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AuthorsBooks", x => new { x.AuthorsId, x.BooksId });
+                    table.ForeignKey(
+                        name: "FK_AuthorsBooks_Authors_AuthorsId",
+                        column: x => x.AuthorsId,
+                        principalTable: "Authors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade
+                    );
+                    table.ForeignKey(
+                        name: "FK_AuthorsBooks_Books_BooksId",
+                        column: x => x.BooksId,
+                        principalTable: "Books",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade
+                    );
+                }
+            );
+
             migrationBuilder.CreateIndex(
-                name: "IX_AuthorsPublications_PublicationsId",
-                table: "AuthorsPublications",
-                column: "PublicationsId"
+                name: "IX_AuthorsBooks_BooksId",
+                table: "AuthorsBooks",
+                column: "BooksId"
             );
 
             migrationBuilder.CreateIndex(
@@ -143,11 +141,11 @@ namespace Alexandria.Persistence.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(name: "AuthorsPublications");
-
-            migrationBuilder.DropTable(name: "Books");
+            migrationBuilder.DropTable(name: "AuthorsBooks");
 
             migrationBuilder.DropTable(name: "Authors");
+
+            migrationBuilder.DropTable(name: "Books");
 
             migrationBuilder.DropTable(name: "Publications");
         }

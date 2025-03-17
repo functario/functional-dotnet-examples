@@ -55,7 +55,7 @@ public sealed class AddBookService : IAddBookService
             cancellationToken
         );
 
-        var response = new AddBookResult(book.AsDto(authors));
+        var response = new AddBookResult(book.ToDto(authors));
         return response;
     }
 }

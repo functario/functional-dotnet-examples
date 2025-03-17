@@ -50,14 +50,11 @@ internal sealed class BookRepository : IBookRepository
             return null;
         }
 
-        var publication = await _alexandriaDbContext
-            .Publications.Include(x => x.Authors)
+        bookModel = await _alexandriaDbContext
+            .Books.Include(x => x.Authors)
+            .Include(x => x.Publication)
             .FirstOrDefaultAsync(x => x.Id == bookModel.Id, cancellationToken);
 
-        return publication is null
-            ? throw new InvalidOperationException(
-                $"No {nameof(Publication)} match the Book with Id '{bookModel.Id}'"
-            )
-            : bookModel.ToDto(publication);
+        return bookModel?.ToDto();
     }
 }

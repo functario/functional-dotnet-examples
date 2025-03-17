@@ -12,7 +12,7 @@ internal class AuthorModel
     public DateTimeOffset BirthDate { get; set; }
     public required DateTimeOffset? CreatedDate { get; set; }
     public required DateTimeOffset? UpdatedDate { get; set; }
-    public virtual ICollection<PublicationModel>? Publications { get; }
+    public virtual ICollection<BookModel>? Books { get; }
 
     public Author ToDomain()
     {

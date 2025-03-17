@@ -387,7 +387,8 @@
         "required": [
           "id",
           "title",
-          "publication"
+          "publication",
+          "authors"
         ],
         "type": "object",
         "properties": {
@@ -400,6 +401,12 @@
           },
           "publication": {
             "$ref": "#/components/schemas/PublicationDto"
+          },
+          "authors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AuthorDto"
+            }
           }
         }
       },
@@ -461,8 +468,7 @@
       "PublicationDto": {
         "required": [
           "id",
-          "publicationDate",
-          "authors"
+          "publicationDate"
         ],
         "type": "object",
         "properties": {
@@ -473,12 +479,6 @@
           "publicationDate": {
             "type": "string",
             "format": "date-time"
-          },
-          "authors": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/AuthorDto"
-            }
           }
         }
       }

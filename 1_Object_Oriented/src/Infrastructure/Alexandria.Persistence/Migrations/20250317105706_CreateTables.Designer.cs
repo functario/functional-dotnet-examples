@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Alexandria.Persistence.Migrations
 {
     [DbContext(typeof(AlexandriaDbContext))]
-    [Migration("20250308192748_CreateTables")]
+    [Migration("20250317105706_CreateTables")]
     partial class CreateTables
     {
         /// <inheritdoc />
@@ -113,19 +113,19 @@ namespace Alexandria.Persistence.Migrations
                     b.ToTable("Publications");
                 });
 
-            modelBuilder.Entity("AuthorsPublications", b =>
+            modelBuilder.Entity("AuthorsBooks", b =>
                 {
                     b.Property<long>("AuthorsId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("PublicationsId")
+                    b.Property<long>("BooksId")
                         .HasColumnType("bigint");
 
-                    b.HasKey("AuthorsId", "PublicationsId");
+                    b.HasKey("AuthorsId", "BooksId");
 
-                    b.HasIndex("PublicationsId");
+                    b.HasIndex("BooksId");
 
-                    b.ToTable("AuthorsPublications");
+                    b.ToTable("AuthorsBooks");
                 });
 
             modelBuilder.Entity("Alexandria.Persistence.Models.BookModel", b =>
@@ -139,7 +139,7 @@ namespace Alexandria.Persistence.Migrations
                     b.Navigation("Publication");
                 });
 
-            modelBuilder.Entity("AuthorsPublications", b =>
+            modelBuilder.Entity("AuthorsBooks", b =>
                 {
                     b.HasOne("Alexandria.Persistence.Models.AuthorModel", null)
                         .WithMany()
@@ -147,9 +147,9 @@ namespace Alexandria.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Alexandria.Persistence.Models.PublicationModel", null)
+                    b.HasOne("Alexandria.Persistence.Models.BookModel", null)
                         .WithMany()
-                        .HasForeignKey("PublicationsId")
+                        .HasForeignKey("BooksId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

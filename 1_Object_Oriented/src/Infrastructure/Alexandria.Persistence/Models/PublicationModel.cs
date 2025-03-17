@@ -11,7 +11,6 @@ internal class PublicationModel : IValidatableObject
     public ICollection<long> AuthorsIds { get; set; } = [];
     public required DateTimeOffset CreatedDate { get; set; }
     public required DateTimeOffset UpdatedDate { get; set; }
-    public virtual ICollection<AuthorModel> Authors { get; } = [];
 
     public Publication ToDomain()
     {
@@ -20,8 +19,7 @@ internal class PublicationModel : IValidatableObject
 
     public PublicationDto ToDto()
     {
-        var authorDtos = Authors?.Select(a => a.ToDto()).ToList() ?? [];
-        return new PublicationDto(Id, PublicationDate, authorDtos);
+        return new PublicationDto(Id, PublicationDate);
     }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

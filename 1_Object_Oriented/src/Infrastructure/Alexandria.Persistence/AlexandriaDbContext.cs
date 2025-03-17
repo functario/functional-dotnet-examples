@@ -21,32 +21,30 @@ internal class AlexandriaDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        // Join table between Authors and Publication
+        // Join table between Authors and Books
         modelBuilder
             .Entity<AuthorModel>()
-            .HasMany(a => a.Publications)
+            .HasMany(a => a.Books)
             .WithMany(p => p.Authors)
-            .UsingEntity<AuthorsPublications>("AuthorsPublications");
+            .UsingEntity<AuthorsBooks>(AuthorsBooks.TableName);
     }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
     {
-        await OnPublicationModelCreated(cancellationToken);
+        await OnBookModelCreated(cancellationToken);
 
         return base.SaveChanges();
     }
 
-    private async Task OnPublicationModelCreated(CancellationToken cancellationToken)
+    private async Task OnBookModelCreated(CancellationToken cancellationToken)
     {
-        var entries = ChangeTracker
-            .Entries<PublicationModel>()
-            .Where(e => e.State is EntityState.Added);
+        var entries = ChangeTracker.Entries<BookModel>().Where(e => e.State is EntityState.Added);
 
         foreach (var entry in entries)
         {
-            var publication = entry.Entity;
+            var book = entry.Entity;
             var missingAuthorIds = new List<long>();
-            foreach (var authorId in publication.AuthorsIds)
+            foreach (var authorId in book.Publication.AuthorsIds)
             {
                 var author = await FindAsync<AuthorModel>([authorId], cancellationToken);
                 if (author is null)
@@ -55,8 +53,8 @@ internal class AlexandriaDbContext : DbContext
                     continue;
                 }
 
-                // Join Author and Publication via AuthorsPublications join table.
-                publication.Authors.Add(author);
+                // Join Author and Authors via AuthorsBooks join table.
+                book.Authors.Add(author);
             }
 
             if (missingAuthorIds.Count > 0)
