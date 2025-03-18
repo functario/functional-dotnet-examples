@@ -15,7 +15,7 @@ public class UnitTest1
         Results<Ok<GetAccountResponse>, NoContent> result = TypedResults.Ok(response);
 
         getAccountEndpoint
-            .HandleAsync(Arg.Any<ulong>(), Arg.Any<CancellationToken>())
+            .HandleAsync(Arg.Any<long>(), Arg.Any<CancellationToken>())
             .Returns(x => Task.FromResult(result));
 
         // Act
@@ -33,7 +33,7 @@ public class UnitTest1
         Results<Ok<GetAccountResponse>, NoContent> result = TypedResults.Ok(response);
 
         getAccountEndpoint
-            .HandleAsync(Arg.Any<ulong>(), Arg.Any<CancellationToken>())
+            .HandleAsync(Arg.Any<long>(), Arg.Any<CancellationToken>())
             .Returns(x => Task.FromResult(result));
 
         // Act

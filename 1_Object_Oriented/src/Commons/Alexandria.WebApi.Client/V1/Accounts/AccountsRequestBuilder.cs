@@ -86,7 +86,7 @@ namespace CleanArchitecture.WebAPI.Client.V1.Accounts
         public partial class AccountsRequestBuilderGetQueryParameters 
         {
             [QueryParameter("id")]
-            public int? Id { get; set; }
+            public long? Id { get; set; }
         }
         /// <summary>
         /// Configuration for the request such as headers, query parameters, and middleware options.
