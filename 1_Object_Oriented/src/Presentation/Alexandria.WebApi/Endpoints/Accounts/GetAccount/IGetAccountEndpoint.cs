@@ -12,7 +12,7 @@ namespace Alexandria.WebApi.Endpoints.Accounts.GetAccount;
 public interface IGetAccountEndpoint : IGroupedEndpoint<AccountsGroup>
 {
     Task<Results<Ok<GetAccountResponse>, NoContent>> HandleAsync(
-        [FromQuery] ulong id,
+        [FromQuery] long id,
         CancellationToken cancellationToken
     );
 }
