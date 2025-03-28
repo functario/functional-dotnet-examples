@@ -18,6 +18,25 @@ internal sealed class UnitOfWork : IUnitOfWork
         return transaction;
     }
 
+    public async Task<T> ExecuteTransactionAsync<T>(
+        Func<IUnitOfWork, CancellationToken, Task<T>> transactionAsync,
+        CancellationToken cancellationToken
+    )
+    {
+        using var transaction = await BeginTransactionAsync(cancellationToken);
+        try
+        {
+            var response = await transactionAsync(this, cancellationToken);
+            await transaction.CommitAsync(cancellationToken);
+            return response;
+        }
+        catch
+        {
+            await transaction.RollBackAsync(cancellationToken);
+            throw;
+        }
+    }
+
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
     {
         return await _alexandriaDbContext.SaveChangesAsync(cancellationToken);

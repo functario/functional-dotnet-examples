@@ -36,7 +36,7 @@ internal sealed class AddBookEndpoint : IAddBookEndpoint
         );
         try
         {
-            var response = await addBookService.Handle(command, cancellationToken);
+            var response = await addBookService.HandleAsync(command, cancellationToken);
             var result = new AddBookResponse(response.Book);
             var uri = linkGenerator.GetLocationUri(
                 httpContext,

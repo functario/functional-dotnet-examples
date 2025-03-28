@@ -27,7 +27,7 @@ public sealed class AddBookService : IAddBookService
         "IDE0059:Unnecessary assignment of a value",
         Justification = "<Pending>"
     )]
-    public async Task<AddBookResult> Handle(
+    public async Task<AddBookResult> HandleAsync(
         AddBookCommand request,
         CancellationToken cancellationToken
     )
@@ -38,18 +38,15 @@ public sealed class AddBookService : IAddBookService
             request.AuthorsIds
         );
 
-        // Create Book and related Publication
-        var transientBook = Book.CreateTransient(request.Title, transientPublication);
-
-        using var transaction = await _unitOfWork.BeginTransactionAsync(cancellationToken);
-#pragma warning disable CA1031 // Do not catch general exception types
-        try
+        async Task<AddBookResult> Transaction(IUnitOfWork unitOfWork, CancellationToken ct)
         {
+            // Create Book and related Publication
+            var transientBook = Book.CreateTransient(request.Title, transientPublication);
             var bookFunc = await _bookRepository.CreateBookAsync(transientBook, cancellationToken);
 
             // Note: The Many-to-Many relation between Publication and Author
             // is created via an overload of SaveChangeAsync.
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            await unitOfWork.SaveChangesAsync(cancellationToken);
 
             // Get book with information from database.
             var book = bookFunc();
@@ -61,15 +58,9 @@ public sealed class AddBookService : IAddBookService
             );
 
             var response = new AddBookResult(book.ToDto(authors));
-            await transaction.CommitAsync(cancellationToken);
             return response;
         }
-        catch
-        {
-            await transaction.RollBackAsync(cancellationToken);
-        }
-#pragma warning restore CA1031 // Do not catch general exception types
 
-        throw new InvalidOperationException();
+        return await _unitOfWork.ExecuteTransactionAsync(Transaction, cancellationToken);
     }
 }
