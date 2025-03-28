@@ -4,39 +4,16 @@ using Alexandria.Persistence.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Alexandria.Persistence.Configurations.Interceptors;
 
-internal class OnBookModelCreatedInterceptor : SaveChangesInterceptor
+internal class OnBookModelCreatedInterceptor : BaseSaveChangesInterceptor<BookModel>
 {
-    public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(
-        DbContextEventData dbContextEventData,
-        InterceptionResult<int> result,
-        CancellationToken cancellationToken
-    )
-    {
-        ArgumentNullException.ThrowIfNull(dbContextEventData, nameof(dbContextEventData));
-        var dbContext = dbContextEventData.Context;
-        ArgumentNullException.ThrowIfNull(dbContext, nameof(dbContextEventData.Context));
+    public override IEnumerable<EntityEntry<BookModel>> EntitiesToSave(DbContext dbContext) =>
+        dbContext.ChangeTracker.Entries<BookModel>().Where(e => e.State is EntityState.Added);
 
-        var entries = dbContext
-            .ChangeTracker.Entries<BookModel>()
-            .Where(e => e.State is EntityState.Added);
-
-        foreach (var entry in entries)
-        {
-            var book = entry.Entity;
-            await MapAuthorsAsync(dbContext, book, cancellationToken);
-        }
-
-        return await base.SavingChangesAsync(
-            dbContextEventData,
-            result,
-            cancellationToken: cancellationToken
-        );
-    }
-
-    private async Task MapAuthorsAsync(
+    public override async Task OnSaveAsync(
         DbContext dbContext,
         BookModel book,
         CancellationToken cancellationToken

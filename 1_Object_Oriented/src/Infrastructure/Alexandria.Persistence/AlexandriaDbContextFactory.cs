@@ -1,6 +1,7 @@
 ﻿using Alexandria.Persistence.Configurations.Interceptors;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using WellKnowns.Infrastructure.SQL;
 
 namespace Alexandria.Persistence;
@@ -29,21 +30,6 @@ internal class AlexandriaDbContextFactory : IDesignTimeDbContextFactory<Alexandr
         context.Database.Migrate();
     }
 
-    private static string EnforceDatabaseName(string sqlConnectionString)
-    {
-        ArgumentNullException.ThrowIfNullOrWhiteSpace(
-            sqlConnectionString,
-            nameof(sqlConnectionString)
-        );
-
-        // Adding the name in the connection string
-        // replace the default name "master".
-        var databaseSegment = $"Database={SqldbConstants.SQLDbName}";
-        return sqlConnectionString.Contains(databaseSegment, StringComparison.OrdinalIgnoreCase)
-            ? sqlConnectionString
-            : $"{sqlConnectionString};{databaseSegment}";
-    }
-
     public static DbContextOptionsBuilder ConfigureDbContextOptionsBuilder(
         DbContextOptionsBuilder optionsBuilder,
         string sqlConnectionString
@@ -63,8 +49,30 @@ internal class AlexandriaDbContextFactory : IDesignTimeDbContextFactory<Alexandr
                         SqldbConstants.SQLDbDefaultSchema
                     )
             )
-            .AddInterceptors(new OnBookModelCreatedInterceptor());
+            .AddInterceptors(CustomInterceptors);
 
         return optionsBuilder;
+    }
+
+    private static IInterceptor[] CustomInterceptors =
+    [
+        new OnBookModelCreatedInterceptor(),
+        new Interceptor2(),
+        new Interceptor3(),
+    ];
+
+    private static string EnforceDatabaseName(string sqlConnectionString)
+    {
+        ArgumentNullException.ThrowIfNullOrWhiteSpace(
+            sqlConnectionString,
+            nameof(sqlConnectionString)
+        );
+
+        // Adding the name in the connection string
+        // replace the default name "master".
+        var databaseSegment = $"Database={SqldbConstants.SQLDbName}";
+        return sqlConnectionString.Contains(databaseSegment, StringComparison.OrdinalIgnoreCase)
+            ? sqlConnectionString
+            : $"{sqlConnectionString};{databaseSegment}";
     }
 }
