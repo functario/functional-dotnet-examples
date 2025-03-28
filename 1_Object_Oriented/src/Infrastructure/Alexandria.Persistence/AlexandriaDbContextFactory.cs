@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Alexandria.Persistence.Configurations.Interceptors;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using WellKnowns.Infrastructure.SQL;
 
@@ -53,14 +54,16 @@ internal class AlexandriaDbContextFactory : IDesignTimeDbContextFactory<Alexandr
         // but later operations will be on "alexandria" once migrations are applied.
         sqlConnectionString = EnforceDatabaseName(sqlConnectionString);
 
-        optionsBuilder.UseSqlServer(
-            sqlConnectionString,
-            x =>
-                x.MigrationsHistoryTable(
-                    SqldbConstants.SQLDbMigrationTable,
-                    SqldbConstants.SQLDbDefaultSchema
-                )
-        );
+        optionsBuilder
+            .UseSqlServer(
+                sqlConnectionString,
+                x =>
+                    x.MigrationsHistoryTable(
+                        SqldbConstants.SQLDbMigrationTable,
+                        SqldbConstants.SQLDbDefaultSchema
+                    )
+            )
+            .AddInterceptors(new OnBookModelCreatedInterceptor());
 
         return optionsBuilder;
     }
