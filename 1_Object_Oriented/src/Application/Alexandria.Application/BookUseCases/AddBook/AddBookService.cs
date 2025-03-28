@@ -40,22 +40,36 @@ public sealed class AddBookService : IAddBookService
 
         // Create Book and related Publication
         var transientBook = Book.CreateTransient(request.Title, transientPublication);
-        var bookFunc = await _bookRepository.CreateBookAsync(transientBook, cancellationToken);
 
-        // Note: The Many-to-Many relation between Publication and Author
-        // is created via an overload of SaveChangeAsync.
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        using var transaction = await _unitOfWork.BeginTransactionAsync(cancellationToken);
+#pragma warning disable CA1031 // Do not catch general exception types
+        try
+        {
+            var bookFunc = await _bookRepository.CreateBookAsync(transientBook, cancellationToken);
 
-        // Get book with information from database.
-        var book = bookFunc();
+            // Note: The Many-to-Many relation between Publication and Author
+            // is created via an overload of SaveChangeAsync.
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        // Create the response.
-        var authors = await _authorRepository.FindAuthorsAsync(
-            book.Publication.AuthorsIds,
-            cancellationToken
-        );
+            // Get book with information from database.
+            var book = bookFunc();
 
-        var response = new AddBookResult(book.ToDto(authors));
-        return response;
+            // Create the response.
+            var authors = await _authorRepository.FindAuthorsAsync(
+                book.Publication.AuthorsIds,
+                cancellationToken
+            );
+
+            var response = new AddBookResult(book.ToDto(authors));
+            await transaction.CommitAsync(cancellationToken);
+            return response;
+        }
+        catch
+        {
+            await transaction.RollBackAsync(cancellationToken);
+        }
+#pragma warning restore CA1031 // Do not catch general exception types
+
+        throw new InvalidOperationException();
     }
 }
