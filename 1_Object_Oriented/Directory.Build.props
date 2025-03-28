@@ -27,6 +27,21 @@
 		<Exec Command="dotnet tool restore" />
 	</Target>
 
+  <!--Copy .env to every project to ease file management-->
+  <Target Name="CopyFilesToProjectRoot" AfterTargets="BeforeBuild" Condition="exists('$(MSBuildThisFileDirectory).env')" >
+    <ItemGroup>
+      <EnFile Include="$(MSBuildThisFileDirectory).env" />
+    </ItemGroup>
+    <Copy SourceFiles="@(EnFile)" DestinationFolder="$(MSBuildProjectDirectory)" SkipUnchangedFiles="true" />
+  </Target>
+
+  <Target Name="CopyFilesToBin" AfterTargets="BeforeBuild" Condition="exists('$(MSBuildThisFileDirectory).env')" >
+    <ItemGroup>
+      <EnFile Include="$(MSBuildThisFileDirectory).env" />
+    </ItemGroup>
+    <Copy SourceFiles="@(EnFile)" DestinationFolder="$(OutputPath)" SkipUnchangedFiles="true" />
+  </Target>
+
 	<!--Apply format code with csharpier-->
 	<Target Name="RunDotNetCSharpierOnce" BeforeTargets="Build">
 		<Message Importance="high" Text="Running dotnet-csharpier..." />
