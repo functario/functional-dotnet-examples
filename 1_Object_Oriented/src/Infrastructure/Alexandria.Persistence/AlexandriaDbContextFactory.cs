@@ -49,12 +49,12 @@ internal class AlexandriaDbContextFactory : IDesignTimeDbContextFactory<Alexandr
                         SqldbConstants.SQLDbDefaultSchema
                     )
             )
-            .AddInterceptors(CustomInterceptors);
+            .AddInterceptors(s_customInterceptors);
 
         return optionsBuilder;
     }
 
-    private static IInterceptor[] CustomInterceptors =
+    private static readonly IInterceptor[] s_customInterceptors =
     [
         new OnBookModelCreatedInterceptor(),
         new Interceptor2(),
