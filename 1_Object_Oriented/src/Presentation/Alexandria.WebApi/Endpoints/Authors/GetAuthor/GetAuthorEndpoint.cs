@@ -7,14 +7,14 @@ namespace Alexandria.WebApi.Endpoints.Authors.GetAuthor;
 
 internal sealed class GetAuthorEndpoint : IGetAuthorEndpoint
 {
-    public const string GetAuthorName = "GetAuthor";
+    public const string EndpointName = "GetAuthor";
 
     public void Map(IEndpointRouteBuilder endpointBuilder)
     {
         endpointBuilder
             .MapGet("/", HandleAsync)
             .WithSummary($"Get an Author.")
-            .WithName(GetAuthorName);
+            .WithName(EndpointName);
     }
 
     public async Task<Results<Ok<GetAuthorResponse>, NotFound>> HandleAsync(

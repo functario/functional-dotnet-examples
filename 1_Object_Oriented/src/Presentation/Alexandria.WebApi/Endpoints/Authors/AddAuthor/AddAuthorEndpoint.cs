@@ -9,14 +9,14 @@ namespace Alexandria.WebApi.Endpoints.Authors.AddAuthor;
 
 internal sealed class AddAuthorEndpoint : IAddAuthorEndpoint
 {
-    public const string PostAuthorName = "PostAuthor";
+    public const string EndpointName = "PostAuthor";
 
     public void Map(IEndpointRouteBuilder endpointBuilder)
     {
         endpointBuilder
             .MapPost("/", HandleAsync)
             .WithSummary($"Add an Author.")
-            .WithName(PostAuthorName);
+            .WithName(EndpointName);
     }
 
     public async Task<
@@ -36,7 +36,7 @@ internal sealed class AddAuthorEndpoint : IAddAuthorEndpoint
             var result = new AddAuthorResponse(response.Author);
             var uri = linkGenerator.GetLocationUri(
                 httpContext,
-                GetAuthorEndpoint.GetAuthorName,
+                GetAuthorEndpoint.EndpointName,
                 GetAuthorEndpoint.QueryObjectValue(result.Author)
             )!;
 

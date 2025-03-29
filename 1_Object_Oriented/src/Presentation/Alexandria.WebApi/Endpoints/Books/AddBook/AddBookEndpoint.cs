@@ -9,14 +9,14 @@ namespace Alexandria.WebApi.Endpoints.Books.AddBook;
 
 internal sealed class AddBookEndpoint : IAddBookEndpoint
 {
-    public const string PostBookName = "PostBook";
+    public const string EndpointName = "PostBook";
 
     public void Map(IEndpointRouteBuilder endpointBuilder)
     {
         endpointBuilder
             .MapPost("/", HandleAsync)
             .WithSummary($"Add a Book.")
-            .WithName(PostBookName);
+            .WithName(EndpointName);
     }
 
     public async Task<
@@ -40,7 +40,7 @@ internal sealed class AddBookEndpoint : IAddBookEndpoint
             var result = new AddBookResponse(response.Book);
             var uri = linkGenerator.GetLocationUri(
                 httpContext,
-                GetBookEndpoint.GetBookName,
+                GetBookEndpoint.EndpointName,
                 GetBookEndpoint.QueryObjectValue(result.Book)
             )!;
 

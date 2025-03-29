@@ -7,11 +7,11 @@ namespace Alexandria.WebApi.Endpoints.Books.GetBook;
 
 internal sealed class GetBookEndpoint : IGetBookEndpoint
 {
-    public const string GetBookName = "GetBook";
+    public const string EndpointName = "GetBook";
 
     public void Map(IEndpointRouteBuilder endpointBuilder)
     {
-        endpointBuilder.MapGet("/", HandleAsync).WithSummary($"Get a Book.").WithName(GetBookName);
+        endpointBuilder.MapGet("/", HandleAsync).WithSummary($"Get a Book.").WithName(EndpointName);
     }
 
     public async Task<Results<Ok<GetBookResponse>, NotFound>> HandleAsync(
