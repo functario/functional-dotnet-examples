@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Alexandria.Persistence.Audits;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using WellKnowns.Infrastructure.SQL;
 
 namespace Alexandria.Persistence;
@@ -12,10 +14,16 @@ internal class AlexandriaDbContextFactory : IDesignTimeDbContextFactory<Alexandr
 
         ArgumentNullException.ThrowIfNull(sqlConnectionString, nameof(sqlConnectionString));
 
+        var interceptors = new OnAuditableSavedInterceptor(TimeProvider.System);
+
         var optionsBuilder = new DbContextOptionsBuilder<AlexandriaDbContext>();
         optionsBuilder =
             (DbContextOptionsBuilder<AlexandriaDbContext>)
-                ConfigureDbContextOptionsBuilder(optionsBuilder, sqlConnectionString!);
+                ConfigureDbContextOptionsBuilder(
+                    optionsBuilder,
+                    sqlConnectionString!,
+                    interceptors
+                );
 
         return new AlexandriaDbContext(optionsBuilder.Options);
     }
@@ -30,7 +38,8 @@ internal class AlexandriaDbContextFactory : IDesignTimeDbContextFactory<Alexandr
 
     public static DbContextOptionsBuilder ConfigureDbContextOptionsBuilder(
         DbContextOptionsBuilder optionsBuilder,
-        string sqlConnectionString
+        string sqlConnectionString,
+        params IInterceptor[] interceptorps
     )
     {
         // The connection string comming from Aspire could miss the DataBase name depending when it is resolved.
@@ -38,14 +47,16 @@ internal class AlexandriaDbContextFactory : IDesignTimeDbContextFactory<Alexandr
         // but later operations will be on "alexandria" once migrations are applied.
         sqlConnectionString = EnforceDatabaseName(sqlConnectionString);
 
-        optionsBuilder.UseSqlServer(
-            sqlConnectionString,
-            x =>
-                x.MigrationsHistoryTable(
-                    SqldbConstants.SQLDbMigrationTable,
-                    SqldbConstants.SQLDbDefaultSchema
-                )
-        );
+        optionsBuilder
+            .UseSqlServer(
+                sqlConnectionString,
+                x =>
+                    x.MigrationsHistoryTable(
+                        SqldbConstants.SQLDbMigrationTable,
+                        SqldbConstants.SQLDbDefaultSchema
+                    )
+            )
+            .AddInterceptors(interceptorps);
 
         return optionsBuilder;
     }

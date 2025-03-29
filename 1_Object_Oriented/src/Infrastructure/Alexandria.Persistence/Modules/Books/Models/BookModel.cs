@@ -1,14 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Alexandria.Domain.BookDomain;
+using Alexandria.Persistence.Audits;
 
-namespace Alexandria.Persistence.Books.Models;
+namespace Alexandria.Persistence.Modules.Books.Models;
 
-internal class BookModel : IValidatableObject
+internal class BookModel : IValidatableObject, IAuditable
 {
     public long Id { get; set; }
     public required string Title { get; set; }
-    public required DateTimeOffset CreatedDate { get; set; }
-    public required DateTimeOffset UpdatedDate { get; set; }
     public required PublicationModel Publication { get; set; }
 
     public ICollection<BookAuthorsModel> BookAuthors { get; set; } = [];
@@ -41,15 +40,13 @@ internal class BookModel : IValidatableObject
 
 internal static class BookExtensions
 {
-    public static BookModel ToNewModel(this Book book, DateTimeOffset createdDate)
+    public static BookModel ToNewModel(this Book book)
     {
         return new BookModel()
         {
             Id = book.Id,
             Title = book.Title,
-            CreatedDate = createdDate,
-            UpdatedDate = createdDate,
-            Publication = book.Publication.ToNewModel(createdDate),
+            Publication = book.Publication.ToNewModel(),
             BookAuthors = book
                 .AuthorsIds.Select(authorId => new BookAuthorsModel
                 {

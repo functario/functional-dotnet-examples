@@ -1,4 +1,4 @@
-﻿namespace Alexandria.Persistence.Books.Models;
+﻿namespace Alexandria.Persistence.Modules.Books.Models;
 
 internal class BookAuthorsModel
 {

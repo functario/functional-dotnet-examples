@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Alexandria.Persistence.Migrations
 {
     [DbContext(typeof(AlexandriaDbContext))]
-    [Migration("20250329132450_CreateTables")]
+    [Migration("20250329144849_CreateTables")]
     partial class CreateTables
     {
         /// <inheritdoc />
@@ -25,7 +25,7 @@ namespace Alexandria.Persistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Alexandria.Persistence.Authors.Models.AuthorModel", b =>
+            modelBuilder.Entity("Alexandria.Persistence.Modules.Authors.Models.AuthorModel", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -59,7 +59,7 @@ namespace Alexandria.Persistence.Migrations
                     b.ToTable("Authors");
                 });
 
-            modelBuilder.Entity("Alexandria.Persistence.Books.Models.BookAuthorsModel", b =>
+            modelBuilder.Entity("Alexandria.Persistence.Modules.Books.Models.BookAuthorsModel", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -80,7 +80,7 @@ namespace Alexandria.Persistence.Migrations
                     b.ToTable("BookAuthors");
                 });
 
-            modelBuilder.Entity("Alexandria.Persistence.Books.Models.BookModel", b =>
+            modelBuilder.Entity("Alexandria.Persistence.Modules.Books.Models.BookModel", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -90,9 +90,6 @@ namespace Alexandria.Persistence.Migrations
 
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("datetimeoffset");
-
-                    b.Property<long>("PublicationId")
-                        .HasColumnType("bigint");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -103,36 +100,12 @@ namespace Alexandria.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PublicationId");
-
-                    b.ToTable("Books");
+                    b.ToTable("Books", (string)null);
                 });
 
-            modelBuilder.Entity("Alexandria.Persistence.Books.Models.PublicationModel", b =>
+            modelBuilder.Entity("Alexandria.Persistence.Modules.Books.Models.BookAuthorsModel", b =>
                 {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<DateTimeOffset>("CreatedDate")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTimeOffset>("PublicationDate")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTimeOffset>("UpdatedDate")
-                        .HasColumnType("datetimeoffset");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Publications");
-                });
-
-            modelBuilder.Entity("Alexandria.Persistence.Books.Models.BookAuthorsModel", b =>
-                {
-                    b.HasOne("Alexandria.Persistence.Books.Models.BookModel", "Book")
+                    b.HasOne("Alexandria.Persistence.Modules.Books.Models.BookModel", "Book")
                         .WithMany("BookAuthors")
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -141,18 +114,35 @@ namespace Alexandria.Persistence.Migrations
                     b.Navigation("Book");
                 });
 
-            modelBuilder.Entity("Alexandria.Persistence.Books.Models.BookModel", b =>
+            modelBuilder.Entity("Alexandria.Persistence.Modules.Books.Models.BookModel", b =>
                 {
-                    b.HasOne("Alexandria.Persistence.Books.Models.PublicationModel", "Publication")
-                        .WithMany()
-                        .HasForeignKey("PublicationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.OwnsOne("Alexandria.Persistence.Modules.Books.Models.PublicationModel", "Publication", b1 =>
+                        {
+                            b1.Property<long>("Id")
+                                .HasColumnType("bigint");
 
-                    b.Navigation("Publication");
+                            b1.Property<DateTimeOffset>("CreatedDate")
+                                .HasColumnType("datetimeoffset");
+
+                            b1.Property<DateTimeOffset>("PublicationDate")
+                                .HasColumnType("datetimeoffset");
+
+                            b1.Property<DateTimeOffset>("UpdatedDate")
+                                .HasColumnType("datetimeoffset");
+
+                            b1.HasKey("Id");
+
+                            b1.ToTable("Publications", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("Id");
+                        });
+
+                    b.Navigation("Publication")
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("Alexandria.Persistence.Books.Models.BookModel", b =>
+            modelBuilder.Entity("Alexandria.Persistence.Modules.Books.Models.BookModel", b =>
                 {
                     b.Navigation("BookAuthors");
                 });

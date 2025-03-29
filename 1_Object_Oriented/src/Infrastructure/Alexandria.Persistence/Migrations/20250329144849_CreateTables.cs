@@ -41,32 +41,6 @@ namespace Alexandria.Persistence.Migrations
             );
 
             migrationBuilder.CreateTable(
-                name: "Publications",
-                columns: table => new
-                {
-                    Id = table
-                        .Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    PublicationDate = table.Column<DateTimeOffset>(
-                        type: "datetimeoffset",
-                        nullable: false
-                    ),
-                    CreatedDate = table.Column<DateTimeOffset>(
-                        type: "datetimeoffset",
-                        nullable: false
-                    ),
-                    UpdatedDate = table.Column<DateTimeOffset>(
-                        type: "datetimeoffset",
-                        nullable: false
-                    ),
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Publications", x => x.Id);
-                }
-            );
-
-            migrationBuilder.CreateTable(
                 name: "Books",
                 columns: table => new
                 {
@@ -82,18 +56,10 @@ namespace Alexandria.Persistence.Migrations
                         type: "datetimeoffset",
                         nullable: false
                     ),
-                    PublicationId = table.Column<long>(type: "bigint", nullable: false),
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Books", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Books_Publications_PublicationId",
-                        column: x => x.PublicationId,
-                        principalTable: "Publications",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade
-                    );
                 }
             );
 
@@ -120,16 +86,41 @@ namespace Alexandria.Persistence.Migrations
                 }
             );
 
+            migrationBuilder.CreateTable(
+                name: "Publications",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false),
+                    PublicationDate = table.Column<DateTimeOffset>(
+                        type: "datetimeoffset",
+                        nullable: false
+                    ),
+                    CreatedDate = table.Column<DateTimeOffset>(
+                        type: "datetimeoffset",
+                        nullable: false
+                    ),
+                    UpdatedDate = table.Column<DateTimeOffset>(
+                        type: "datetimeoffset",
+                        nullable: false
+                    ),
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Publications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Publications_Books_Id",
+                        column: x => x.Id,
+                        principalTable: "Books",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade
+                    );
+                }
+            );
+
             migrationBuilder.CreateIndex(
                 name: "IX_BookAuthors_BookId",
                 table: "BookAuthors",
                 column: "BookId"
-            );
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Books_PublicationId",
-                table: "Books",
-                column: "PublicationId"
             );
         }
 
@@ -140,9 +131,9 @@ namespace Alexandria.Persistence.Migrations
 
             migrationBuilder.DropTable(name: "BookAuthors");
 
-            migrationBuilder.DropTable(name: "Books");
-
             migrationBuilder.DropTable(name: "Publications");
+
+            migrationBuilder.DropTable(name: "Books");
         }
     }
 }

@@ -1,8 +1,8 @@
-﻿using Alexandria.Persistence.Authors.Models;
+﻿using Alexandria.Persistence.Modules.Authors.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Alexandria.Persistence.Authors.Configurations;
+namespace Alexandria.Persistence.Modules.Authors.Configurations;
 
 internal class AuthorsConfiguration : IEntityTypeConfiguration<AuthorModel>
 {

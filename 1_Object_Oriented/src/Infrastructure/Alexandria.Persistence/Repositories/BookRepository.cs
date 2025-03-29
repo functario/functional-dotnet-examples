@@ -1,6 +1,6 @@
 ﻿using Alexandria.Application.Abstractions.Repositories;
 using Alexandria.Domain.BookDomain;
-using Alexandria.Persistence.Books.Models;
+using Alexandria.Persistence.Modules.Books.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Alexandria.Persistence.Repositories;
@@ -8,19 +8,16 @@ namespace Alexandria.Persistence.Repositories;
 internal sealed class BookRepository : IBookRepository
 {
     private readonly AlexandriaDbContext _alexandriaDbContext;
-    private readonly TimeProvider _timeProvider;
 
-    public BookRepository(AlexandriaDbContext alexandriaDbContext, TimeProvider timeProvider)
+    public BookRepository(AlexandriaDbContext alexandriaDbContext)
     {
         _alexandriaDbContext = alexandriaDbContext;
-        _timeProvider = timeProvider;
     }
 
     public async Task<Func<Book>> CreateBookAsync(Book book, CancellationToken cancellationToken)
     {
-        var creationDate = _timeProvider.GetUtcNow();
         var result = await _alexandriaDbContext.Books.AddAsync(
-            book.ToNewModel(creationDate),
+            book.ToNewModel(),
             cancellationToken
         );
 

@@ -1,13 +1,12 @@
 ﻿using Alexandria.Domain.BookDomain;
+using Alexandria.Persistence.Audits;
 
-namespace Alexandria.Persistence.Books.Models;
+namespace Alexandria.Persistence.Modules.Books.Models;
 
-internal class PublicationModel
+internal class PublicationModel : IAuditable
 {
     public long Id { get; set; }
     public DateTimeOffset PublicationDate { get; set; }
-    public required DateTimeOffset CreatedDate { get; set; }
-    public required DateTimeOffset UpdatedDate { get; set; }
 
     public Publication ToDomain()
     {
@@ -17,16 +16,11 @@ internal class PublicationModel
 
 internal static class PublicationModelExtensions
 {
-    public static PublicationModel ToNewModel(
-        this Publication publication,
-        DateTimeOffset createdDate
-    )
+    public static PublicationModel ToNewModel(this Publication publication)
     {
         return new PublicationModel()
         {
             Id = publication.Id,
-            CreatedDate = createdDate,
-            UpdatedDate = createdDate,
             PublicationDate = publication.PublicationDate,
         };
     }

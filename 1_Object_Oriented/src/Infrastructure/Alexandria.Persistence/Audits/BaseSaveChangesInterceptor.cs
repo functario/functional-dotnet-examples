@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-namespace Alexandria.Persistence.Books.Interceptors;
+namespace Alexandria.Persistence.Audits;
 
 internal abstract class BaseSaveChangesInterceptor<T> : SaveChangesInterceptor
     where T : class
@@ -10,7 +10,7 @@ internal abstract class BaseSaveChangesInterceptor<T> : SaveChangesInterceptor
     public abstract IEnumerable<EntityEntry<T>> EntitiesToSave(DbContext dbContext);
     public abstract Task OnSaveAsync(
         DbContext dbContext,
-        T entity,
+        EntityEntry<T> entityEntry,
         CancellationToken cancellationToken
     );
 
@@ -23,8 +23,8 @@ internal abstract class BaseSaveChangesInterceptor<T> : SaveChangesInterceptor
         ArgumentNullException.ThrowIfNull(eventData, nameof(eventData));
         var dbContext = eventData.Context;
         ArgumentNullException.ThrowIfNull(dbContext, nameof(eventData.Context));
-        var entities = EntitiesToSave(dbContext).Select(x => x.Entity);
-        foreach (var entity in entities)
+        var entityEntries = EntitiesToSave(dbContext);
+        foreach (var entity in entityEntries)
         {
             await OnSaveAsync(dbContext, entity, cancellationToken);
         }

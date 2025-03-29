@@ -1,5 +1,6 @@
-﻿using Alexandria.Persistence.Authors.Models;
-using Alexandria.Persistence.Books.Models;
+﻿using Alexandria.Persistence.Modules.Authors.Models;
+using Alexandria.Persistence.Modules.Books.Configurations;
+using Alexandria.Persistence.Modules.Books.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Alexandria.Persistence;
@@ -21,6 +22,7 @@ internal class AlexandriaDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.ApplyConfiguration(new BooksConfiguration());
         base.OnModelCreating(modelBuilder);
     }
 }
