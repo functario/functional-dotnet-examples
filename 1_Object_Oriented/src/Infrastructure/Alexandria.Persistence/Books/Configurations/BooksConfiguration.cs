@@ -1,8 +1,8 @@
-﻿using Alexandria.Persistence.Models;
+﻿using Alexandria.Persistence.Books.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Alexandria.Persistence.Configurations;
+namespace Alexandria.Persistence.Books.Configurations;
 
 internal class BooksConfiguration : IEntityTypeConfiguration<BookModel>
 {
@@ -10,7 +10,7 @@ internal class BooksConfiguration : IEntityTypeConfiguration<BookModel>
     {
         builder.ToTable("Books");
         builder.HasKey(b => b.Id);
-        builder.OwnsOne<PublicationModel>(
+        builder.OwnsOne(
             b => b.Publication,
             od =>
             {

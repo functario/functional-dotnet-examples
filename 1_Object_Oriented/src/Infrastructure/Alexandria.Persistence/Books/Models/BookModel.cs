@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Alexandria.Domain.BookDomain;
 
-namespace Alexandria.Persistence.Models;
+namespace Alexandria.Persistence.Books.Models;
 
 internal class BookModel : IValidatableObject
 {
@@ -11,12 +11,13 @@ internal class BookModel : IValidatableObject
     public required DateTimeOffset UpdatedDate { get; set; }
     public required PublicationModel Publication { get; set; }
 
-    public ICollection<BookAuthors> BookAuthors { get; set; } = [];
+    public ICollection<BookAuthorsModel> BookAuthors { get; set; } = [];
 
     public Book ToDomain()
     {
-        var authorsIds = BookAuthors.Where(x => x.BookId == Id).Select(x => x.AuthorId);
-        return new Book(Id, Title, Publication.ToDomain(), [.. authorsIds]);
+        var publication = Publication.ToDomain();
+        var authorsIds = BookAuthors.Select(x => x.AuthorId);
+        return new Book(Id, Title, publication, [.. authorsIds]);
     }
 
     public Book ToNewDomain()
@@ -49,6 +50,13 @@ internal static class BookExtensions
             CreatedDate = createdDate,
             UpdatedDate = createdDate,
             Publication = book.Publication.ToNewModel(createdDate),
+            BookAuthors = book
+                .AuthorsIds.Select(authorId => new BookAuthorsModel
+                {
+                    BookId = book.Id,
+                    AuthorId = authorId,
+                })
+                .ToList(),
         };
     }
 }

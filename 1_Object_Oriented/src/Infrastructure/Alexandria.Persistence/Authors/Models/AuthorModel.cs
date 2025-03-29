@@ -1,6 +1,6 @@
 ﻿using Alexandria.Domain.AuthorDomain;
 
-namespace Alexandria.Persistence.Models;
+namespace Alexandria.Persistence.Authors.Models;
 
 internal class AuthorModel
 {

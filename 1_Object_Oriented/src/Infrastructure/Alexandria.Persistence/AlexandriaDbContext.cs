@@ -1,4 +1,5 @@
-﻿using Alexandria.Persistence.Models;
+﻿using Alexandria.Persistence.Authors.Models;
+using Alexandria.Persistence.Books.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Alexandria.Persistence;
@@ -13,6 +14,8 @@ internal class AlexandriaDbContext : DbContext
     public DbSet<AuthorModel> Authors { get; init; }
 
     public DbSet<BookModel> Books { get; init; }
+
+    public DbSet<BookAuthorsModel> BookAuthors { get; init; }
 
     public DbSet<PublicationModel> Publications { get; set; }
 

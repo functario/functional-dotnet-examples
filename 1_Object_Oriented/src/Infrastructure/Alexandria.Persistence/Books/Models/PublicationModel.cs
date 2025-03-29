@@ -1,6 +1,6 @@
 ﻿using Alexandria.Domain.BookDomain;
 
-namespace Alexandria.Persistence.Models;
+namespace Alexandria.Persistence.Books.Models;
 
 internal class PublicationModel
 {

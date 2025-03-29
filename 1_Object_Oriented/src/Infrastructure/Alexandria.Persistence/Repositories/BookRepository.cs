@@ -1,15 +1,14 @@
 ﻿using Alexandria.Application.Abstractions.Repositories;
 using Alexandria.Domain.BookDomain;
-using Alexandria.Persistence.Models;
+using Alexandria.Persistence.Books.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Alexandria.Persistence.Repositories;
 
 internal sealed class BookRepository : IBookRepository
 {
-#pragma warning disable IDE0052 // Remove unread private members
     private readonly AlexandriaDbContext _alexandriaDbContext;
     private readonly TimeProvider _timeProvider;
-#pragma warning restore IDE0052 // Remove unread private members
 
     public BookRepository(AlexandriaDbContext alexandriaDbContext, TimeProvider timeProvider)
     {
@@ -30,7 +29,10 @@ internal sealed class BookRepository : IBookRepository
 
     public async Task<Book?> GetBookAsync(long bookId, CancellationToken cancellationToken)
     {
-        var result = await _alexandriaDbContext.FindAsync<BookModel>([bookId], cancellationToken);
+        var result = await _alexandriaDbContext
+            .Books.Include(b => b.BookAuthors)
+            .Include(b => b.Publication)
+            .FirstOrDefaultAsync(b => b.Id == bookId, cancellationToken);
 
         return result?.ToDomain();
     }

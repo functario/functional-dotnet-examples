@@ -1,6 +1,6 @@
-﻿namespace Alexandria.Persistence.Models;
+﻿namespace Alexandria.Persistence.Books.Models;
 
-internal class BookAuthors
+internal class BookAuthorsModel
 {
     public long Id { get; set; }
     public long BookId { get; set; }

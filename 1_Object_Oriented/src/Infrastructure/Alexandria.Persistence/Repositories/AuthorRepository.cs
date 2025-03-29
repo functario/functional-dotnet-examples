@@ -1,6 +1,6 @@
 ﻿using Alexandria.Application.Abstractions.Repositories;
 using Alexandria.Domain.AuthorDomain;
-using Alexandria.Persistence.Models;
+using Alexandria.Persistence.Authors.Models;
 
 namespace Alexandria.Persistence.Repositories;
 

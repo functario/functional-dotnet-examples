@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Alexandria.Persistence.Migrations
 {
     [DbContext(typeof(AlexandriaDbContext))]
-    [Migration("20250329125257_CreateTables")]
+    [Migration("20250329132450_CreateTables")]
     partial class CreateTables
     {
         /// <inheritdoc />
@@ -25,7 +25,7 @@ namespace Alexandria.Persistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Alexandria.Persistence.Models.AuthorModel", b =>
+            modelBuilder.Entity("Alexandria.Persistence.Authors.Models.AuthorModel", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -59,7 +59,7 @@ namespace Alexandria.Persistence.Migrations
                     b.ToTable("Authors");
                 });
 
-            modelBuilder.Entity("Alexandria.Persistence.Models.BookAuthors", b =>
+            modelBuilder.Entity("Alexandria.Persistence.Books.Models.BookAuthorsModel", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -80,7 +80,7 @@ namespace Alexandria.Persistence.Migrations
                     b.ToTable("BookAuthors");
                 });
 
-            modelBuilder.Entity("Alexandria.Persistence.Models.BookModel", b =>
+            modelBuilder.Entity("Alexandria.Persistence.Books.Models.BookModel", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -108,7 +108,7 @@ namespace Alexandria.Persistence.Migrations
                     b.ToTable("Books");
                 });
 
-            modelBuilder.Entity("Alexandria.Persistence.Models.PublicationModel", b =>
+            modelBuilder.Entity("Alexandria.Persistence.Books.Models.PublicationModel", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -130,9 +130,9 @@ namespace Alexandria.Persistence.Migrations
                     b.ToTable("Publications");
                 });
 
-            modelBuilder.Entity("Alexandria.Persistence.Models.BookAuthors", b =>
+            modelBuilder.Entity("Alexandria.Persistence.Books.Models.BookAuthorsModel", b =>
                 {
-                    b.HasOne("Alexandria.Persistence.Models.BookModel", "Book")
+                    b.HasOne("Alexandria.Persistence.Books.Models.BookModel", "Book")
                         .WithMany("BookAuthors")
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -141,9 +141,9 @@ namespace Alexandria.Persistence.Migrations
                     b.Navigation("Book");
                 });
 
-            modelBuilder.Entity("Alexandria.Persistence.Models.BookModel", b =>
+            modelBuilder.Entity("Alexandria.Persistence.Books.Models.BookModel", b =>
                 {
-                    b.HasOne("Alexandria.Persistence.Models.PublicationModel", "Publication")
+                    b.HasOne("Alexandria.Persistence.Books.Models.PublicationModel", "Publication")
                         .WithMany()
                         .HasForeignKey("PublicationId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -152,7 +152,7 @@ namespace Alexandria.Persistence.Migrations
                     b.Navigation("Publication");
                 });
 
-            modelBuilder.Entity("Alexandria.Persistence.Models.BookModel", b =>
+            modelBuilder.Entity("Alexandria.Persistence.Books.Models.BookModel", b =>
                 {
                     b.Navigation("BookAuthors");
                 });
