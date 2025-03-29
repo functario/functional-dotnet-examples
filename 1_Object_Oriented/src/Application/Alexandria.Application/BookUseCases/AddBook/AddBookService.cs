@@ -26,25 +26,23 @@ public sealed class AddBookService : IAddBookService
         Justification = "<Pending>"
     )]
     public async Task<AddBookResult> HandleAsync(
-        AddBookCommand request,
+        AddBookCommand command,
         CancellationToken cancellationToken
     )
     {
-        ArgumentNullException.ThrowIfNull(request, nameof(request));
-        var transientPublication = Publication.CreateTransient(request.PublicationDate);
+        ArgumentNullException.ThrowIfNull(command, nameof(command));
+        var transientPublication = Publication.CreateTransient(command.PublicationDate);
 
         async Task<AddBookResult> Transaction(IUnitOfWork unitOfWork, CancellationToken ct)
         {
             // Create Book and related Publication
             var transientBook = Book.CreateTransient(
-                request.Title,
+                command.Title,
                 transientPublication,
-                request.AuthorsIds
+                command.AuthorsIds
             );
             var bookFunc = await _bookRepository.CreateBookAsync(transientBook, cancellationToken);
 
-            // Note: The Many-to-Many relation between Publication and Author
-            // is created via an overload of SaveChangeAsync.
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
             // Get book with information from database.

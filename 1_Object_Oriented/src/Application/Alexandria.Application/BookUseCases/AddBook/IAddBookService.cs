@@ -2,5 +2,5 @@
 
 public interface IAddBookService
 {
-    Task<AddBookResult> HandleAsync(AddBookCommand request, CancellationToken cancellationToken);
+    Task<AddBookResult> HandleAsync(AddBookCommand command, CancellationToken cancellationToken);
 }

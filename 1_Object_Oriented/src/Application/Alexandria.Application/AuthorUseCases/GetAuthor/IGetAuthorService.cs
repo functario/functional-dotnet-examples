@@ -2,5 +2,5 @@
 
 public interface IGetAuthorService
 {
-    Task<GetAuthorResult?> Handle(GetAuthorQuery request, CancellationToken cancellationToken);
+    Task<GetAuthorResult?> Handle(GetAuthorQuery query, CancellationToken cancellationToken);
 }

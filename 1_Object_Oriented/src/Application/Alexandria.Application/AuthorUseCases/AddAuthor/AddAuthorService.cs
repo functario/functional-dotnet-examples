@@ -14,19 +14,19 @@ internal sealed class AddAuthorService : IAddAuthorService
     }
 
     public async Task<AddAuthorResult> Handle(
-        AddAuthorCommand request,
+        AddAuthorCommand command,
         CancellationToken cancellationToken
     )
     {
-        var author = request?.Author;
-        ArgumentNullException.ThrowIfNull(author, nameof(request.Author));
+        var author = command?.Author;
+        ArgumentNullException.ThrowIfNull(author, nameof(command.Author));
         var createdAuthorFunc = await _authorRepository.CreateAuthorAsync(
             author,
             cancellationToken
         );
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         var createdAuthor = createdAuthorFunc();
-        var response = new AddAuthorResult(createdAuthor);
-        return response;
+        var result = new AddAuthorResult(createdAuthor);
+        return result;
     }
 }

@@ -12,14 +12,11 @@ internal sealed class GetAuthorService : IGetAuthorService
     }
 
     public async Task<GetAuthorResult?> Handle(
-        GetAuthorQuery request,
+        GetAuthorQuery query,
         CancellationToken cancellationToken
     )
     {
-        var authorFound = await _authorRepository.GetAuthorAsync(
-            request.AuthorId,
-            cancellationToken
-        );
+        var authorFound = await _authorRepository.GetAuthorAsync(query.AuthorId, cancellationToken);
 
         return authorFound is not null ? new GetAuthorResult(authorFound) : null;
     }

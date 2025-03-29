@@ -12,11 +12,11 @@ internal sealed class GetBookService : IGetBookService
     }
 
     public async Task<GetBookResult?> Handle(
-        GetBookQuery request,
+        GetBookQuery query,
         CancellationToken cancellationToken
     )
     {
-        var bookFound = await _bookRepository.GetBookAsync(request.BookId, cancellationToken);
+        var bookFound = await _bookRepository.GetBookAsync(query.BookId, cancellationToken);
         return bookFound is not null ? new GetBookResult(bookFound) : null;
     }
 }
