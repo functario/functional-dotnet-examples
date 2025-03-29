@@ -20,7 +20,6 @@ internal class BooksConfiguration : IEntityTypeConfiguration<BookModel>
                 od.Property(x => x.PublicationDate).IsRequired();
                 od.Property(x => x.CreatedDate).IsRequired();
                 od.Property(x => x.UpdatedDate).IsRequired();
-                od.Property(x => x.AuthorsIds).IsRequired();
             }
         );
     }

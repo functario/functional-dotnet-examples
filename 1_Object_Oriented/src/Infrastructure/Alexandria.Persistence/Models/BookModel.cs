@@ -1,9 +1,9 @@
-﻿using Alexandria.Application.Abstractions.DTOs;
+﻿using System.ComponentModel.DataAnnotations;
 using Alexandria.Domain.BookDomain;
 
 namespace Alexandria.Persistence.Models;
 
-internal class BookModel
+internal class BookModel : IValidatableObject
 {
     public long Id { get; set; }
     public required string Title { get; set; }
@@ -11,29 +11,44 @@ internal class BookModel
     public required DateTimeOffset UpdatedDate { get; set; }
     public required PublicationModel Publication { get; set; }
 
-    public virtual ICollection<AuthorModel> Authors { get; } = [];
+    public ICollection<BookAuthors> BookAuthors { get; set; } = [];
 
-    public Book ToDomain(PublicationModel publication)
+    public Book ToDomain()
     {
-        return new Book(Id, Title, publication.ToDomain());
-    }
-
-    public BookDto ToDto()
-    {
-        return new BookDto(Id, Title, Publication.ToDto(), GetAuthorDtos());
+        var authorsIds = BookAuthors.Where(x => x.BookId == Id).Select(x => x.AuthorId);
+        return new Book(Id, Title, Publication.ToDomain(), [.. authorsIds]);
     }
 
     public Book ToNewDomain()
     {
         var publication = Publication.ToDomain();
-        return new Book(Id, Title, publication);
+        var authorsIds = BookAuthors.Where(x => x.BookId == Id).Select(x => x.AuthorId);
+        return new Book(Id, Title, publication, [.. authorsIds]);
     }
 
-    public BookDto ToNewDto()
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-        var publicationDto = Publication.ToDto();
-        return new BookDto(Id, Title, publicationDto, GetAuthorDtos());
+        if (BookAuthors == null || BookAuthors.Count == 0)
+        {
+            yield return new ValidationResult(
+                $"A {nameof(BookModel)} must have at least one author.",
+                [nameof(BookAuthors)]
+            );
+        }
     }
+}
 
-    private List<AuthorDto> GetAuthorDtos() => Authors?.Select(a => a.ToDto()).ToList() ?? [];
+internal static class BookExtensions
+{
+    public static BookModel ToNewModel(this Book book, DateTimeOffset createdDate)
+    {
+        return new BookModel()
+        {
+            Id = book.Id,
+            Title = book.Title,
+            CreatedDate = createdDate,
+            UpdatedDate = createdDate,
+            Publication = book.Publication.ToNewModel(createdDate),
+        };
+    }
 }

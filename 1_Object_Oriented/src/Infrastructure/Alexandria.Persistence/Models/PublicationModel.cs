@@ -1,36 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Alexandria.Application.Abstractions.DTOs;
-using Alexandria.Domain.BookDomain;
+﻿using Alexandria.Domain.BookDomain;
 
 namespace Alexandria.Persistence.Models;
 
-internal class PublicationModel : IValidatableObject
+internal class PublicationModel
 {
     public long Id { get; set; }
     public DateTimeOffset PublicationDate { get; set; }
-    public ICollection<long> AuthorsIds { get; set; } = [];
     public required DateTimeOffset CreatedDate { get; set; }
     public required DateTimeOffset UpdatedDate { get; set; }
 
     public Publication ToDomain()
     {
-        return new Publication(Id, PublicationDate, AuthorsIds);
-    }
-
-    public PublicationDto ToDto()
-    {
-        return new PublicationDto(Id, PublicationDate);
-    }
-
-    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-    {
-        if (AuthorsIds == null || AuthorsIds.Count == 0)
-        {
-            yield return new ValidationResult(
-                "A publication must have at least one author.",
-                [nameof(AuthorsIds)]
-            );
-        }
+        return new Publication(Id, PublicationDate);
     }
 }
 
@@ -44,7 +25,6 @@ internal static class PublicationModelExtensions
         return new PublicationModel()
         {
             Id = publication.Id,
-            AuthorsIds = publication.AuthorsIds,
             CreatedDate = createdDate,
             UpdatedDate = createdDate,
             PublicationDate = publication.PublicationDate,

@@ -51,7 +51,6 @@ namespace Alexandria.Persistence.Migrations
                         type: "datetimeoffset",
                         nullable: false
                     ),
-                    AuthorsIds = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedDate = table.Column<DateTimeOffset>(
                         type: "datetimeoffset",
                         nullable: false
@@ -99,25 +98,21 @@ namespace Alexandria.Persistence.Migrations
             );
 
             migrationBuilder.CreateTable(
-                name: "AuthorsBooks",
+                name: "BookAuthors",
                 columns: table => new
                 {
-                    AuthorsId = table.Column<long>(type: "bigint", nullable: false),
-                    BooksId = table.Column<long>(type: "bigint", nullable: false),
+                    Id = table
+                        .Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BookId = table.Column<long>(type: "bigint", nullable: false),
+                    AuthorId = table.Column<long>(type: "bigint", nullable: false),
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AuthorsBooks", x => new { x.AuthorsId, x.BooksId });
+                    table.PrimaryKey("PK_BookAuthors", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AuthorsBooks_Authors_AuthorsId",
-                        column: x => x.AuthorsId,
-                        principalTable: "Authors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade
-                    );
-                    table.ForeignKey(
-                        name: "FK_AuthorsBooks_Books_BooksId",
-                        column: x => x.BooksId,
+                        name: "FK_BookAuthors_Books_BookId",
+                        column: x => x.BookId,
                         principalTable: "Books",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade
@@ -126,9 +121,9 @@ namespace Alexandria.Persistence.Migrations
             );
 
             migrationBuilder.CreateIndex(
-                name: "IX_AuthorsBooks_BooksId",
-                table: "AuthorsBooks",
-                column: "BooksId"
+                name: "IX_BookAuthors_BookId",
+                table: "BookAuthors",
+                column: "BookId"
             );
 
             migrationBuilder.CreateIndex(
@@ -141,9 +136,9 @@ namespace Alexandria.Persistence.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(name: "AuthorsBooks");
-
             migrationBuilder.DropTable(name: "Authors");
+
+            migrationBuilder.DropTable(name: "BookAuthors");
 
             migrationBuilder.DropTable(name: "Books");
 

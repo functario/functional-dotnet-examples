@@ -56,6 +56,27 @@ namespace Alexandria.Persistence.Migrations
                     b.ToTable("Authors");
                 });
 
+            modelBuilder.Entity("Alexandria.Persistence.Models.BookAuthors", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("AuthorId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("BookId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.ToTable("BookAuthors");
+                });
+
             modelBuilder.Entity("Alexandria.Persistence.Models.BookModel", b =>
                 {
                     b.Property<long>("Id")
@@ -92,10 +113,6 @@ namespace Alexandria.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.PrimitiveCollection<string>("AuthorsIds")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("datetimeoffset");
 
@@ -110,19 +127,15 @@ namespace Alexandria.Persistence.Migrations
                     b.ToTable("Publications");
                 });
 
-            modelBuilder.Entity("AuthorsBooks", b =>
+            modelBuilder.Entity("Alexandria.Persistence.Models.BookAuthors", b =>
                 {
-                    b.Property<long>("AuthorsId")
-                        .HasColumnType("bigint");
+                    b.HasOne("Alexandria.Persistence.Models.BookModel", "Book")
+                        .WithMany("BookAuthors")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<long>("BooksId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("AuthorsId", "BooksId");
-
-                    b.HasIndex("BooksId");
-
-                    b.ToTable("AuthorsBooks");
+                    b.Navigation("Book");
                 });
 
             modelBuilder.Entity("Alexandria.Persistence.Models.BookModel", b =>
@@ -136,19 +149,9 @@ namespace Alexandria.Persistence.Migrations
                     b.Navigation("Publication");
                 });
 
-            modelBuilder.Entity("AuthorsBooks", b =>
+            modelBuilder.Entity("Alexandria.Persistence.Models.BookModel", b =>
                 {
-                    b.HasOne("Alexandria.Persistence.Models.AuthorModel", null)
-                        .WithMany()
-                        .HasForeignKey("AuthorsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Alexandria.Persistence.Models.BookModel", null)
-                        .WithMany()
-                        .HasForeignKey("BooksId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("BookAuthors");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,6 +1,4 @@
-﻿//using Alexandria.Application.Abstractions.DTOs;
-using Alexandria.Application.Abstractions.DTOs;
-using Alexandria.Application.Abstractions.Repositories;
+﻿using Alexandria.Application.Abstractions.Repositories;
 using Alexandria.Domain.BookDomain;
 
 namespace Alexandria.Application.BookUseCases.AddBook;
@@ -33,15 +31,16 @@ public sealed class AddBookService : IAddBookService
     )
     {
         ArgumentNullException.ThrowIfNull(request, nameof(request));
-        var transientPublication = Publication.CreateTransient(
-            request.PublicationDate,
-            request.AuthorsIds
-        );
+        var transientPublication = Publication.CreateTransient(request.PublicationDate);
 
         async Task<AddBookResult> Transaction(IUnitOfWork unitOfWork, CancellationToken ct)
         {
             // Create Book and related Publication
-            var transientBook = Book.CreateTransient(request.Title, transientPublication);
+            var transientBook = Book.CreateTransient(
+                request.Title,
+                transientPublication,
+                request.AuthorsIds
+            );
             var bookFunc = await _bookRepository.CreateBookAsync(transientBook, cancellationToken);
 
             // Note: The Many-to-Many relation between Publication and Author
@@ -53,11 +52,11 @@ public sealed class AddBookService : IAddBookService
 
             // Create the response.
             var authors = await _authorRepository.FindAuthorsAsync(
-                book.Publication.AuthorsIds,
+                book.AuthorsIds,
                 cancellationToken
             );
 
-            var response = new AddBookResult(book.ToDto(authors));
+            var response = new AddBookResult(book);
             return response;
         }
 

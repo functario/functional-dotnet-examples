@@ -1,5 +1,4 @@
-﻿using Alexandria.Domain.AuthorDomain;
-using Alexandria.Persistence.Models;
+﻿using Alexandria.Persistence.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Alexandria.Persistence;
@@ -20,12 +19,5 @@ internal class AlexandriaDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
-        // Join table between Authors and Books
-        modelBuilder
-            .Entity<AuthorModel>()
-            .HasMany(a => a.Books)
-            .WithMany(p => p.Authors)
-            .UsingEntity<AuthorsBooks>(AuthorsBooks.TableName);
     }
 }

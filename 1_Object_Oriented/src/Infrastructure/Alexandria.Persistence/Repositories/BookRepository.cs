@@ -1,15 +1,15 @@
-﻿using Alexandria.Application.Abstractions.DTOs;
-using Alexandria.Application.Abstractions.Repositories;
+﻿using Alexandria.Application.Abstractions.Repositories;
 using Alexandria.Domain.BookDomain;
 using Alexandria.Persistence.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace Alexandria.Persistence.Repositories;
 
 internal sealed class BookRepository : IBookRepository
 {
+#pragma warning disable IDE0052 // Remove unread private members
     private readonly AlexandriaDbContext _alexandriaDbContext;
     private readonly TimeProvider _timeProvider;
+#pragma warning restore IDE0052 // Remove unread private members
 
     public BookRepository(AlexandriaDbContext alexandriaDbContext, TimeProvider timeProvider)
     {
@@ -20,41 +20,18 @@ internal sealed class BookRepository : IBookRepository
     public async Task<Func<Book>> CreateBookAsync(Book book, CancellationToken cancellationToken)
     {
         var creationDate = _timeProvider.GetUtcNow();
-
-        var bookModel = new BookModel()
-        {
-            Id = 0,
-            Title = book.Title,
-            CreatedDate = creationDate,
-            UpdatedDate = creationDate,
-            Publication = book.Publication.ToNewModel(creationDate),
-        };
-
-        var result = await _alexandriaDbContext.Books.AddAsync(bookModel, cancellationToken);
-
-        var entry = _alexandriaDbContext.Entry(bookModel);
-        var createdBookModel = result.Entity;
-
-        return result.Entity.ToNewDomain;
-    }
-
-    public async Task<BookDto?> GetBookDtoAsync(long bookId, CancellationToken cancellationToken)
-    {
-        var bookModel = await _alexandriaDbContext.FindAsync<BookModel>(
-            [bookId],
+        var result = await _alexandriaDbContext.Books.AddAsync(
+            book.ToNewModel(creationDate),
             cancellationToken
         );
 
-        if (bookModel is null)
-        {
-            return null;
-        }
+        return result.Entity.ToDomain;
+    }
 
-        bookModel = await _alexandriaDbContext
-            .Books.Include(x => x.Authors)
-            .Include(x => x.Publication)
-            .FirstOrDefaultAsync(x => x.Id == bookModel.Id, cancellationToken);
+    public async Task<Book?> GetBookAsync(long bookId, CancellationToken cancellationToken)
+    {
+        var result = await _alexandriaDbContext.FindAsync<BookModel>([bookId], cancellationToken);
 
-        return bookModel?.ToDto();
+        return result?.ToDomain();
     }
 }

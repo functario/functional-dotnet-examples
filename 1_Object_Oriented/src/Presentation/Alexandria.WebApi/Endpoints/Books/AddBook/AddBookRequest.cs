@@ -10,7 +10,7 @@ internal sealed record AddBookRequest(
 {
     internal Book ToCreatedBook()
     {
-        var publication = new Publication(0, PublicationDate, AuthorsIds);
-        return new Book(0, Title, publication);
+        var publication = new Publication(0, PublicationDate);
+        return new Book(0, Title, publication, AuthorsIds);
     }
 }

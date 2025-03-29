@@ -25,26 +25,20 @@ internal sealed class Transaction : ITransaction
 
     public Task CommitAsync(CancellationToken cancellationToken)
     {
-        if (DbContextTransaction is null)
-        {
-            throw new InvalidOperationException(
+        return DbContextTransaction is null
+            ? throw new InvalidOperationException(
                 $"Transaction was not started. Please call '{BeginAsync}'."
-            );
-        }
-
-        return DbContextTransaction.CommitAsync(cancellationToken);
+            )
+            : DbContextTransaction.CommitAsync(cancellationToken);
     }
 
     public Task RollBackAsync(CancellationToken cancellationToken)
     {
-        if (DbContextTransaction is null)
-        {
-            throw new InvalidOperationException(
+        return DbContextTransaction is null
+            ? throw new InvalidOperationException(
                 $"Transaction was not started. Please call '{BeginAsync}'."
-            );
-        }
-
-        return DbContextTransaction.RollbackAsync(cancellationToken);
+            )
+            : DbContextTransaction.RollbackAsync(cancellationToken);
     }
 
     public void Dispose()
