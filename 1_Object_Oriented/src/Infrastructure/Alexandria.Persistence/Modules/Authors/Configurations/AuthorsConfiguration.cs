@@ -1,4 +1,5 @@
-﻿using Alexandria.Persistence.Modules.Authors.Models;
+﻿using Alexandria.Persistence.Audits;
+using Alexandria.Persistence.Modules.Authors.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -10,5 +11,6 @@ internal class AuthorsConfiguration : IEntityTypeConfiguration<AuthorModel>
     {
         builder.ToTable("Authors");
         builder.HasKey(x => x.Id);
+        builder.ConfigureAuditProperties();
     }
 }

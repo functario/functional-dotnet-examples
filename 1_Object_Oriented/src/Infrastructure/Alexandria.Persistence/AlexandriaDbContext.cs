@@ -1,4 +1,5 @@
-﻿using Alexandria.Persistence.Modules.Authors.Models;
+﻿using Alexandria.Persistence.Modules.Authors.Configurations;
+using Alexandria.Persistence.Modules.Authors.Models;
 using Alexandria.Persistence.Modules.Books.Configurations;
 using Alexandria.Persistence.Modules.Books.Models;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,8 @@ internal class AlexandriaDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // Need to explicitly apply configuration, otherwise the shadow properties are not added to tables.
+        modelBuilder.ApplyConfiguration(new AuthorsConfiguration());
         modelBuilder.ApplyConfiguration(new BooksConfiguration());
         base.OnModelCreating(modelBuilder);
     }

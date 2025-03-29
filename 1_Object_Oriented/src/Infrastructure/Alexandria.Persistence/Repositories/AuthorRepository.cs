@@ -7,12 +7,10 @@ namespace Alexandria.Persistence.Repositories;
 internal sealed class AuthorRepository : IAuthorRepository
 {
     private readonly AlexandriaDbContext _alexandriaDbContext;
-    private readonly TimeProvider _timeProvider;
 
-    public AuthorRepository(AlexandriaDbContext alexandriaDbContext, TimeProvider timeProvider)
+    public AuthorRepository(AlexandriaDbContext alexandriaDbContext)
     {
         _alexandriaDbContext = alexandriaDbContext;
-        _timeProvider = timeProvider;
     }
 
     public async Task<Func<Author>> CreateAuthorAsync(
@@ -20,9 +18,8 @@ internal sealed class AuthorRepository : IAuthorRepository
         CancellationToken cancellationToken
     )
     {
-        var creationDate = _timeProvider.GetUtcNow();
         var result = await _alexandriaDbContext.Authors.AddAsync(
-            author.ToNewModel(creationDate),
+            author.ToNewModel(),
             cancellationToken
         );
 

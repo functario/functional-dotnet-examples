@@ -27,11 +27,11 @@ namespace Alexandria.Persistence.Migrations
                     ),
                     CreatedDate = table.Column<DateTimeOffset>(
                         type: "datetimeoffset",
-                        nullable: true
+                        nullable: false
                     ),
                     UpdatedDate = table.Column<DateTimeOffset>(
                         type: "datetimeoffset",
-                        nullable: true
+                        nullable: false
                     ),
                 },
                 constraints: table =>

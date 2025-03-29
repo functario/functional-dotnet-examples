@@ -1,4 +1,5 @@
-﻿using Alexandria.Persistence.Modules.Books.Models;
+﻿using Alexandria.Persistence.Audits;
+using Alexandria.Persistence.Modules.Books.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -10,8 +11,7 @@ internal class BooksConfiguration : IEntityTypeConfiguration<BookModel>
     {
         builder.ToTable("Books");
         builder.HasKey(b => b.Id);
-        builder.Property<DateTimeOffset>("CreatedDate");
-        builder.Property<DateTimeOffset>("UpdatedDate");
+        builder.ConfigureAuditProperties();
         builder.OwnsOne(
             b => b.Publication,
             od =>
@@ -20,8 +20,7 @@ internal class BooksConfiguration : IEntityTypeConfiguration<BookModel>
                 od.HasKey(x => x.Id);
                 od.WithOwner().HasForeignKey(od => od.Id);
                 od.Property(x => x.PublicationDate).IsRequired();
-                od.Property<DateTimeOffset>("CreatedDate");
-                od.Property<DateTimeOffset>("UpdatedDate");
+                od.ConfigureAuditProperties();
             }
         );
     }

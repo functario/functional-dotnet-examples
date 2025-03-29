@@ -1,5 +1,4 @@
-﻿using Alexandria.Persistence.Audits;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using WellKnowns.Infrastructure.SQL;
@@ -14,16 +13,10 @@ internal class AlexandriaDbContextFactory : IDesignTimeDbContextFactory<Alexandr
 
         ArgumentNullException.ThrowIfNull(sqlConnectionString, nameof(sqlConnectionString));
 
-        var interceptors = new OnAuditableSavedInterceptor(TimeProvider.System);
-
         var optionsBuilder = new DbContextOptionsBuilder<AlexandriaDbContext>();
         optionsBuilder =
             (DbContextOptionsBuilder<AlexandriaDbContext>)
-                ConfigureDbContextOptionsBuilder(
-                    optionsBuilder,
-                    sqlConnectionString!,
-                    interceptors
-                );
+                ConfigureDbContextOptionsBuilder(optionsBuilder, sqlConnectionString!);
 
         return new AlexandriaDbContext(optionsBuilder.Options);
     }
@@ -36,6 +29,13 @@ internal class AlexandriaDbContextFactory : IDesignTimeDbContextFactory<Alexandr
         context.Database.Migrate();
     }
 
+    /// <summary>
+    /// Configures DbContextOptionsBuilder.
+    /// </summary>
+    /// <param name="optionsBuilder">The DbContextOptionsBuilder.</param>
+    /// <param name="sqlConnectionString">The SQL ConnectionString.</param>
+    /// <param name="interceptorps">The interceptors. Only required for runtime. Uncessary when creating migrations.</param>
+    /// <returns>The configured DbContextOptionsBuilder.</returns>
     public static DbContextOptionsBuilder ConfigureDbContextOptionsBuilder(
         DbContextOptionsBuilder optionsBuilder,
         string sqlConnectionString,

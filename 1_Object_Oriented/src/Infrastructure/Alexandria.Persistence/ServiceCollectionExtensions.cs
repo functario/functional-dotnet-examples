@@ -36,7 +36,10 @@ public static class ServiceCollectionExtensions
 
     internal static IServiceCollection WithInterceptors(this IServiceCollection services)
     {
-        services.AddScoped<OnAuditableSavedInterceptor>();
+        services.AddScoped<
+            BaseSaveChangesInterceptor<IAuditable>,
+            OnAuditableSaveChangesInterceptor
+        >();
         return services;
     }
 
@@ -74,7 +77,9 @@ public static class ServiceCollectionExtensions
                     nameof(SqldbEnvVars.SQLConnectionString)
                 );
 
-                var interceptors = service.GetRequiredService<OnAuditableSavedInterceptor>();
+                var interceptors = service.GetRequiredService<
+                    BaseSaveChangesInterceptor<IAuditable>
+                >();
 
                 AlexandriaDbContextFactory.ConfigureDbContextOptionsBuilder(
                     x,
