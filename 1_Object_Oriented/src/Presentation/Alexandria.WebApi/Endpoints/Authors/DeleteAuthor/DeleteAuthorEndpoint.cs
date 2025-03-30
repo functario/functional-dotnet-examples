@@ -1,34 +1,34 @@
 ﻿using System.Diagnostics;
 using Alexandria.Application.Abstractions.Repositories.Exceptions;
-using Alexandria.Application.BookUseCases.DeleteBook;
+using Alexandria.Application.AuthorUseCases.DeleteAuthor;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Alexandria.WebApi.Endpoints.Books.DeleteBook;
+namespace Alexandria.WebApi.Endpoints.Authors.DeleteAuthor;
 
-internal sealed class DeleteBookEndpoint : IDeleteBookEndpoint
+internal sealed class DeleteAuthorEndpoint : IDeleteAuthorEndpoint
 {
-    public const string EndpointName = "DeleteBook";
+    public const string EndpointName = "DeleteAuthor";
 
     public void Map(IEndpointRouteBuilder endpointBuilder)
     {
         endpointBuilder
             .MapDelete("/", HandleAsync)
-            .WithSummary($"Delete a Book.")
+            .WithSummary($"Delete an Author.")
             .WithName(EndpointName);
     }
 
     public async Task<Results<NoContent, NotFound>> HandleAsync(
-        [FromServices] IDeleteBookService deleteBookService,
+        [FromServices] IDeleteAuthorService deleteAuthorService,
         [FromQuery] long id,
         CancellationToken cancellationToken
     )
     {
-        var query = new DeleteBookQuery(id);
+        var query = new DeleteAuthorQuery(id);
         try
         {
-            var response = await deleteBookService.HandleAsync(query, cancellationToken);
-            return response.BookId == id
+            var response = await deleteAuthorService.HandleAsync(query, cancellationToken);
+            return response.AuthorId == id
                 ? (Results<NoContent, NotFound>)TypedResults.NoContent()
                 : throw new InvalidDataException();
         }

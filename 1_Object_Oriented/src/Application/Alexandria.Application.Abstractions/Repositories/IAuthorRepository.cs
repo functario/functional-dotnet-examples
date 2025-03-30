@@ -10,5 +10,5 @@ public interface IAuthorRepository : IRepository
         ICollection<long> authorsIds,
         CancellationToken cancellationToken
     );
-    Task<Author> DeleteAuthorAsync(long authorId, CancellationToken cancellationToken);
+    Task<long> DeleteAuthorAsync(long authorId, CancellationToken cancellationToken);
 }

@@ -25,6 +25,7 @@ internal sealed class BookRepository : IBookRepository
         return result.Entity.ToDomain;
     }
 
+    // An example where EntityNotFoundException is used to indicated that the book was not found.
     public async Task<long> DeleteBookAsync(long bookId, CancellationToken cancellationToken)
     {
         var deletedRow = await _alexandriaDbContext
@@ -39,6 +40,7 @@ internal sealed class BookRepository : IBookRepository
         };
     }
 
+    // An example where nullable book is used to indicated that the book was not found.
     public async Task<Book?> GetBookAsync(long bookId, CancellationToken cancellationToken)
     {
         var result = await _alexandriaDbContext

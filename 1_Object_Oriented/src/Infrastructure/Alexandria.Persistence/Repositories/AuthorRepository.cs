@@ -1,6 +1,8 @@
 ﻿using Alexandria.Application.Abstractions.Repositories;
+using Alexandria.Application.Abstractions.Repositories.Exceptions;
 using Alexandria.Domain.AuthorDomain;
 using Alexandria.Persistence.Modules.Authors.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Alexandria.Persistence.Repositories;
 
@@ -26,9 +28,18 @@ internal sealed class AuthorRepository : IAuthorRepository
         return result.Entity.ToDomain;
     }
 
-    public Task<Author> DeleteAuthorAsync(long authorId, CancellationToken cancellationToken)
+    public async Task<long> DeleteAuthorAsync(long authorId, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var deletedRow = await _alexandriaDbContext
+            .Authors.Where(b => b.Id == authorId)
+            .ExecuteDeleteAsync(cancellationToken);
+
+        return deletedRow switch
+        {
+            0 => throw new EntityNotFoundException(authorId),
+            1 => authorId,
+            _ => throw new InvalidOperationException(),
+        };
     }
 
     public async Task<Author?> GetAuthorAsync(long authorId, CancellationToken cancellationToken)

@@ -1,4 +1,5 @@
 ﻿using Alexandria.Application.AuthorUseCases.AddAuthor;
+using Alexandria.Application.AuthorUseCases.DeleteAuthor;
 using Alexandria.Application.AuthorUseCases.GetAuthor;
 using Alexandria.Application.BookUseCases.AddBook;
 using Alexandria.Application.BookUseCases.DeleteBook;
@@ -25,6 +26,7 @@ public static class ServiceCollectionsExtensions
         services.AddScoped<IAddBookService, AddBookService>();
         services.AddScoped<IGetBookService, GetBookService>();
         services.AddScoped<IDeleteBookService, DeleteBookService>();
+        services.AddScoped<IDeleteAuthorService, DeleteAuthorService>();
 
         return services;
     }
