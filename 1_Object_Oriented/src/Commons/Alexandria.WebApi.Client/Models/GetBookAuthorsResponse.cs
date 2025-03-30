@@ -14,6 +14,14 @@ namespace CleanArchitecture.WebAPI.Client.Models
     {
         /// <summary>Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.</summary>
         public IDictionary<string, object> AdditionalData { get; set; }
+        /// <summary>The authors property</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public List<global::CleanArchitecture.WebAPI.Client.Models.Author>? Authors { get; set; }
+#nullable restore
+#else
+        public List<global::CleanArchitecture.WebAPI.Client.Models.Author> Authors { get; set; }
+#endif
         /// <summary>The book property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -47,6 +55,7 @@ namespace CleanArchitecture.WebAPI.Client.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
+                { "authors", n => { Authors = n.GetCollectionOfObjectValues<global::CleanArchitecture.WebAPI.Client.Models.Author>(global::CleanArchitecture.WebAPI.Client.Models.Author.CreateFromDiscriminatorValue)?.AsList(); } },
                 { "book", n => { Book = n.GetObjectValue<global::CleanArchitecture.WebAPI.Client.Models.Book>(global::CleanArchitecture.WebAPI.Client.Models.Book.CreateFromDiscriminatorValue); } },
             };
         }
@@ -57,6 +66,7 @@ namespace CleanArchitecture.WebAPI.Client.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             _ = writer ?? throw new ArgumentNullException(nameof(writer));
+            writer.WriteCollectionOfObjectValues<global::CleanArchitecture.WebAPI.Client.Models.Author>("authors", Authors);
             writer.WriteObjectValue<global::CleanArchitecture.WebAPI.Client.Models.Book>("book", Book);
             writer.WriteAdditionalData(AdditionalData);
         }

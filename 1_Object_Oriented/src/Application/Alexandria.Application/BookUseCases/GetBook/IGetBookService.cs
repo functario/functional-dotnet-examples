@@ -2,5 +2,5 @@
 
 public interface IGetBookService
 {
-    Task<GetBookResult?> Handle(GetBookQuery query, CancellationToken cancellationToken);
+    Task<GetBookResult?> HandleAsync(GetBookQuery query, CancellationToken cancellationToken);
 }

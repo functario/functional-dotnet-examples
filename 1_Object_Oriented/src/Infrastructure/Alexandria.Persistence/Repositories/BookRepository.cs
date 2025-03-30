@@ -1,4 +1,5 @@
 ﻿using Alexandria.Application.Abstractions.Repositories;
+using Alexandria.Application.Abstractions.Repositories.Exceptions;
 using Alexandria.Domain.BookDomain;
 using Alexandria.Persistence.Modules.Books.Models;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,20 @@ internal sealed class BookRepository : IBookRepository
         );
 
         return result.Entity.ToDomain;
+    }
+
+    public async Task<long> DeleteBookAsync(long bookId, CancellationToken cancellationToken)
+    {
+        var deletedRow = await _alexandriaDbContext
+            .Books.Where(b => b.Id == bookId)
+            .ExecuteDeleteAsync(cancellationToken);
+
+        return deletedRow switch
+        {
+            0 => throw new EntityNotFoundException(bookId),
+            1 => bookId,
+            _ => throw new InvalidOperationException(),
+        };
     }
 
     public async Task<Book?> GetBookAsync(long bookId, CancellationToken cancellationToken)

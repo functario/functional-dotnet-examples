@@ -11,7 +11,7 @@ internal sealed class GetBookService : IGetBookService
         _bookRepository = bookRepository;
     }
 
-    public async Task<GetBookResult?> Handle(
+    public async Task<GetBookResult?> HandleAsync(
         GetBookQuery query,
         CancellationToken cancellationToken
     )

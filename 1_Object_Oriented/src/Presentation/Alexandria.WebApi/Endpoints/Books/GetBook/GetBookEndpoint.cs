@@ -21,7 +21,7 @@ internal sealed class GetBookEndpoint : IGetBookEndpoint
     )
     {
         var query = new GetBookQuery(id);
-        var response = await getAuthorService.Handle(query, cancellationToken);
+        var response = await getAuthorService.HandleAsync(query, cancellationToken);
         if (response is not null)
         {
             var result = new GetBookResponse(response.Book);

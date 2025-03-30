@@ -44,6 +44,32 @@
           }
         }
       },
+      "delete": {
+        "tags": [
+          "Books"
+        ],
+        "summary": "Delete a Book.",
+        "operationId": "DeleteBook",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
       "post": {
         "tags": [
           "Books"
@@ -80,41 +106,6 @@
                 }
               }
             }
-          }
-        }
-      }
-    },
-    "/v1/books/bookAuthors": {
-      "get": {
-        "tags": [
-          "Books"
-        ],
-        "summary": "Get a Book and its author(s).",
-        "operationId": "GetBookAuthors",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GetBookAuthorsResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found"
           }
         }
       }
@@ -410,24 +401,6 @@
         "properties": {
           "author": {
             "$ref": "#/components/schemas/Author"
-          }
-        }
-      },
-      "GetBookAuthorsResponse": {
-        "required": [
-          "book",
-          "authors"
-        ],
-        "type": "object",
-        "properties": {
-          "book": {
-            "$ref": "#/components/schemas/Book"
-          },
-          "authors": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Author"
-            }
           }
         }
       },
