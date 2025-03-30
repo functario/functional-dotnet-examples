@@ -97,6 +97,16 @@
               }
             }
           },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorNotFoundResponse"
+                }
+              }
+            }
+          },
           "409": {
             "description": "Conflict",
             "content": {
@@ -361,6 +371,26 @@
         "properties": {
           "author": {
             "$ref": "#/components/schemas/Author"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "AuthorNotFoundResponse": {
+        "required": [
+          "book",
+          "authorId"
+        ],
+        "type": "object",
+        "properties": {
+          "book": {
+            "$ref": "#/components/schemas/Book"
+          },
+          "authorId": {
+            "type": "integer",
+            "format": "int64"
           },
           "message": {
             "type": "string",

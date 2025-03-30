@@ -20,7 +20,11 @@ internal sealed class AddBookEndpoint : IAddBookEndpoint
     }
 
     public async Task<
-        Results<Created<AddBookResponse>, Conflict<BookAlreadyExistsResponse>>
+        Results<
+            Created<AddBookResponse>,
+            NotFound<AuthorNotFoundResponse>,
+            Conflict<BookAlreadyExistsResponse>
+        >
     > HandleAsync(
         [FromServices] IAddBookService addBookService,
         LinkGenerator linkGenerator,
@@ -45,6 +49,10 @@ internal sealed class AddBookEndpoint : IAddBookEndpoint
             )!;
 
             return TypedResults.Created(uri, result);
+        }
+        catch (EntityNotFoundException e)
+        {
+            return TypedResults.NotFound(new AuthorNotFoundResponse(request.ToCreatedBook(), e.Id));
         }
         catch (AuthorAlreadyExistsException)
         {

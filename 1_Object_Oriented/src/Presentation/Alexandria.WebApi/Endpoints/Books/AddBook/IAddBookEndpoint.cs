@@ -7,7 +7,13 @@ namespace Alexandria.WebApi.Endpoints.Books.AddBook;
 
 internal interface IAddBookEndpoint : IGroupedEndpoint<BooksGroup>
 {
-    Task<Results<Created<AddBookResponse>, Conflict<BookAlreadyExistsResponse>>> HandleAsync(
+    Task<
+        Results<
+            Created<AddBookResponse>,
+            NotFound<AuthorNotFoundResponse>,
+            Conflict<BookAlreadyExistsResponse>
+        >
+    > HandleAsync(
         [FromServices] IAddBookService addBookService,
         LinkGenerator linkGenerator,
         HttpContext httpContext,

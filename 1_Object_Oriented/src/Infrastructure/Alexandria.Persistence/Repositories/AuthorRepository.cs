@@ -30,11 +30,11 @@ internal sealed class AuthorRepository : IAuthorRepository
 
     public async Task<long> DeleteAuthorAsync(long authorId, CancellationToken cancellationToken)
     {
-        var deletedRow = await _alexandriaDbContext
+        var deletedRows = await _alexandriaDbContext
             .Authors.Where(b => b.Id == authorId)
             .ExecuteDeleteAsync(cancellationToken);
 
-        return deletedRow switch
+        return deletedRows switch
         {
             0 => throw new EntityNotFoundException(authorId),
             1 => authorId,
