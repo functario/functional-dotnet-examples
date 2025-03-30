@@ -17,10 +17,10 @@ namespace CleanArchitecture.WebAPI.Client.Models
         /// <summary>The book property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public global::CleanArchitecture.WebAPI.Client.Models.BookDto? Book { get; set; }
+        public global::CleanArchitecture.WebAPI.Client.Models.Book? Book { get; set; }
 #nullable restore
 #else
-        public global::CleanArchitecture.WebAPI.Client.Models.BookDto Book { get; set; }
+        public global::CleanArchitecture.WebAPI.Client.Models.Book Book { get; set; }
 #endif
         /// <summary>
         /// Instantiates a new <see cref="global::CleanArchitecture.WebAPI.Client.Models.AddBookResponse"/> and sets the default values.
@@ -47,7 +47,7 @@ namespace CleanArchitecture.WebAPI.Client.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
-                { "book", n => { Book = n.GetObjectValue<global::CleanArchitecture.WebAPI.Client.Models.BookDto>(global::CleanArchitecture.WebAPI.Client.Models.BookDto.CreateFromDiscriminatorValue); } },
+                { "book", n => { Book = n.GetObjectValue<global::CleanArchitecture.WebAPI.Client.Models.Book>(global::CleanArchitecture.WebAPI.Client.Models.Book.CreateFromDiscriminatorValue); } },
             };
         }
         /// <summary>
@@ -57,7 +57,7 @@ namespace CleanArchitecture.WebAPI.Client.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             _ = writer ?? throw new ArgumentNullException(nameof(writer));
-            writer.WriteObjectValue<global::CleanArchitecture.WebAPI.Client.Models.BookDto>("book", Book);
+            writer.WriteObjectValue<global::CleanArchitecture.WebAPI.Client.Models.Book>("book", Book);
             writer.WriteAdditionalData(AdditionalData);
         }
     }

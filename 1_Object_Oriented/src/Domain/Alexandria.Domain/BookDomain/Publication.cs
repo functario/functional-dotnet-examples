@@ -2,25 +2,17 @@
 
 public class Publication
 {
-    public Publication(long id, DateTimeOffset publicationDate, ICollection<long> authorsIds)
+    public Publication(long id, DateTimeOffset publicationDate)
     {
         Id = id;
         PublicationDate = publicationDate;
-        AuthorsIds = authorsIds;
     }
 
     public long Id { get; }
-    public DateTimeOffset PublicationDate { get; }
-    public ICollection<long> AuthorsIds { get; }
+    public DateTimeOffset PublicationDate { get; private set; }
 
-    public static Publication CreateTransient(
-        DateTimeOffset publicationDate,
-        ICollection<long> authorsIds
-    )
+    public static Publication CreateTransient(DateTimeOffset publicationDate)
     {
-        ArgumentNullException.ThrowIfNull(authorsIds, nameof(authorsIds));
-        return authorsIds.Count == 0
-            ? throw new ArgumentException($"'{nameof(authorsIds)}' cannot be empty.")
-            : new Publication(0, publicationDate, authorsIds);
+        return new Publication(0, publicationDate);
     }
 }

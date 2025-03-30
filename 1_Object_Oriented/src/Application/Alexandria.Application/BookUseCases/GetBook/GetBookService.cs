@@ -4,19 +4,19 @@ namespace Alexandria.Application.BookUseCases.GetBook;
 
 internal sealed class GetBookService : IGetBookService
 {
-    private readonly IBookRepository _authorRepository;
+    private readonly IBookRepository _bookRepository;
 
     public GetBookService(IBookRepository bookRepository)
     {
-        _authorRepository = bookRepository;
+        _bookRepository = bookRepository;
     }
 
-    public async Task<GetBookResult?> Handle(
-        GetBookQuery request,
+    public async Task<GetBookResult?> HandleAsync(
+        GetBookQuery query,
         CancellationToken cancellationToken
     )
     {
-        var bookFound = await _authorRepository.GetBookDtoAsync(request.BookId, cancellationToken);
+        var bookFound = await _bookRepository.GetBookAsync(query.BookId, cancellationToken);
         return bookFound is not null ? new GetBookResult(bookFound) : null;
     }
 }

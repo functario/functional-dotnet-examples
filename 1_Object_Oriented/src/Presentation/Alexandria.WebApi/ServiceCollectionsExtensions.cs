@@ -2,6 +2,7 @@
 using Alexandria.Application;
 using Alexandria.Persistence;
 using Alexandria.WebApi.Supports.EndpointMapper;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using WellKnowns.Exceptions;
 using WellKnowns.Presentation.AlexandriaWebApi;
 
@@ -19,7 +20,14 @@ internal static class ServiceCollectionsExtensions
             .AddLighthousePersistence(context)
             .AddAlexandriaApplication(context)
             .AddEndpointsApiExplorer()
+            .WithTimeProvider()
             .WithOpenApi();
+    }
+
+    internal static IServiceCollection WithTimeProvider(this IServiceCollection services)
+    {
+        services.TryAddSingleton<TimeProvider>(x => TimeProvider.System);
+        return services;
     }
 
     internal static IServiceCollection WithOpenApi(this IServiceCollection services)

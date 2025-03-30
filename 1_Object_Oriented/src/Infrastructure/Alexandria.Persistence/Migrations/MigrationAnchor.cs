@@ -1,3 +1,3 @@
 ﻿namespace Alexandria.Persistence.Migrations;
 
-public static class MigrationMarker { }
+public static class MigrationAnchor { }

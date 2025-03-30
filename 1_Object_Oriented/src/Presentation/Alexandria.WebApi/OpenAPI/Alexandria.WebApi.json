@@ -44,6 +44,32 @@
           }
         }
       },
+      "delete": {
+        "tags": [
+          "Books"
+        ],
+        "summary": "Delete a Book.",
+        "operationId": "DeleteBook",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
       "post": {
         "tags": [
           "Books"
@@ -67,6 +93,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/AddBookResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorNotFoundResponse"
                 }
               }
             }
@@ -112,6 +148,32 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Authors"
+        ],
+        "summary": "Delete an Author.",
+        "operationId": "DeleteAuthor",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
           },
           "404": {
             "description": "Not Found"
@@ -172,7 +234,7 @@
             "required": true,
             "schema": {
               "type": "integer",
-              "format": "uint64"
+              "format": "int64"
             }
           }
         ],
@@ -265,7 +327,7 @@
         "type": "object",
         "properties": {
           "book": {
-            "$ref": "#/components/schemas/BookDto"
+            "$ref": "#/components/schemas/Book"
           }
         }
       },
@@ -316,35 +378,23 @@
           }
         }
       },
-      "AuthorDto": {
+      "AuthorNotFoundResponse": {
         "required": [
-          "id",
-          "firstName",
-          "middleNames",
-          "lastName",
-          "birthDate"
+          "book",
+          "authorId"
         ],
         "type": "object",
         "properties": {
-          "id": {
+          "book": {
+            "$ref": "#/components/schemas/Book"
+          },
+          "authorId": {
             "type": "integer",
             "format": "int64"
           },
-          "firstName": {
-            "type": "string"
-          },
-          "middleNames": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "lastName": {
-            "type": "string"
-          },
-          "birthDate": {
+          "message": {
             "type": "string",
-            "format": "date-time"
+            "nullable": true
           }
         }
       },
@@ -352,7 +402,8 @@
         "required": [
           "id",
           "title",
-          "publication"
+          "publication",
+          "authorsIds"
         ],
         "type": "object",
         "properties": {
@@ -365,6 +416,13 @@
           },
           "publication": {
             "$ref": "#/components/schemas/Publication"
+          },
+          "authorsIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
           }
         }
       },
@@ -380,26 +438,6 @@
           "message": {
             "type": "string",
             "nullable": true
-          }
-        }
-      },
-      "BookDto": {
-        "required": [
-          "id",
-          "title",
-          "publication"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "title": {
-            "type": "string"
-          },
-          "publication": {
-            "$ref": "#/components/schemas/PublicationDto"
           }
         }
       },
@@ -429,15 +467,14 @@
         "type": "object",
         "properties": {
           "book": {
-            "$ref": "#/components/schemas/BookDto"
+            "$ref": "#/components/schemas/Book"
           }
         }
       },
       "Publication": {
         "required": [
           "id",
-          "publicationDate",
-          "authorsIds"
+          "publicationDate"
         ],
         "type": "object",
         "properties": {
@@ -448,37 +485,6 @@
           "publicationDate": {
             "type": "string",
             "format": "date-time"
-          },
-          "authorsIds": {
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        }
-      },
-      "PublicationDto": {
-        "required": [
-          "id",
-          "publicationDate",
-          "authors"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "publicationDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "authors": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/AuthorDto"
-            }
           }
         }
       }

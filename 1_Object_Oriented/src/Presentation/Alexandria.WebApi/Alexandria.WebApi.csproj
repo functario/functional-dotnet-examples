@@ -10,6 +10,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Endpoints\Books\AddBook\Models\**" />
+    <Content Remove="Endpoints\Books\AddBook\Models\**" />
+    <EmbeddedResource Remove="Endpoints\Books\AddBook\Models\**" />
+    <None Remove="Endpoints\Books\AddBook\Models\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Azure.Identity" />
     <PackageReference Include="dotenv.net" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
@@ -39,7 +46,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Endpoints\Books\AddBook\Models\" />
     <Folder Include="OpenAPI\" />
   </ItemGroup>
 

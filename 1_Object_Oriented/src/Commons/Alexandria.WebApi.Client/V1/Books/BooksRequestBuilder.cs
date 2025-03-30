@@ -34,6 +34,23 @@ namespace CleanArchitecture.WebAPI.Client.V1.Books
         {
         }
         /// <summary>
+        /// Delete a Book.
+        /// </summary>
+        /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
+        /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public async Task DeleteAsync(Action<RequestConfiguration<global::CleanArchitecture.WebAPI.Client.V1.Books.BooksRequestBuilder.BooksRequestBuilderDeleteQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        {
+#nullable restore
+#else
+        public async Task DeleteAsync(Action<RequestConfiguration<global::CleanArchitecture.WebAPI.Client.V1.Books.BooksRequestBuilder.BooksRequestBuilderDeleteQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        {
+#endif
+            var requestInfo = ToDeleteRequestInformation(requestConfiguration);
+            await RequestAdapter.SendNoContentAsync(requestInfo, default, cancellationToken).ConfigureAwait(false);
+        }
+        /// <summary>
         /// Get a Book.
         /// </summary>
         /// <returns>A <see cref="global::CleanArchitecture.WebAPI.Client.Models.GetBookResponse"/></returns>
@@ -58,6 +75,7 @@ namespace CleanArchitecture.WebAPI.Client.V1.Books
         /// <param name="body">The request body</param>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
+        /// <exception cref="global::CleanArchitecture.WebAPI.Client.Models.AuthorNotFoundResponse">When receiving a 404 status code</exception>
         /// <exception cref="global::CleanArchitecture.WebAPI.Client.Models.BookAlreadyExistsResponse">When receiving a 409 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -72,9 +90,28 @@ namespace CleanArchitecture.WebAPI.Client.V1.Books
             var requestInfo = ToPostRequestInformation(body, requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
+                { "404", global::CleanArchitecture.WebAPI.Client.Models.AuthorNotFoundResponse.CreateFromDiscriminatorValue },
                 { "409", global::CleanArchitecture.WebAPI.Client.Models.BookAlreadyExistsResponse.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::CleanArchitecture.WebAPI.Client.Models.AddBookResponse>(requestInfo, global::CleanArchitecture.WebAPI.Client.Models.AddBookResponse.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
+        }
+        /// <summary>
+        /// Delete a Book.
+        /// </summary>
+        /// <returns>A <see cref="RequestInformation"/></returns>
+        /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public RequestInformation ToDeleteRequestInformation(Action<RequestConfiguration<global::CleanArchitecture.WebAPI.Client.V1.Books.BooksRequestBuilder.BooksRequestBuilderDeleteQueryParameters>>? requestConfiguration = default)
+        {
+#nullable restore
+#else
+        public RequestInformation ToDeleteRequestInformation(Action<RequestConfiguration<global::CleanArchitecture.WebAPI.Client.V1.Books.BooksRequestBuilder.BooksRequestBuilderDeleteQueryParameters>> requestConfiguration = default)
+        {
+#endif
+            var requestInfo = new RequestInformation(Method.DELETE, UrlTemplate, PathParameters);
+            requestInfo.Configure(requestConfiguration);
+            return requestInfo;
         }
         /// <summary>
         /// Get a Book.
@@ -125,6 +162,23 @@ namespace CleanArchitecture.WebAPI.Client.V1.Books
         public global::CleanArchitecture.WebAPI.Client.V1.Books.BooksRequestBuilder WithUrl(string rawUrl)
         {
             return new global::CleanArchitecture.WebAPI.Client.V1.Books.BooksRequestBuilder(rawUrl, RequestAdapter);
+        }
+        /// <summary>
+        /// Delete a Book.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
+        public partial class BooksRequestBuilderDeleteQueryParameters 
+        {
+            [QueryParameter("id")]
+            public long? Id { get; set; }
+        }
+        /// <summary>
+        /// Configuration for the request such as headers, query parameters, and middleware options.
+        /// </summary>
+        [Obsolete("This class is deprecated. Please use the generic RequestConfiguration class generated by the generator.")]
+        [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
+        public partial class BooksRequestBuilderDeleteRequestConfiguration : RequestConfiguration<global::CleanArchitecture.WebAPI.Client.V1.Books.BooksRequestBuilder.BooksRequestBuilderDeleteQueryParameters>
+        {
         }
         /// <summary>
         /// Get a Book.

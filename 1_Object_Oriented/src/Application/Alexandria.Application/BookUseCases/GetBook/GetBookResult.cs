@@ -1,5 +1,5 @@
-﻿using Alexandria.Application.Abstractions.DTOs;
+﻿using Alexandria.Domain.BookDomain;
 
 namespace Alexandria.Application.BookUseCases.GetBook;
 
-public sealed record GetBookResult(BookDto Book) { }
+public sealed record GetBookResult(Book Book) { }

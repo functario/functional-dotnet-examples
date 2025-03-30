@@ -14,7 +14,7 @@ internal class GetAccountEndpoint : IGetAccountEndpoint
     }
 
     public async Task<Results<Ok<GetAccountResponse>, NoContent>> HandleAsync(
-        [FromQuery] ulong id,
+        [FromQuery] long id,
         CancellationToken cancellationToken
     )
     {

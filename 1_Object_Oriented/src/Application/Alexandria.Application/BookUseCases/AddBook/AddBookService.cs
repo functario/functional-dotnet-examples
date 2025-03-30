@@ -1,6 +1,5 @@
-﻿//using Alexandria.Application.Abstractions.DTOs;
-using Alexandria.Application.Abstractions.DTOs;
-using Alexandria.Application.Abstractions.Repositories;
+﻿using Alexandria.Application.Abstractions.Repositories;
+using Alexandria.Application.Abstractions.Repositories.Exceptions;
 using Alexandria.Domain.BookDomain;
 
 namespace Alexandria.Application.BookUseCases.AddBook;
@@ -22,40 +21,45 @@ public sealed class AddBookService : IAddBookService
         _unitOfWork = unitOfWork;
     }
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Style",
-        "IDE0059:Unnecessary assignment of a value",
-        Justification = "<Pending>"
-    )]
-    public async Task<AddBookResult> Handle(
-        AddBookCommand request,
+    public async Task<AddBookResult> HandleAsync(
+        AddBookCommand command,
         CancellationToken cancellationToken
     )
     {
-        ArgumentNullException.ThrowIfNull(request, nameof(request));
-        var transientPublication = Publication.CreateTransient(
-            request.PublicationDate,
-            request.AuthorsIds
-        );
+        ArgumentNullException.ThrowIfNull(command, nameof(command));
+        var transientPublication = Publication.CreateTransient(command.PublicationDate);
 
-        // Create Book and related Publication
-        var transientBook = Book.CreateTransient(request.Title, transientPublication);
-        var bookFunc = await _bookRepository.CreateBookAsync(transientBook, cancellationToken);
+        async Task<AddBookResult> Transaction(IUnitOfWork unitOfWork, CancellationToken ct)
+        {
+            // Example of monolithic implementation where we need to valide if
+            // the Author exist before adding the book.
+            // A better approach could be to use mediatr to keep the events sequences
+            // but with handling abstraction.
+            foreach (var authorId in command.AuthorsIds)
+            {
+                var author =
+                    await _authorRepository.GetAuthorAsync(authorId, cancellationToken)
+                    ?? throw new EntityNotFoundException(authorId);
+            }
 
-        // Note: The Many-to-Many relation between Publication and Author
-        // is created via an overload of SaveChangeAsync.
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+            // Create Book and related Publication
+            var transientBook = Book.CreateTransient(
+                command.Title,
+                transientPublication,
+                command.AuthorsIds
+            );
 
-        // Get book with information from database.
-        var book = bookFunc();
+            var bookTracker = await _bookRepository.CreateBookAsync(
+                transientBook,
+                cancellationToken
+            );
 
-        // Create the response.
-        var authors = await _authorRepository.FindAuthorsAsync(
-            book.Publication.AuthorsIds,
-            cancellationToken
-        );
+            await unitOfWork.SaveChangesAsync(cancellationToken);
 
-        var response = new AddBookResult(book.AsDto(authors));
-        return response;
+            var response = new AddBookResult(bookTracker());
+            return response;
+        }
+
+        return await _unitOfWork.ExecuteTransactionAsync(Transaction, cancellationToken);
     }
 }

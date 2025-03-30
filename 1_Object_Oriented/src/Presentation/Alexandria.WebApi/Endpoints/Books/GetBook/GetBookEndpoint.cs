@@ -1,5 +1,5 @@
-﻿using Alexandria.Application.Abstractions.DTOs;
-using Alexandria.Application.BookUseCases.GetBook;
+﻿using Alexandria.Application.BookUseCases.GetBook;
+using Alexandria.Domain.BookDomain;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,11 +7,11 @@ namespace Alexandria.WebApi.Endpoints.Books.GetBook;
 
 internal sealed class GetBookEndpoint : IGetBookEndpoint
 {
-    public const string GetBookName = "GetBook";
+    public const string EndpointName = "GetBook";
 
     public void Map(IEndpointRouteBuilder endpointBuilder)
     {
-        endpointBuilder.MapGet("/", HandleAsync).WithSummary($"Get a Book.").WithName(GetBookName);
+        endpointBuilder.MapGet("/", HandleAsync).WithSummary($"Get a Book.").WithName(EndpointName);
     }
 
     public async Task<Results<Ok<GetBookResponse>, NotFound>> HandleAsync(
@@ -21,7 +21,7 @@ internal sealed class GetBookEndpoint : IGetBookEndpoint
     )
     {
         var query = new GetBookQuery(id);
-        var response = await getAuthorService.Handle(query, cancellationToken);
+        var response = await getAuthorService.HandleAsync(query, cancellationToken);
         if (response is not null)
         {
             var result = new GetBookResponse(response.Book);
@@ -31,11 +31,5 @@ internal sealed class GetBookEndpoint : IGetBookEndpoint
         return TypedResults.NotFound();
     }
 
-    /// <summary>
-    /// Returns a query object value to use with <see cref="LinkGenerator"/>
-    /// to create the location URI.
-    /// </summary>
-    /// <param name="book">The author to query.</param>
-    /// <returns>The query object value.</returns>
-    internal static object QueryObjectValue(BookDto book) => new { id = book.Id };
+    internal static object QueryObjectValue(Book book) => new { id = book.Id };
 }

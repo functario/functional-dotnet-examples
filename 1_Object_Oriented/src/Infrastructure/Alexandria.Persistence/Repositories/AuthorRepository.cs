@@ -1,18 +1,18 @@
 ﻿using Alexandria.Application.Abstractions.Repositories;
+using Alexandria.Application.Abstractions.Repositories.Exceptions;
 using Alexandria.Domain.AuthorDomain;
-using Alexandria.Persistence.Models;
+using Alexandria.Persistence.Modules.Authors.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Alexandria.Persistence.Repositories;
 
 internal sealed class AuthorRepository : IAuthorRepository
 {
     private readonly AlexandriaDbContext _alexandriaDbContext;
-    private readonly TimeProvider _timeProvider;
 
-    public AuthorRepository(AlexandriaDbContext alexandriaDbContext, TimeProvider timeProvider)
+    public AuthorRepository(AlexandriaDbContext alexandriaDbContext)
     {
         _alexandriaDbContext = alexandriaDbContext;
-        _timeProvider = timeProvider;
     }
 
     public async Task<Func<Author>> CreateAuthorAsync(
@@ -20,18 +20,26 @@ internal sealed class AuthorRepository : IAuthorRepository
         CancellationToken cancellationToken
     )
     {
-        var creationDate = _timeProvider.GetUtcNow();
         var result = await _alexandriaDbContext.Authors.AddAsync(
-            author.ToNewModel(creationDate),
+            author.ToNewModel(),
             cancellationToken
         );
 
         return result.Entity.ToDomain;
     }
 
-    public Task<Author> DeleteAuthorAsync(long authorId, CancellationToken cancellationToken)
+    public async Task<long> DeleteAuthorAsync(long authorId, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var deletedRows = await _alexandriaDbContext
+            .Authors.Where(b => b.Id == authorId)
+            .ExecuteDeleteAsync(cancellationToken);
+
+        return deletedRows switch
+        {
+            0 => throw new EntityNotFoundException(authorId),
+            1 => authorId,
+            _ => throw new InvalidOperationException(),
+        };
     }
 
     public async Task<Author?> GetAuthorAsync(long authorId, CancellationToken cancellationToken)

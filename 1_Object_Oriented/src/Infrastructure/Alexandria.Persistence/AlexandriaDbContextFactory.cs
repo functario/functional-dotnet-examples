@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using WellKnowns.Infrastructure.SQL;
 
 namespace Alexandria.Persistence;
@@ -28,6 +29,38 @@ internal class AlexandriaDbContextFactory : IDesignTimeDbContextFactory<Alexandr
         context.Database.Migrate();
     }
 
+    /// <summary>
+    /// Configures DbContextOptionsBuilder.
+    /// </summary>
+    /// <param name="optionsBuilder">The DbContextOptionsBuilder.</param>
+    /// <param name="sqlConnectionString">The SQL ConnectionString.</param>
+    /// <param name="interceptorps">The interceptors. Only required for runtime. Uncessary when creating migrations.</param>
+    /// <returns>The configured DbContextOptionsBuilder.</returns>
+    public static DbContextOptionsBuilder ConfigureDbContextOptionsBuilder(
+        DbContextOptionsBuilder optionsBuilder,
+        string sqlConnectionString,
+        params IInterceptor[] interceptorps
+    )
+    {
+        // The connection string comming from Aspire could miss the DataBase name depending when it is resolved.
+        // if it is missing, the configuration will be on "master" db
+        // but later operations will be on "alexandria" once migrations are applied.
+        sqlConnectionString = EnforceDatabaseName(sqlConnectionString);
+
+        optionsBuilder
+            .UseSqlServer(
+                sqlConnectionString,
+                x =>
+                    x.MigrationsHistoryTable(
+                        SqldbConstants.SQLDbMigrationTable,
+                        SqldbConstants.SQLDbDefaultSchema
+                    )
+            )
+            .AddInterceptors(interceptorps);
+
+        return optionsBuilder;
+    }
+
     private static string EnforceDatabaseName(string sqlConnectionString)
     {
         ArgumentNullException.ThrowIfNullOrWhiteSpace(
@@ -41,27 +74,5 @@ internal class AlexandriaDbContextFactory : IDesignTimeDbContextFactory<Alexandr
         return sqlConnectionString.Contains(databaseSegment, StringComparison.OrdinalIgnoreCase)
             ? sqlConnectionString
             : $"{sqlConnectionString};{databaseSegment}";
-    }
-
-    public static DbContextOptionsBuilder ConfigureDbContextOptionsBuilder(
-        DbContextOptionsBuilder optionsBuilder,
-        string sqlConnectionString
-    )
-    {
-        // The connection string comming from Aspire could miss the DataBase name depending when it is resolved.
-        // if it is missing, the configuration will be on "master" db
-        // but later operations will be on "alexandria" once migrations are applied.
-        sqlConnectionString = EnforceDatabaseName(sqlConnectionString);
-
-        optionsBuilder.UseSqlServer(
-            sqlConnectionString,
-            x =>
-                x.MigrationsHistoryTable(
-                    SqldbConstants.SQLDbMigrationTable,
-                    SqldbConstants.SQLDbDefaultSchema
-                )
-        );
-
-        return optionsBuilder;
     }
 }

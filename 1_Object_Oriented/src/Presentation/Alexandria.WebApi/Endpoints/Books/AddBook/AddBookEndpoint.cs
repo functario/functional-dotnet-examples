@@ -9,18 +9,22 @@ namespace Alexandria.WebApi.Endpoints.Books.AddBook;
 
 internal sealed class AddBookEndpoint : IAddBookEndpoint
 {
-    public const string PostBookName = "PostBook";
+    public const string EndpointName = "PostBook";
 
     public void Map(IEndpointRouteBuilder endpointBuilder)
     {
         endpointBuilder
             .MapPost("/", HandleAsync)
             .WithSummary($"Add a Book.")
-            .WithName(PostBookName);
+            .WithName(EndpointName);
     }
 
     public async Task<
-        Results<Created<AddBookResponse>, Conflict<BookAlreadyExistsResponse>>
+        Results<
+            Created<AddBookResponse>,
+            NotFound<AuthorNotFoundResponse>,
+            Conflict<BookAlreadyExistsResponse>
+        >
     > HandleAsync(
         [FromServices] IAddBookService addBookService,
         LinkGenerator linkGenerator,
@@ -36,15 +40,19 @@ internal sealed class AddBookEndpoint : IAddBookEndpoint
         );
         try
         {
-            var response = await addBookService.Handle(command, cancellationToken);
+            var response = await addBookService.HandleAsync(command, cancellationToken);
             var result = new AddBookResponse(response.Book);
             var uri = linkGenerator.GetLocationUri(
                 httpContext,
-                GetBookEndpoint.GetBookName,
+                GetBookEndpoint.EndpointName,
                 GetBookEndpoint.QueryObjectValue(result.Book)
             )!;
 
             return TypedResults.Created(uri, result);
+        }
+        catch (EntityNotFoundException e)
+        {
+            return TypedResults.NotFound(new AuthorNotFoundResponse(request.ToCreatedBook(), e.Id));
         }
         catch (AuthorAlreadyExistsException)
         {
