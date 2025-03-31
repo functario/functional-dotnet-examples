@@ -28,7 +28,7 @@ internal static class TestConfiguration
     {
         var migration = builder
             .AddProject<Projects.Alexandria_Migration>("migration")
-            .WithEnvironment(SqldbEnvVars.SQLConnectionString, () => SqlConnectionString(sqlServer))
+            .WithEnvironment(context => SetSqlConnectionStringEnvVar(context, sqlServer.Resource))
             .WithReference(sqldb)
             .WaitFor(sqldb);
 
@@ -45,7 +45,7 @@ internal static class TestConfiguration
         builder
             .AddProject<Projects.Alexandria_WebApi>(WebApiProjectReferences.ProjectName)
             .WithEndpoint()
-            .WithEnvironment(SqldbEnvVars.SQLConnectionString, () => SqlConnectionString(sqlServer))
+            .WithEnvironment(context => SetSqlConnectionStringEnvVar(context, sqlServer.Resource))
             .WithReference(sqldb)
             .WaitFor(sqldb)
             .WaitForCompletion(migration);
@@ -53,22 +53,12 @@ internal static class TestConfiguration
         return builder;
     }
 
-#pragma warning disable CA2012 // Use ValueTasks correctly
-    private static string SqlConnectionString(IResourceBuilder<SqlServerServerResource> sqlServer)
-    {
-        var awaiter = sqlServer.Resource.GetConnectionStringAsync().GetAwaiter();
-        while (!awaiter.IsCompleted)
-        {
-            Thread.Sleep(10);
-        }
-
-        var connectionString = awaiter.GetResult();
-        return connectionString is null
-            ? throw new InvalidOperationException("Could not retrieve SQL ConnectionString")
-            : EnforceDatabaseName(connectionString)
-                ?? throw new InvalidOperationException("ConnectionString not found");
-#pragma warning restore CA2012 // Use ValueTasks correctly
-    }
+    private static void SetSqlConnectionStringEnvVar(
+        EnvironmentCallbackContext context,
+        IResourceWithConnectionString resource
+    ) =>
+        context.EnvironmentVariables[SqldbEnvVars.SQLConnectionString] =
+            new ConnectionStringReference(resource, false);
 
     private static (
         IResourceBuilder<SqlServerServerResource> sqlServer,
@@ -91,20 +81,5 @@ internal static class TestConfiguration
 
         var sqldb = sqlServer.AddDatabase(dbName);
         return (sqlServer, sqldb);
-    }
-
-    private static string EnforceDatabaseName(string sqlConnectionString)
-    {
-        ArgumentNullException.ThrowIfNullOrWhiteSpace(
-            sqlConnectionString,
-            nameof(sqlConnectionString)
-        );
-
-        // Adding the name in the connection string
-        // replace the default name "master".
-        var databaseSegment = $"Database={SqldbConstants.SQLDbName}";
-        return sqlConnectionString.Contains(databaseSegment, StringComparison.OrdinalIgnoreCase)
-            ? sqlConnectionString
-            : $"{sqlConnectionString};{databaseSegment}";
     }
 }
