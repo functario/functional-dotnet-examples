@@ -6,10 +6,13 @@ using Alexandria.WebApi.Endpoints.Authors.GetAuthor;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using NSubstitute;
+using TestDefinitions.Traits;
 using VerifyDefault;
 
 namespace Alexandria.SociableTests.Tests.Authors;
 
+[Trait(SizeTraits.Size, SizeTraits.S)]
+[Trait(DomainTraits.Domain, DomainTraits.Author)]
 public class AddAuthorTests
 {
     private readonly IAddAuthorEndpoint _addAuthorEndpoint;

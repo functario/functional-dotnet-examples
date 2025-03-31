@@ -34,7 +34,6 @@
     <PackageReference Include="System.Drawing.Common" />
     <PackageReference Include="System.Formats.Asn1" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
-    <!--<PackageReference Include="System.Linq.AsyncEnumerable" />-->
     <PackageReference Include="xunit.v3" />
     <PackageReference Include="xunit.runner.visualstudio">
       <PrivateAssets>all</PrivateAssets>
@@ -45,6 +44,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Presentation\Alexandria.WebApi\Alexandria.WebApi.csproj" />
+    <ProjectReference Include="..\..\Supports\TestDefinitions\TestDefinitions.csproj" />
     <ProjectReference Include="..\..\Supports\VerifyDefault\VerifyDefault.csproj" />
   </ItemGroup>
 

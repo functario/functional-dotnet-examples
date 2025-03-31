@@ -4,10 +4,13 @@ using Alexandria.Domain.BookDomain;
 using Alexandria.SociableTests.Extensions;
 using Alexandria.WebApi.Endpoints.Authors.DeleteAuthor;
 using NSubstitute;
+using TestDefinitions.Traits;
 using VerifyDefault;
 
 namespace Alexandria.SociableTests.Tests.Authors;
 
+[Trait(SizeTraits.Size, SizeTraits.S)]
+[Trait(DomainTraits.Domain, DomainTraits.Author)]
 public class DeleteAuthorTests
 {
     private readonly IDeleteAuthorEndpoint _deleteAuthorEndpoint;
@@ -39,7 +42,6 @@ public class DeleteAuthorTests
     internal async Task Test1(ICollection<Book> books)
     {
         // Arrange
-        //_bookRepository.
         var authorId = 123;
         books = books
             .Select(b =>

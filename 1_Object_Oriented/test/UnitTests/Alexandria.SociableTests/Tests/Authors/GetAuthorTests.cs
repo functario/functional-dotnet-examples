@@ -3,10 +3,13 @@ using Alexandria.Application.AuthorUseCases.GetAuthor;
 using Alexandria.Domain.AuthorDomain;
 using Alexandria.WebApi.Endpoints.Authors.GetAuthor;
 using NSubstitute;
+using TestDefinitions.Traits;
 using VerifyDefault;
 
 namespace Alexandria.SociableTests.Tests.Authors;
 
+[Trait(SizeTraits.Size, SizeTraits.S)]
+[Trait(DomainTraits.Domain, DomainTraits.Author)]
 public class GetAuthorTests
 {
     private readonly IGetAuthorEndpoint _getAuthorEntpoint;
