@@ -13,18 +13,26 @@ internal sealed class AddAuthorService : IAddAuthorService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<AddAuthorResult> Handle(
+    public async Task<AddAuthorResult> HandleAsync(
         AddAuthorCommand command,
         CancellationToken cancellationToken
     )
     {
         var author = command?.Author;
         ArgumentNullException.ThrowIfNull(author, nameof(command.Author));
-        var getCreatedAuthor = await _authorRepository.CreateAuthorAsync(author, cancellationToken);
 
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
-        var createdAuthor = getCreatedAuthor();
-        var result = new AddAuthorResult(createdAuthor);
-        return result;
+        async Task<AddAuthorResult> TransactionAsync(IUnitOfWork unitOfWork, CancellationToken ct)
+        {
+            var getCreatedAuthor = await _authorRepository.CreateAuthorAsync(
+                author,
+                cancellationToken
+            );
+
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            var createdAuthor = getCreatedAuthor();
+            return new AddAuthorResult(createdAuthor);
+        }
+
+        return await _unitOfWork.ExecuteTransactionAsync(TransactionAsync, cancellationToken);
     }
 }

@@ -32,7 +32,7 @@ internal sealed class AddAuthorEndpoint : IAddAuthorEndpoint
         var command = new AddAuthorCommand(authorRequest.ToAuthor());
         try
         {
-            var response = await addAuthorService.Handle(command, cancellationToken);
+            var response = await addAuthorService.HandleAsync(command, cancellationToken);
             var result = new AddAuthorResponse(response.Author);
             var uri = linkGenerator.GetLocationUri(
                 httpContext,

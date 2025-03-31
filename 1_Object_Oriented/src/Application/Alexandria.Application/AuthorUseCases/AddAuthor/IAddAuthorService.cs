@@ -2,5 +2,8 @@
 
 public interface IAddAuthorService
 {
-    Task<AddAuthorResult> Handle(AddAuthorCommand command, CancellationToken cancellationToken);
+    Task<AddAuthorResult> HandleAsync(
+        AddAuthorCommand command,
+        CancellationToken cancellationToken
+    );
 }
