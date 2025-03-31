@@ -18,23 +18,15 @@ public class DeleteAuthorTests
     private readonly IAuthorRepository _authorRepository;
     private readonly IBookRepository _bookRepository;
 
-    private readonly IUnitOfWork _unitOfWork;
-
     public DeleteAuthorTests(WebAppServicesFactory webAppServicesFactory)
     {
-        (
-            _deleteAuthorEndpoint,
-            _deleteAuthorService,
-            _authorRepository,
-            _bookRepository,
-            _unitOfWork
-        ) = webAppServicesFactory.CreateServices<
-            IDeleteAuthorEndpoint,
-            IDeleteAuthorService,
-            IAuthorRepository,
-            IBookRepository,
-            IUnitOfWork
-        >();
+        (_deleteAuthorEndpoint, _deleteAuthorService, _authorRepository, _bookRepository) =
+            webAppServicesFactory.CreateServices<
+                IDeleteAuthorEndpoint,
+                IDeleteAuthorService,
+                IAuthorRepository,
+                IBookRepository
+            >();
     }
 
     [Theory(DisplayName = "Delete an existing Author by Id")]
@@ -62,8 +54,6 @@ public class DeleteAuthorTests
         _bookRepository
             .DeleteManyBookAsync(Arg.Any<ICollection<long>>(), Arg.Any<CancellationToken>())
             .Returns(books.Count);
-
-        _unitOfWork.SetExecuteTransactionAsync<DeleteAuthorResult>();
 
         // Act
         var sut = await _deleteAuthorEndpoint.HandleAsync(

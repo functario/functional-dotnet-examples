@@ -28,7 +28,10 @@ internal sealed class DeleteAuthorService : IDeleteAuthorService
         // directly handle the deletion of the corresponding book.
         // A better approach could be to use mediatr to keep the events sequences
         // but with handling abstraction.
-        async Task<DeleteAuthorResult> Transaction(IUnitOfWork unitOfWork, CancellationToken ct)
+        async Task<DeleteAuthorResult> TransactionAsync(
+            IUnitOfWork unitOfWork,
+            CancellationToken ct
+        )
         {
             // If a book contains only this Author it will be deleted.
             // Otherwise the caller must handle the book deletion before to Author ones.
@@ -60,6 +63,6 @@ internal sealed class DeleteAuthorService : IDeleteAuthorService
             return new DeleteAuthorResult(deletedAuthorId);
         }
 
-        return await _unitOfWork.ExecuteTransactionAsync(Transaction, cancellationToken);
+        return await _unitOfWork.ExecuteTransactionAsync(TransactionAsync, cancellationToken);
     }
 }
