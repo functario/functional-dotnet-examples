@@ -41,6 +41,10 @@ internal sealed class BookRepository : IBookRepository
         };
     }
 
+    // TODO:
+    // There is inconsistence
+    // with the returns being number of rows
+    // but the deleted Id in DeleteBookAsync
     public async Task<long> DeleteManyBookAsync(
         ICollection<long> booksIds,
         CancellationToken cancellationToken
@@ -71,7 +75,10 @@ internal sealed class BookRepository : IBookRepository
         return result?.ToDomain();
     }
 
-    // TODO: Validate performance. Is it better to use an async or sync query?
+    // TODO: Validate performance.
+    // There is no reason to return IAsyncEnumerable here
+    // since there is no real Async.
+    // But method keep in example until a real case can be used.
     public async IAsyncEnumerable<Book> GetManyBooksAuthorsAsync(
         ICollection<long> authorIds,
         [EnumeratorCancellation] CancellationToken cancellationToken

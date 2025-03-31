@@ -2,5 +2,8 @@
 
 public interface IDeleteBookService
 {
-    Task<DeleteBookResult> HandleAsync(DeleteBookQuery query, CancellationToken cancellationToken);
+    Task<DeleteBookResult> HandleAsync(
+        DeleteBookCommand command,
+        CancellationToken cancellationToken
+    );
 }

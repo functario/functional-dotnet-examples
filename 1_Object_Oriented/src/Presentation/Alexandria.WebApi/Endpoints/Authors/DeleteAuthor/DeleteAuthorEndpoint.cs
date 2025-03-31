@@ -24,7 +24,7 @@ internal sealed class DeleteAuthorEndpoint : IDeleteAuthorEndpoint
         CancellationToken cancellationToken
     )
     {
-        var query = new DeleteAuthorQuery(id);
+        var query = new DeleteAuthorCommand(id);
         try
         {
             var response = await deleteAuthorService.HandleAsync(query, cancellationToken);

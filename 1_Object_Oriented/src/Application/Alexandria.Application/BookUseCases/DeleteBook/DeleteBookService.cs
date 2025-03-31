@@ -5,18 +5,28 @@ namespace Alexandria.Application.BookUseCases.DeleteBook;
 internal sealed class DeleteBookService : IDeleteBookService
 {
     private readonly IBookRepository _bookRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public DeleteBookService(IBookRepository bookRepository)
+    public DeleteBookService(IBookRepository bookRepository, IUnitOfWork unitOfWork)
     {
         _bookRepository = bookRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<DeleteBookResult> HandleAsync(
-        DeleteBookQuery query,
+        DeleteBookCommand command,
         CancellationToken cancellationToken
     )
     {
-        var deletedBookId = await _bookRepository.DeleteBookAsync(query.BookId, cancellationToken);
-        return new DeleteBookResult(deletedBookId);
+        async Task<DeleteBookResult> Transaction(IUnitOfWork unitOfWork, CancellationToken ct)
+        {
+            var deletedBookId = await _bookRepository.DeleteBookAsync(
+                command.BookId,
+                cancellationToken
+            );
+            return new DeleteBookResult(deletedBookId);
+        }
+
+        return await _unitOfWork.ExecuteTransactionAsync(Transaction, cancellationToken);
     }
 }

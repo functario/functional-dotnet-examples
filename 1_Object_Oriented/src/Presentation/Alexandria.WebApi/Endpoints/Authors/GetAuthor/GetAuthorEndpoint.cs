@@ -24,7 +24,7 @@ internal sealed class GetAuthorEndpoint : IGetAuthorEndpoint
     )
     {
         var query = new GetAuthorQuery(id);
-        var response = await getAuthorService.Handle(query, cancellationToken);
+        var response = await getAuthorService.HandleAsync(query, cancellationToken);
         if (response is not null)
         {
             var result = new GetAuthorResponse(response.Author);

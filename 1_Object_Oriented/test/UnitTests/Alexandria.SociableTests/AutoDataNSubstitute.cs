@@ -7,10 +7,14 @@ namespace Alexandria.SociableTests;
 internal sealed class AutoDataNSubstitute : AutoDataAttribute
 {
     internal AutoDataNSubstitute()
-        : base(
-            () =>
-                new Fixture().Customize(
-                    new AutoNSubstituteCustomization() { ConfigureMembers = true }
-                )
-        ) { }
+        : base(() =>
+        {
+            var f = new Fixture();
+
+            var fixture = new Fixture().Customize(
+                new AutoNSubstituteCustomization() { ConfigureMembers = true }
+            );
+
+            return fixture;
+        }) { }
 }

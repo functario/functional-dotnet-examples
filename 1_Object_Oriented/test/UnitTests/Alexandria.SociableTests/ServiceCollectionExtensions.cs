@@ -25,15 +25,9 @@ internal static class ServiceCollectionExtensions
             // This ensure to isolate each tests.
             var webApplicationBuilder = WebApiStartup.CreateWebHostBuilder([]);
             webApplicationBuilder
-                .Services.RegisterRepositoryInWebApplicationAsMock()
-                .RegisterConcreteClassesAsInterfacesInWebApplication(
-                    typeof(IEndpoint),
-                    (implementedInterface, concreteImplementation) =>
-                        implementedInterface.Name.Contains(
-                            concreteImplementation.Name,
-                            StringComparison.OrdinalIgnoreCase
-                        )
-                );
+                .Services.RegisterUnitOfWorkInWebApplicationAsMock()
+                .RegisterRepositoryInWebApplicationAsMock()
+                .RegisterIEndpointsInWebApplicationAsMock();
 
             var app = WebApiStartup
                 .BuildWebAppAsync(webApplicationBuilder)
@@ -69,6 +63,41 @@ internal static class ServiceCollectionExtensions
         }
 
         return webApplicationServiceCollection;
+    }
+
+    private static IServiceCollection RegisterUnitOfWorkInWebApplicationAsMock(
+        this IServiceCollection webApplicationServiceCollection
+    )
+    {
+        var iUnitOfWork =
+            webApplicationServiceCollection.SingleOrDefault(s =>
+                typeof(IUnitOfWork).IsAssignableFrom(s.ServiceType)
+            )
+            ?? throw new InvalidOperationException(
+                $"Could not get IUnitOfWork single implementation."
+            );
+
+        webApplicationServiceCollection.Remove(iUnitOfWork);
+        webApplicationServiceCollection.AddScoped(
+            iUnitOfWork.ServiceType,
+            x => Substitute.For([iUnitOfWork.ServiceType], null)
+        );
+
+        return webApplicationServiceCollection;
+    }
+
+    private static IServiceCollection RegisterIEndpointsInWebApplicationAsMock(
+        this IServiceCollection webApplicationServiceCollection
+    )
+    {
+        return webApplicationServiceCollection.RegisterConcreteClassesAsInterfacesInWebApplication(
+            typeof(IEndpoint),
+            (implementedInterface, concreteImplementation) =>
+                implementedInterface.Name.Contains(
+                    concreteImplementation.Name,
+                    StringComparison.OrdinalIgnoreCase
+                )
+        );
     }
 
     /// <summary>

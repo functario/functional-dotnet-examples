@@ -3,10 +3,12 @@ using Alexandria.Local.IntegrationTests.Support;
 using CleanArchitecture.WebAPI.Client;
 using CleanArchitecture.WebAPI.Client.Models;
 using Microsoft.Kiota.Abstractions;
+using TestDefinitions.Traits;
 
 namespace Alexandria.Local.IntegrationTests.Tests.Authors;
 
-[Trait("Category", "Aspire")]
+[Trait(SizeTraits.Size, SizeTraits.L)]
+[Trait(DomainTraits.Domain, DomainTraits.Author)]
 [Collection(nameof(IntegratedTests))]
 public class AddAuthorTests3 : IAsyncLifetime
 {

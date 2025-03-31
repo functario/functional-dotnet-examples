@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoFixture.AutoNSubstitute" />
+    <PackageReference Include="AutoFixture.SeedExtensions" />
     <PackageReference Include="AutoFixture.Xunit3" />
     <PackageReference Include="AwesomeAssertions" />
     <PackageReference Include="Azure.Identity" />
@@ -43,6 +44,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Presentation\Alexandria.WebApi\Alexandria.WebApi.csproj" />
+    <ProjectReference Include="..\..\Supports\TestDefinitions\TestDefinitions.csproj" />
+    <ProjectReference Include="..\..\Supports\VerifyDefault\VerifyDefault.csproj" />
   </ItemGroup>
 
 </Project>

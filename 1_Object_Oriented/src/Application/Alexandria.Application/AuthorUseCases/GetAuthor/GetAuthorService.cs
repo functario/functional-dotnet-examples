@@ -11,7 +11,7 @@ internal sealed class GetAuthorService : IGetAuthorService
         _authorRepository = authorRepository;
     }
 
-    public async Task<GetAuthorResult?> Handle(
+    public async Task<GetAuthorResult?> HandleAsync(
         GetAuthorQuery query,
         CancellationToken cancellationToken
     )

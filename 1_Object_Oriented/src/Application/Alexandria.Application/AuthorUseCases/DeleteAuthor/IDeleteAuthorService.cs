@@ -3,7 +3,7 @@
 public interface IDeleteAuthorService
 {
     Task<DeleteAuthorResult> HandleAsync(
-        DeleteAuthorQuery query,
+        DeleteAuthorCommand command,
         CancellationToken cancellationToken
     );
 }
