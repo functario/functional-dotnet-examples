@@ -41,6 +41,10 @@ internal sealed class BookRepository : IBookRepository
         };
     }
 
+    // TODO:
+    // There is inconsistence
+    // with the returns being number of rows
+    // but the deleted Id in DeleteBookAsync
     public async Task<long> DeleteManyBookAsync(
         ICollection<long> booksIds,
         CancellationToken cancellationToken

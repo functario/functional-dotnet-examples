@@ -32,6 +32,7 @@
     <ProjectReference Include="..\..\..\src\Commons\Alexandria.SQLSeeding\Alexandria.SQLSeeding.csproj" />
     <ProjectReference Include="..\..\..\src\Commons\Alexandria.WebApi.Client\Alexandria.WebApi.Client.csproj" />
     <ProjectReference Include="..\..\..\src\Commons\WellKnowns\WellKnowns.csproj" />
+    <ProjectReference Include="..\..\Supports\VerifyDefault\VerifyDefault.csproj" />
   </ItemGroup>
 
 </Project>

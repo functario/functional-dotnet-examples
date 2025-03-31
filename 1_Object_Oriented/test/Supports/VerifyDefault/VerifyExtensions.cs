@@ -1,7 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
-namespace Alexandria.Local.IntegrationTests.Support;
+namespace VerifyDefault;
 
 public static class ModuleInitializer
 {

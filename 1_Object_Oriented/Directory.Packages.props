@@ -2,6 +2,7 @@
   <ItemGroup>
     <PackageVersion Include="Aspire.Hosting.SqlServer" Version="9.1.0" />
     <PackageVersion Include="AutoFixture.AutoNSubstitute" Version="5.0.0-preview0012" />
+    <PackageVersion Include="AutoFixture.SeedExtensions" Version="5.0.0-preview0012" />
     <PackageVersion Include="AutoFixture.Xunit3" Version="5.0.0-preview0012" />
     <PackageVersion Include="AwesomeAssertions" Version="8.0.1" />
     <PackageVersion Include="Azure.Identity" Version="1.13.2" />
@@ -23,6 +24,8 @@
     <PackageVersion Include="System.Drawing.Common" Version="9.0.3" />
     <PackageVersion Include="System.Formats.Asn1" Version="9.0.3" />
     <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.6.1" />
+    <PackageVersion Include="System.Linq.Async.Queryable" Version="6.0.1" />
+    <PackageVersion Include="System.Linq.AsyncEnumerable" Version="10.0.0-preview.2.25163.2" />
     <PackageVersion Include="Verify.Http" Version="6.4.1" />
     <PackageVersion Include="Verify.XunitV3" Version="28.13.0" />
     <PackageVersion Include="xunit.analyzers" Version="1.20.0" />

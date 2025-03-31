@@ -1,0 +1,17 @@
+﻿{
+  "Result": {
+    "Value": {
+      "Author": {
+        "FirstName": "firstname",
+        "MiddleNames": [
+          "A",
+          "B"
+        ],
+        "LastName": "lastName",
+        "BirthDate": "DateTimeOffset_1"
+      }
+    },
+    "StatusCode": 201,
+    "Location": "https://localhost:Port_1/v1/authors?id=0"
+  }
+}

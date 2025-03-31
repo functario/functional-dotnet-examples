@@ -67,6 +67,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alexandria.SQLSeeding", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alexandria.Migration", "src\Infrastructure\Alexandria.Migration\Alexandria.Migration.csproj", "{A42D92C6-B192-4E52-A469-66273A2A00C6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Supports", "Supports", "{D1755338-3E4E-4763-80D3-B50EEE17CD05}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VerifyDefault", "test\Supports\VerifyDefault\VerifyDefault.csproj", "{FAA5256F-7A96-4423-9B34-DB2EF63F821E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -129,6 +133,10 @@ Global
 		{A42D92C6-B192-4E52-A469-66273A2A00C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A42D92C6-B192-4E52-A469-66273A2A00C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A42D92C6-B192-4E52-A469-66273A2A00C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAA5256F-7A96-4423-9B34-DB2EF63F821E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAA5256F-7A96-4423-9B34-DB2EF63F821E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAA5256F-7A96-4423-9B34-DB2EF63F821E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAA5256F-7A96-4423-9B34-DB2EF63F821E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -156,6 +164,8 @@ Global
 		{181B9946-93AE-431A-9D1B-ABB575799166} = {E2797F65-0422-4979-8164-D644CF676CC4}
 		{77DE46C0-A177-4DD8-8561-77061118F466} = {EC4DC049-6886-471B-B02C-A9FA1EBC5740}
 		{A42D92C6-B192-4E52-A469-66273A2A00C6} = {0DDEEF4A-9FFD-452B-9D45-625847711E64}
+		{D1755338-3E4E-4763-80D3-B50EEE17CD05} = {E9386FA2-8440-47A0-B3AA-D3C67A600298}
+		{FAA5256F-7A96-4423-9B34-DB2EF63F821E} = {D1755338-3E4E-4763-80D3-B50EEE17CD05}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BA2279E0-8E3C-4D7C-AB41-49C435FD0795}

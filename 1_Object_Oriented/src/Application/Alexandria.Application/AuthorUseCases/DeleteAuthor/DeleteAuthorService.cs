@@ -56,7 +56,6 @@ internal sealed class DeleteAuthorService : IDeleteAuthorService
             await unitOfWork.SaveChangesAsync(ct);
 
             await _bookRepository.DeleteManyBookAsync(booksIds, ct);
-
             await unitOfWork.SaveChangesAsync(ct);
             return new DeleteAuthorResult(deletedAuthorId);
         }

@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>$(SdkTargetFramework)</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <OutputType>Exe</OutputType>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <NoWarn>IDE0055, CS1591, IDE2006, IDE0058, IDE0290, IDE2000, xUnit1050, IDE0008, CS8618</NoWarn>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <PackageReference Include="Verify.Http" />
+        <PackageReference Include="Verify.XunitV3" />
+        <PackageReference Include="xunit.v3" />
+    </ItemGroup>
+</Project>

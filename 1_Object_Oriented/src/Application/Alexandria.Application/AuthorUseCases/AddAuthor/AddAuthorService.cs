@@ -20,12 +20,10 @@ internal sealed class AddAuthorService : IAddAuthorService
     {
         var author = command?.Author;
         ArgumentNullException.ThrowIfNull(author, nameof(command.Author));
-        var createdAuthorFunc = await _authorRepository.CreateAuthorAsync(
-            author,
-            cancellationToken
-        );
+        var getCreatedAuthor = await _authorRepository.CreateAuthorAsync(author, cancellationToken);
+
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        var createdAuthor = createdAuthorFunc();
+        var createdAuthor = getCreatedAuthor();
         var result = new AddAuthorResult(createdAuthor);
         return result;
     }
