@@ -48,6 +48,7 @@ namespace Alexandria.Persistence.Migrations
                         .Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Isbn = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CreatedDate = table.Column<DateTimeOffset>(
                         type: "datetimeoffset",
                         nullable: false
@@ -121,6 +122,13 @@ namespace Alexandria.Persistence.Migrations
                 name: "IX_BookAuthors_BookId",
                 table: "BookAuthors",
                 column: "BookId"
+            );
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BookIsbns",
+                table: "Books",
+                column: "Isbn",
+                unique: true
             );
         }
 

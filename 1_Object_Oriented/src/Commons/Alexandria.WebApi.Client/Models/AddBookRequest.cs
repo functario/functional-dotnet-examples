@@ -22,6 +22,14 @@ namespace CleanArchitecture.WebAPI.Client.Models
 #else
         public List<long?> AuthorsIds { get; set; }
 #endif
+        /// <summary>The isbn property</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public string? Isbn { get; set; }
+#nullable restore
+#else
+        public string Isbn { get; set; }
+#endif
         /// <summary>The publicationDate property</summary>
         public DateTimeOffset? PublicationDate { get; set; }
         /// <summary>The title property</summary>
@@ -58,6 +66,7 @@ namespace CleanArchitecture.WebAPI.Client.Models
             return new Dictionary<string, Action<IParseNode>>
             {
                 { "authorsIds", n => { AuthorsIds = n.GetCollectionOfPrimitiveValues<long?>()?.AsList(); } },
+                { "isbn", n => { Isbn = n.GetStringValue(); } },
                 { "publicationDate", n => { PublicationDate = n.GetDateTimeOffsetValue(); } },
                 { "title", n => { Title = n.GetStringValue(); } },
             };
@@ -70,6 +79,7 @@ namespace CleanArchitecture.WebAPI.Client.Models
         {
             _ = writer ?? throw new ArgumentNullException(nameof(writer));
             writer.WriteCollectionOfPrimitiveValues<long?>("authorsIds", AuthorsIds);
+            writer.WriteStringValue("isbn", Isbn);
             writer.WriteDateTimeOffsetValue("publicationDate", PublicationDate);
             writer.WriteStringValue("title", Title);
             writer.WriteAdditionalData(AdditionalData);

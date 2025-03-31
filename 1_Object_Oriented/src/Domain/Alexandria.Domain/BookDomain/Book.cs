@@ -2,21 +2,30 @@
 
 public class Book
 {
-    public Book(long id, string title, Publication publication, ICollection<long> authorsIds)
+    public Book(
+        long id,
+        string title,
+        string isbn,
+        Publication publication,
+        ICollection<long> authorsIds
+    )
     {
         Id = id;
+        Isbn = isbn;
         Title = title;
         Publication = publication;
         this.AuthorsIds = authorsIds;
     }
 
     public long Id { get; }
+    public string Isbn { get; }
     public string Title { get; }
     public Publication Publication { get; }
     public ICollection<long> AuthorsIds { get; }
 
     public static Book CreateTransient(
         string title,
+        string isbn,
         Publication transientPublication,
         ICollection<long> authorsIds
     )
@@ -34,6 +43,6 @@ public class Book
             transientPublication.PublicationDate
         );
 
-        return new Book(0, title, publicationTransient, authorsIds);
+        return new Book(0, title, isbn, publicationTransient, authorsIds);
     }
 }

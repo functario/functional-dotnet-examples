@@ -23,5 +23,7 @@ internal class BooksConfiguration : IEntityTypeConfiguration<BookModel>
                 od.ConfigureAuditProperties();
             }
         );
+
+        builder.HasIndex(b => b.Isbn, "IX_BookIsbns").IsUnique(true);
     }
 }

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Alexandria.Persistence.Migrations
 {
     [DbContext(typeof(AlexandriaDbContext))]
-    [Migration("20250329152139_CreateTables")]
+    [Migration("20250331194755_CreateTables")]
     partial class CreateTables
     {
         /// <inheritdoc />
@@ -91,6 +91,10 @@ namespace Alexandria.Persistence.Migrations
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<string>("Isbn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -99,6 +103,9 @@ namespace Alexandria.Persistence.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
+
+                    b.HasIndex(new[] { "Isbn" }, "IX_BookIsbns")
+                        .IsUnique();
 
                     b.ToTable("Books", (string)null);
                 });

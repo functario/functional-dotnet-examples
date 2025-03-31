@@ -299,12 +299,16 @@
       "AddBookRequest": {
         "required": [
           "title",
+          "isbn",
           "publicationDate",
           "authorsIds"
         ],
         "type": "object",
         "properties": {
           "title": {
+            "type": "string"
+          },
+          "isbn": {
             "type": "string"
           },
           "publicationDate": {
@@ -401,6 +405,7 @@
       "Book": {
         "required": [
           "id",
+          "isbn",
           "title",
           "publication",
           "authorsIds"
@@ -410,6 +415,9 @@
           "id": {
             "type": "integer",
             "format": "int64"
+          },
+          "isbn": {
+            "type": "string"
           },
           "title": {
             "type": "string"

@@ -17,7 +17,7 @@ internal class BookAuthorsConfiguration : IEntityTypeConfiguration<BookAuthorsMo
             .HasForeignKey(ba => ba.BookId);
 
         builder
-            .HasIndex(ba => ba.AuthorId) // Add index for fast lookups
+            .HasIndex(ba => ba.AuthorId)
             .HasDatabaseName("IX_BookAuthors_AuthorId");
 
         // csharpier-ignore-ending

@@ -24,6 +24,14 @@ namespace CleanArchitecture.WebAPI.Client.Models
 #endif
         /// <summary>The id property</summary>
         public long? Id { get; set; }
+        /// <summary>The isbn property</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public string? Isbn { get; set; }
+#nullable restore
+#else
+        public string Isbn { get; set; }
+#endif
         /// <summary>The publication property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -67,6 +75,7 @@ namespace CleanArchitecture.WebAPI.Client.Models
             {
                 { "authorsIds", n => { AuthorsIds = n.GetCollectionOfPrimitiveValues<long?>()?.AsList(); } },
                 { "id", n => { Id = n.GetLongValue(); } },
+                { "isbn", n => { Isbn = n.GetStringValue(); } },
                 { "publication", n => { Publication = n.GetObjectValue<global::CleanArchitecture.WebAPI.Client.Models.Publication>(global::CleanArchitecture.WebAPI.Client.Models.Publication.CreateFromDiscriminatorValue); } },
                 { "title", n => { Title = n.GetStringValue(); } },
             };
@@ -80,6 +89,7 @@ namespace CleanArchitecture.WebAPI.Client.Models
             _ = writer ?? throw new ArgumentNullException(nameof(writer));
             writer.WriteCollectionOfPrimitiveValues<long?>("authorsIds", AuthorsIds);
             writer.WriteLongValue("id", Id);
+            writer.WriteStringValue("isbn", Isbn);
             writer.WriteObjectValue<global::CleanArchitecture.WebAPI.Client.Models.Publication>("publication", Publication);
             writer.WriteStringValue("title", Title);
             writer.WriteAdditionalData(AdditionalData);

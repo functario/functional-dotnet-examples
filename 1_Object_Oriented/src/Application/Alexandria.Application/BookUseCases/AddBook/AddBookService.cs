@@ -45,6 +45,7 @@ public sealed class AddBookService : IAddBookService
             // Create Book and related Publication
             var transientBook = Book.CreateTransient(
                 command.Title,
+                command.Isbn,
                 transientPublication,
                 command.AuthorsIds
             );

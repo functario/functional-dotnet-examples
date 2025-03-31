@@ -8,6 +8,7 @@ internal class BookModel : IValidatableObject, IAuditable
 {
     public long Id { get; set; }
     public required string Title { get; set; }
+    public required string Isbn { get; set; }
     public required PublicationModel Publication { get; set; }
 
     public ICollection<BookAuthorsModel> BookAuthors { get; set; } = [];
@@ -16,14 +17,14 @@ internal class BookModel : IValidatableObject, IAuditable
     {
         var publication = Publication.ToDomain();
         var authorsIds = BookAuthors.Select(x => x.AuthorId);
-        return new Book(Id, Title, publication, [.. authorsIds]);
+        return new Book(Id, Title, Isbn, publication, [.. authorsIds]);
     }
 
     public Book ToNewDomain()
     {
         var publication = Publication.ToDomain();
         var authorsIds = BookAuthors.Where(x => x.BookId == Id).Select(x => x.AuthorId);
-        return new Book(Id, Title, publication, [.. authorsIds]);
+        return new Book(Id, Title, Isbn, publication, [.. authorsIds]);
     }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -46,6 +47,7 @@ internal static class BookExtensions
         {
             Id = book.Id,
             Title = book.Title,
+            Isbn = book.Isbn,
             Publication = book.Publication.ToNewModel(),
             BookAuthors = book
                 .AuthorsIds.Select(authorId => new BookAuthorsModel

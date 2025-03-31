@@ -35,6 +35,7 @@ internal sealed class AddBookEndpoint : IAddBookEndpoint
     {
         var command = new AddBookCommand(
             request.Title,
+            request.Isbn,
             request.PublicationDate,
             request.AuthorsIds
         );
