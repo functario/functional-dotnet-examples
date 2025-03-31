@@ -24,7 +24,7 @@ internal sealed class DeleteBookEndpoint : IDeleteBookEndpoint
         CancellationToken cancellationToken
     )
     {
-        var query = new DeleteBookQuery(id);
+        var query = new DeleteBookCommand(id);
         try
         {
             var response = await deleteBookService.HandleAsync(query, cancellationToken);

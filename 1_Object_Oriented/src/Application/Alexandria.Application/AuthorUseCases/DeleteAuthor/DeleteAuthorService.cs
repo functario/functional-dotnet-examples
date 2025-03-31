@@ -20,7 +20,7 @@ internal sealed class DeleteAuthorService : IDeleteAuthorService
     }
 
     public async Task<DeleteAuthorResult> HandleAsync(
-        DeleteAuthorQuery query,
+        DeleteAuthorCommand command,
         CancellationToken cancellationToken
     )
     {
@@ -34,13 +34,13 @@ internal sealed class DeleteAuthorService : IDeleteAuthorService
             // Otherwise the caller must handle the book deletion before to Author ones.
             var booksIds = new List<long>();
             await foreach (
-                var book in _bookRepository.GetManyBooksAuthorsAsync([query.AuhtorId], ct)
+                var book in _bookRepository.GetManyBooksAuthorsAsync([command.AuhtorId], ct)
             )
             {
-                if (book.AuthorsIds.Any(id => id != query.AuhtorId))
+                if (book.AuthorsIds.Any(id => id != command.AuhtorId))
                 {
                     throw new InvalidOperationException(
-                        $"Cannot delete Author with Id '{query.AuhtorId}' "
+                        $"Cannot delete Author with Id '{command.AuhtorId}' "
                             + $"because the Book with Id '{book.Id}' contains other authors."
                     );
                 }
@@ -49,7 +49,7 @@ internal sealed class DeleteAuthorService : IDeleteAuthorService
             }
 
             var deletedAuthorId = await _authorRepository.DeleteAuthorAsync(
-                query.AuhtorId,
+                command.AuhtorId,
                 cancellationToken
             );
 

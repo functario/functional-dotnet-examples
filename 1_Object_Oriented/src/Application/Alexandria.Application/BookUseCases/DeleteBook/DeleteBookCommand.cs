@@ -1,3 +1,3 @@
 ﻿namespace Alexandria.Application.BookUseCases.DeleteBook;
 
-public sealed record DeleteBookQuery(long BookId) { }
+public sealed record DeleteBookCommand(long BookId) { }

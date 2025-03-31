@@ -1,3 +1,3 @@
 ﻿namespace Alexandria.Application.AuthorUseCases.DeleteAuthor;
 
-public sealed record DeleteAuthorQuery(long AuhtorId) { }
+public sealed record DeleteAuthorCommand(long AuhtorId) { }

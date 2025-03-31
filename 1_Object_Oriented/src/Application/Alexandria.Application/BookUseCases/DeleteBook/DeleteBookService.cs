@@ -12,11 +12,14 @@ internal sealed class DeleteBookService : IDeleteBookService
     }
 
     public async Task<DeleteBookResult> HandleAsync(
-        DeleteBookQuery query,
+        DeleteBookCommand command,
         CancellationToken cancellationToken
     )
     {
-        var deletedBookId = await _bookRepository.DeleteBookAsync(query.BookId, cancellationToken);
+        var deletedBookId = await _bookRepository.DeleteBookAsync(
+            command.BookId,
+            cancellationToken
+        );
         return new DeleteBookResult(deletedBookId);
     }
 }
